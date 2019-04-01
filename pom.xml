@@ -97,7 +97,7 @@
             <version>${version.cdi}</version>
         </dependency>
 
-        <!-- PERSISTENCE -->
+        <!-- persistence -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -128,6 +128,12 @@
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>${version.jwt}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${version.apache.commons.lang}</version>
         </dependency>
     </dependencies>
 
