@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>bupt-spirit</groupId>
+    <artifactId>spm-service</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <version.javaee.servlet>4.0.1</version.javaee.servlet>
+        <version.jersey>2.28</version.jersey>
+        <version.javax.servlet.api>4.0.1</version.javax.servlet.api>
+        <version.log4j>2.11.2</version.log4j>
+        <version.weld>2.4.8.Final</version.weld>
+        <version.cdi>2.0</version.cdi>
+        <version.hibernate>5.4.2.Final</version.hibernate>
+        <version.hibernate.jpa>1.0.2.Final</version.hibernate.jpa>
+        <version.mysql>8.0.15</version.mysql>
+        <version.jboss.logging>3.3.2.Final</version.jboss.logging>
+        <version.infinispan>9.4.11.Final</version.infinispan>
+        <version.apache.commons.lang>3.8.1</version.apache.commons.lang>
+        <version.jwt>3.8.0</version.jwt>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.glassfish.jersey</groupId>
+                <artifactId>jersey-bom</artifactId>
+                <version>${version.jersey}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- for servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${version.javaee.servlet}</version>
+        </dependency>
+        
+        <!-- for logging -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${version.log4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${version.log4j}</version>
+        </dependency>
+
+        <!-- for jersey -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-binding</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+        </dependency>
+        <!-- required by cdi -->
+        <dependency>
+            <groupId>org.glassfish.jersey.ext.cdi</groupId>
+            <artifactId>jersey-cdi1x-servlet</artifactId>
+        </dependency>
+
+        <!-- for cdi -->
+        <dependency>
+            <groupId>org.jboss.weld.servlet</groupId>
+            <artifactId>weld-servlet</artifactId>
+            <version>${version.weld}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>${version.cdi}</version>
+        </dependency>
+
+        <!-- PERSISTENCE -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${version.hibernate}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${version.hibernate.jpa}</version>
+        </dependency>
+        <!-- needed by hibernate -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${version.mysql}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- caching -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-core</artifactId>
+            <version>${version.infinispan}</version>
+        </dependency>
+
+        <!-- jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${version.jwt}</version>
+        </dependency>
+    </dependencies>
+
+</project>
