@@ -30,8 +30,6 @@ public class UnhandledExceptionMapper implements ExceptionMapper<Throwable> {
     }
 
     private void log(Throwable t) {
-        logger.error(
-                "unhandled exception mapped by exception manager: {}\n{}",
-                t, t.getStackTrace());
+        logger.error("unhandled exception mapped by exception manager", t);
     }
 }
