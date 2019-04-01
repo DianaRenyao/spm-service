@@ -97,7 +97,7 @@
             <version>${version.cdi}</version>
         </dependency>
 
-        <!-- PERSISTENCE -->
+        <!-- persistence -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
