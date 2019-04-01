@@ -1,9 +1,11 @@
 package buptspirit.spm.rest.filter;
 
+import buptspirit.spm.rest.session.RemoteSession;
 import buptspirit.spm.rest.token.TokenManager;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
 import javax.annotation.Priority;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -17,6 +19,11 @@ import java.util.Date;
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
+
+    @Inject
+    @AuthenticatedSession
+    Event<RemoteSession> userAuthenticatedEvent;
+
     @Inject
     private TokenManager tokenManager;
 
@@ -38,6 +45,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
         if (jwt != null) {
             // authenticated
+            int id = jwt.getClaim("id").asInt();
             String username = jwt.getSubject();
             String role = jwt.getClaim("role").asString();
             requestContext.setSecurityContext(new SecurityContextImpl(
@@ -45,6 +53,18 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     role,
                     false,
                     null));
+            RemoteSession session = new RemoteSession();
+            session.setAuthenticated(true);
+            session.setId(id);
+            session.setRole(role);
+            session.setUsername(username);
+            session.setIssuedAt(jwt.getIssuedAt());
+            session.setExpiresAt(jwt.getExpiresAt());
+            userAuthenticatedEvent.fire(session);
+        } else {
+            RemoteSession session = new RemoteSession();
+            session.setAuthenticated(true);
+            userAuthenticatedEvent.fire(session);
         }
     }
 }
