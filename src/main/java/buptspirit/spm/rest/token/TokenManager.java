@@ -52,7 +52,7 @@ public class TokenManager {
         return RandomStringUtils.randomAlphanumeric(64);
     }
 
-    public String issue(String username, String role, long expireTime) {
+    public String issue(int id, String username, String role, long expireTime) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             long current = System.currentTimeMillis();
@@ -61,6 +61,7 @@ public class TokenManager {
                     .withSubject(username)
                     .withIssuedAt(new Date(current))
                     .withExpiresAt(new Date(current + expireTime))
+                    .withClaim("id", id)
                     .withClaim("role", role)
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
