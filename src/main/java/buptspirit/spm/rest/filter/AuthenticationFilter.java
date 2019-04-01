@@ -63,7 +63,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
             userAuthenticatedEvent.fire(session);
         } else {
             RemoteSession session = new RemoteSession();
-            session.setAuthenticated(true);
+            session.setAuthenticated(false);
             userAuthenticatedEvent.fire(session);
         }
     }
