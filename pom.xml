@@ -129,6 +129,12 @@
             <artifactId>java-jwt</artifactId>
             <version>${version.jwt}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${version.apache.commons.lang}</version>
+        </dependency>
     </dependencies>
 
 </project>
