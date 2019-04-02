@@ -8,12 +8,30 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>buptspirit.spm.persistence.entity.UserInfo</class>
         <class>buptspirit.spm.persistence.entity.TokenSecret</class>
+        <class>buptspirit.spm.persistence.entity.ChapterEntity</class>
+        <class>buptspirit.spm.persistence.entity.CourseEntity</class>
+        <class>buptspirit.spm.persistence.entity.ExamEntity</class>
+        <class>buptspirit.spm.persistence.entity.ExperimentEntity</class>
+        <class>buptspirit.spm.persistence.entity.ExperimentFileEntity</class>
+        <class>buptspirit.spm.persistence.entity.FilesourceEntity</class>
+        <class>buptspirit.spm.persistence.entity.MessageEntity</class>
+        <class>buptspirit.spm.persistence.entity.NoticeEntity</class>
+        <class>buptspirit.spm.persistence.entity.OptionEntity</class>
+        <class>buptspirit.spm.persistence.entity.QuestionEntity</class>
+        <class>buptspirit.spm.persistence.entity.SectionEntity</class>
+        <class>buptspirit.spm.persistence.entity.SectionFileEntity</class>
+        <class>buptspirit.spm.persistence.entity.SelectedCourseEntity</class>
+        <class>buptspirit.spm.persistence.entity.StudentEntity</class>
+        <class>buptspirit.spm.persistence.entity.StudentCourseExperimentEntity</class>
+        <class>buptspirit.spm.persistence.entity.TeacherEntity</class>
+        <class>buptspirit.spm.persistence.entity.TokenSecretEntity</class>
+        <class>buptspirit.spm.persistence.entity.UserInfoEntity</class>
         <properties>
-            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.url"
                       value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
             <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="bupt-spirit"/>
+            <property name="hibernate.connection.password" value="sh996371."/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
