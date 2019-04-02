@@ -11,7 +11,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.AnnotatedElement;
@@ -52,9 +51,7 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             ServiceException forbidden = new ServiceException(
                     Response.Status.FORBIDDEN,
                     "operation on the resource is not accessible from the user role or not logged in");
-            Response rejectWith = serviceExceptionMapper.toResponseWith(
-                    forbidden,
-                    builder -> builder.type(MediaType.APPLICATION_JSON));
+            Response rejectWith = serviceExceptionMapper.toResponse(forbidden);
             containerRequestContext.abortWith(rejectWith);
         }
     }
