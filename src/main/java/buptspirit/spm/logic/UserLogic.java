@@ -24,7 +24,7 @@ public class UserLogic {
                 em -> userInfoFacade.findByUsername(em, username),
                 "failed to find user by username"
         );
-        if (passwordHash.verify(password.toCharArray(), info.getPassword())) {
+        if (info != null && passwordHash.verify(password.toCharArray(), info.getPassword())) {
             return info;
         } else {
             return null;
