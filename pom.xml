@@ -30,6 +30,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
 
+    <build>
+        <finalName>spm-service</finalName>
+    </build>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
