@@ -3,6 +3,8 @@ package buptspirit.spm.logic;
 import buptspirit.spm.password.PasswordHash;
 import buptspirit.spm.persistence.entity.UserInfo;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.rest.exception.ServiceError;
+import buptspirit.spm.rest.exception.ServiceException;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -33,14 +35,13 @@ public class UserLogic {
     }
 
     // return null if user already exists
-    public UserInfo create(String username, String password, String role) {
+    public UserInfo create(String username, String password, String role) throws ServiceException {
         boolean exists = transactional(
                 em -> userInfoFacade.findByUsername(em, username) != null,
                 "failed to find user by name"
         );
-        // TODO redesign the api
         if (exists)
-            return null;
+            throw ServiceError.USERNAME_ALREADY_EXISTS.toException();
         UserInfo newUser = new UserInfo();
         newUser.setUsername(username);
         newUser.setPassword(passwordHash.generate(password.toCharArray()));
