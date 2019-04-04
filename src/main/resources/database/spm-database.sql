@@ -254,13 +254,13 @@ CREATE TABLE IF NOT EXISTS `spm`.`student_course_experiment` (
   `course_id` INT UNSIGNED NOT NULL,
   `experiment_id` INT UNSIGNED NOT NULL,
   `doc_file` INT UNSIGNED NOT NULL,
-  `vedio_file` INT UNSIGNED NOT NULL,
+  `video_file` INT UNSIGNED NOT NULL,
   `score` INT UNSIGNED NULL,
   PRIMARY KEY (`student_id`, `course_id`, `experiment_id`),
   INDEX `fk_student_course_approve_has_experiment1_experiment1_idx` (`experiment_id` ASC) VISIBLE,
   INDEX `fk_student_course_approve_has_experiment1_student_course_ap_idx` (`student_id` ASC, `course_id` ASC) VISIBLE,
   INDEX `fk_stu_course_exp_file_idx` (`doc_file` ASC) VISIBLE,
-  INDEX `fk_stu_course_exp_file2_idx` (`vedio_file` ASC) VISIBLE,
+  INDEX `fk_stu_course_exp_file2_idx` (`video_file` ASC) VISIBLE,
   CONSTRAINT `fk_student_course_approve_has_experiment1_student_course_appr1`
     FOREIGN KEY (`student_id` , `course_id`)
     REFERENCES `spm`.`selected_course` (`student_user_id` , `course_course_id`)
@@ -277,7 +277,7 @@ CREATE TABLE IF NOT EXISTS `spm`.`student_course_experiment` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_stu_course_exp_file2`
-    FOREIGN KEY (`vedio_file`)
+    FOREIGN KEY (`video_file`)
     REFERENCES `spm`.`file_source` (`file_source_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

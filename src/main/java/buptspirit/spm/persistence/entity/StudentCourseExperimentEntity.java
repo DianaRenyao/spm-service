@@ -16,7 +16,7 @@ public class StudentCourseExperimentEntity {
     private int courseId;
     private int experimentId;
     private int docFile;
-    private int vedioFile;
+    private int videoFile;
     private Integer score;
 
     @Id
@@ -60,13 +60,13 @@ public class StudentCourseExperimentEntity {
     }
 
     @Basic
-    @Column(name = "vedio_file", nullable = false)
-    public int getVedioFile() {
-        return vedioFile;
+    @Column(name = "video_file", nullable = false)
+    public int getVideoFile() {
+        return videoFile;
     }
 
-    public void setVedioFile(int vedioFile) {
-        this.vedioFile = vedioFile;
+    public void setVideoFile(int videoFile) {
+        this.videoFile = videoFile;
     }
 
     @Basic
@@ -88,12 +88,12 @@ public class StudentCourseExperimentEntity {
                 courseId == that.courseId &&
                 experimentId == that.experimentId &&
                 docFile == that.docFile &&
-                vedioFile == that.vedioFile &&
+                videoFile == that.videoFile &&
                 Objects.equals(score, that.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, courseId, experimentId, docFile, vedioFile, score);
+        return Objects.hash(studentId, courseId, experimentId, docFile, videoFile, score);
     }
 }
