@@ -1,6 +1,6 @@
-package buptspirit.spm.rest.session;
+package buptspirit.spm.rest.filter;
 
-import buptspirit.spm.rest.filter.AuthenticatedSession;
+import buptspirit.spm.message.SessionMessage;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
@@ -12,9 +12,9 @@ public class RemoteSessionProducer {
     @Produces
     @RequestScoped
     @AuthenticatedSession
-    private RemoteSession remoteSession;
+    private SessionMessage remoteSession;
 
-    public void handleAuthenticationEvent(@Observes @AuthenticatedSession RemoteSession remoteSession) {
+    public void handleAuthenticationEvent(@Observes @AuthenticatedSession SessionMessage remoteSession) {
         this.remoteSession = remoteSession;
     }
 }

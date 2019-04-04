@@ -1,6 +1,6 @@
 package buptspirit.spm.rest.exception;
 
-import buptspirit.spm.rest.message.ErrorMessage;
+import buptspirit.spm.message.ErrorMessage;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

@@ -1,7 +1,5 @@
 package buptspirit.spm.rest.exception;
 
-import buptspirit.spm.rest.message.ErrorMessage;
-
 import javax.ws.rs.core.Response;
 
 public class ServiceException extends Exception {

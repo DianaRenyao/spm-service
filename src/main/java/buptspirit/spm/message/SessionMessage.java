@@ -1,14 +1,21 @@
-package buptspirit.spm.rest.session;
+package buptspirit.spm.message;
 
 import java.util.Date;
 
-public class RemoteSession {
+public class SessionMessage {
+
+    private String token;
+
     private boolean authenticated;
-    private Integer id;
-    private String username;
-    private String role;
+    private UserInfoMessage userInfo;
     private Date issuedAt;
     private Date expiresAt;
+
+    public static SessionMessage Unauthenticated() {
+        SessionMessage message = new SessionMessage();
+        message.setAuthenticated(false);
+        return message;
+    }
 
     public boolean isAuthenticated() {
         return authenticated;
@@ -18,28 +25,12 @@ public class RemoteSession {
         this.authenticated = authenticated;
     }
 
-    public Integer getId() {
-        return id;
+    public String getToken() {
+        return token;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Date getIssuedAt() {
@@ -57,4 +48,14 @@ public class RemoteSession {
     public void setExpiresAt(Date expiresAt) {
         this.expiresAt = expiresAt;
     }
+
+    public UserInfoMessage getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfoMessage userInfo) {
+        this.userInfo = userInfo;
+    }
 }
+
+

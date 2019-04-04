@@ -21,16 +21,16 @@ USE `spm` ;
 DROP TABLE IF EXISTS `spm`.`user_info` ;
 
 CREATE TABLE IF NOT EXISTS `spm`.`user_info` (
-  `user_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `username` CHAR(10) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
-  `time_created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `role` VARCHAR(32) NOT NULL,
-  `real_name` VARCHAR(64) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `phone` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`user_id`),
-  UNIQUE INDEX `id_UNIQUE` (`user_id` ASC) VISIBLE);
+                                                 `user_id`      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                                 `username`     CHAR(10)     NOT NULL,
+                                                 `password`     VARCHAR(256) NOT NULL,
+                                                 `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                 `role`         VARCHAR(32)  NOT NULL,
+                                                 `real_name`    VARCHAR(64)  NOT NULL,
+                                                 `email`        VARCHAR(45)  NOT NULL,
+                                                 `phone`        VARCHAR(45)  NOT NULL,
+                                                 PRIMARY KEY (`user_id`),
+                                                 UNIQUE INDEX `id_UNIQUE` (`user_id` ASC) VISIBLE);
 
 
 -- -----------------------------------------------------

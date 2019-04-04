@@ -1,15 +1,14 @@
 package buptspirit.spm.rest.resource;
 
-import buptspirit.spm.logic.UserLogic;
-import buptspirit.spm.persistence.entity.UserInfo;
-import buptspirit.spm.rest.exception.ServiceError;
+import buptspirit.spm.logic.SessionLogic;
+import buptspirit.spm.message.LoginMessage;
+import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.exception.ServiceException;
-import buptspirit.spm.rest.message.LoginMessage;
-import buptspirit.spm.rest.message.SessionMessage;
-import buptspirit.spm.rest.token.TokenManager;
+import buptspirit.spm.rest.filter.AuthenticatedSession;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,36 +19,32 @@ import javax.ws.rs.core.SecurityContext;
 @Path("session")
 public class SessionResource {
 
-    private static final long EXPIRE_TIME = 24 * 60 * 60 * 1000; // 1 day
-
     @Context
     private SecurityContext securityContext;
 
     @Inject
-    private TokenManager tokenManager;
+    private SessionLogic sessionLogic;
 
     @Inject
-    private UserLogic userLogic;
+    @AuthenticatedSession
+    private SessionMessage remoteSession;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public SessionMessage getCurrentSession() {
+        SessionMessage copied = new SessionMessage();
+        copied.setAuthenticated(remoteSession.isAuthenticated());
+        copied.setToken(remoteSession.getToken());
+        copied.setIssuedAt(remoteSession.getIssuedAt());
+        copied.setExpiresAt(remoteSession.getExpiresAt());
+        copied.setUserInfo(remoteSession.getUserInfo());
+        return copied;
+    }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public SessionMessage createSession(LoginMessage login) throws ServiceException {
-        String username = login.getUsername();
-        String password = login.getPassword();
-        UserInfo userInfo = userLogic.verify(username, password);
-        if (userInfo != null) {
-            int id = userInfo.getId();
-            String role = userInfo.getRole();
-            SessionMessage sessionMessage = new SessionMessage();
-            String token = tokenManager.issue(id, username, role, EXPIRE_TIME);
-            sessionMessage.setId(id);
-            sessionMessage.setRole(role);
-            sessionMessage.setUsername(username);
-            sessionMessage.setToken(token);
-            return sessionMessage;
-        } else {
-            throw ServiceError.INVALID_USERNAME_OR_PASSWORD.toException();
-        }
+        return sessionLogic.createSession(login);
     }
 }

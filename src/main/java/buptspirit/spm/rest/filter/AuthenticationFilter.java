@@ -1,8 +1,7 @@
 package buptspirit.spm.rest.filter;
 
-import buptspirit.spm.rest.session.RemoteSession;
-import buptspirit.spm.rest.token.TokenManager;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import buptspirit.spm.logic.SessionLogic;
+import buptspirit.spm.message.SessionMessage;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -14,7 +13,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.security.Principal;
-import java.util.Date;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
@@ -22,50 +20,20 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 
     @Inject
     @AuthenticatedSession
-    Event<RemoteSession> userAuthenticatedEvent;
+    Event<SessionMessage> userAuthenticatedEvent;
 
     @Inject
-    private TokenManager tokenManager;
+    private SessionLogic sessionLogic;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        DecodedJWT jwt = null;
+        SessionMessage session = SessionMessage.Unauthenticated();
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring("Bearer".length()).trim();
-            jwt = tokenManager.verifiedOrNull(token);
-            if (jwt != null) {
-                Date expire = jwt.getExpiresAt();
-                if (expire.before(new Date())) {
-                    // expired
-                    jwt = null;
-                }
-            }
+            session = sessionLogic.getSessionFromToken(token);
         }
-
-        if (jwt != null) {
-            // authenticated
-            int id = jwt.getClaim("id").asInt();
-            String username = jwt.getSubject();
-            String role = jwt.getClaim("role").asString();
-            requestContext.setSecurityContext(new SecurityContextImpl(
-                    username,
-                    role,
-                    false,
-                    null));
-            RemoteSession session = new RemoteSession();
-            session.setAuthenticated(true);
-            session.setId(id);
-            session.setRole(role);
-            session.setUsername(username);
-            session.setIssuedAt(jwt.getIssuedAt());
-            session.setExpiresAt(jwt.getExpiresAt());
-            userAuthenticatedEvent.fire(session);
-        } else {
-            RemoteSession session = new RemoteSession();
-            session.setAuthenticated(false);
-            userAuthenticatedEvent.fire(session);
-        }
+        userAuthenticatedEvent.fire(session);
     }
 }
 

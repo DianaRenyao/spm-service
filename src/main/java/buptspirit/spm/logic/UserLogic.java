@@ -1,14 +1,21 @@
 package buptspirit.spm.logic;
 
+import buptspirit.spm.message.LoginMessage;
+import buptspirit.spm.message.StudentMessage;
+import buptspirit.spm.message.StudentRegisterMessage;
+import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.password.PasswordHash;
-import buptspirit.spm.persistence.entity.UserInfo;
+import buptspirit.spm.persistence.entity.StudentEntity;
+import buptspirit.spm.persistence.entity.UserInfoEntity;
+import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
 import buptspirit.spm.rest.exception.ServiceError;
 import buptspirit.spm.rest.exception.ServiceException;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.util.Date;
 
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
@@ -19,41 +26,63 @@ public class UserLogic {
     private UserInfoFacade userInfoFacade;
 
     @Inject
+    private StudentFacade studentFacade;
+
+    @Inject
     private PasswordHash passwordHash;
 
+    @Inject
+    private Logger logger;
+
+    @PostConstruct
+    public void postConstruct() {
+        logger.info("successfully constructed");
+    }
+
     // return null if failed to verify user
-    public UserInfo verify(String username, String password) {
-        UserInfo info = transactional(
-                em -> userInfoFacade.findByUsername(em, username),
+    UserInfoMessage verify(LoginMessage loginMessage) {
+        UserInfoEntity info = transactional(
+                em -> userInfoFacade.findByUsername(em, loginMessage.getUsername()),
                 "failed to find user by username"
         );
-        if (info != null && passwordHash.verify(password.toCharArray(), info.getPassword())) {
-            return info;
+        if (info != null && passwordHash.verify(loginMessage.getPassword().toCharArray(), info.getPassword())) {
+            return UserInfoMessage.FromEntity(info);
         } else {
             return null;
         }
     }
 
-    // return null if user already exists
-    public UserInfo create(String username, String password, String role) throws ServiceException {
+    public StudentMessage createStudent(StudentRegisterMessage registerMessage) throws ServiceException {
         boolean exists = transactional(
-                em -> userInfoFacade.findByUsername(em, username) != null,
+                em -> userInfoFacade.findByUsername(em, registerMessage.getUsername()) != null,
                 "failed to find user by name"
         );
         if (exists)
             throw ServiceError.USERNAME_ALREADY_EXISTS.toException();
-        UserInfo newUser = new UserInfo();
-        newUser.setUsername(username);
-        newUser.setPassword(passwordHash.generate(password.toCharArray()));
-        newUser.setRole(role);
-        newUser.setDateCreated(new Date());
+        UserInfoEntity newUser = new UserInfoEntity();
+        newUser.setUsername(registerMessage.getUsername());
+        newUser.setPassword(passwordHash.generate(registerMessage.getPassword().toCharArray()));
+        newUser.setRole("student");
+        newUser.setRealName(registerMessage.getRealName());
+        newUser.setEmail(registerMessage.getEmail());
+        newUser.setPhone(registerMessage.getPhone());
+        StudentEntity newStudent = new StudentEntity();
+        newStudent.setClazz(registerMessage.getClazz());
+        newStudent.setCollege(registerMessage.getCollege());
+        newStudent.setNickname(registerMessage.getNickname());
         transactional(
                 em -> {
                     userInfoFacade.create(em, newUser);
+                    logger.debug("user id={} created", newUser.getUserId());
+                    newStudent.setUserId(newUser.getUserId());
+                    studentFacade.create(em, newStudent);
                     return null;
                 },
                 "failed to create user"
         );
-        return newUser;
+
+
+        UserInfoMessage userInfoMessage = UserInfoMessage.FromEntity(newUser);
+        return StudentMessage.FromEntity(newStudent, userInfoMessage);
     }
 }

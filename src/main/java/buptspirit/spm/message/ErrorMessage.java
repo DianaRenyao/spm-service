@@ -1,4 +1,4 @@
-package buptspirit.spm.rest.message;
+package buptspirit.spm.message;
 
 public class ErrorMessage {
     private int status;
