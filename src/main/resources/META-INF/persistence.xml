@@ -31,7 +31,7 @@
             <property name="hibernate.connection.url"
                       value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
             <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="sh996371."/>
+            <property name="hibernate.connection.password" value="bupt-spirit"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
