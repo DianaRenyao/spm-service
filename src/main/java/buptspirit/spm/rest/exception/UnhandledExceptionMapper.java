@@ -9,23 +9,15 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class UnhandledExceptionMapper implements ExceptionMapper<WebApplicationException> {
+public class UnhandledExceptionMapper implements ExceptionMapper<Throwable> {
 
     @Inject
     private Logger logger;
 
-    @Inject
-    private ServiceExceptionMapper serviceExceptionMapper;
-
     @Override
-    public Response toResponse(WebApplicationException e) {
-        Response.Status status = Response.Status.fromStatusCode(e.getResponse().getStatus());
-        return serviceExceptionMapper.toResponse(
-                new ServiceException(status, e.getMessage())
-        );
-    }
-
-    void log(WebApplicationException e) {
-        logger.info("unhandled exception occurred", e);
+    public Response toResponse(Throwable t) {
+        logger.warn("unhandled exception occurred, unknown error message sent", t);
+        // shadow the unhandled error
+        return ServiceError.UNKNOWN.toResponse();
     }
 }

@@ -19,6 +19,7 @@ public class UserLogic {
     @Inject
     private PasswordHash passwordHash;
 
+    // return null if failed to verify user
     public UserInfo verify(String username, String password) {
         UserInfo info = transactional(
                 em -> userInfoFacade.findByUsername(em, username),
@@ -31,7 +32,15 @@ public class UserLogic {
         }
     }
 
+    // return null if user already exists
     public UserInfo create(String username, String password, String role) {
+        boolean exists = transactional(
+                em -> userInfoFacade.findByUsername(em, username) != null,
+                "failed to find user by name"
+        );
+        // TODO redesign the api
+        if (exists)
+            return null;
         UserInfo newUser = new UserInfo();
         newUser.setUsername(username);
         newUser.setPassword(passwordHash.generate(password.toCharArray()));
