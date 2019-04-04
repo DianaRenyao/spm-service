@@ -1,13 +1,13 @@
 package buptspirit.spm.persistence.facade;
 
-import buptspirit.spm.persistence.entity.TokenSecret;
+import buptspirit.spm.persistence.entity.TokenSecretEntity;
 
 import javax.inject.Singleton;
 
 @Singleton
-public class TokenSecretFacade extends AbstractFacade<TokenSecret> {
+public class TokenSecretFacade extends AbstractFacade<TokenSecretEntity> {
 
     public TokenSecretFacade() {
-        super(TokenSecret.class);
+        super(TokenSecretEntity.class);
     }
 }

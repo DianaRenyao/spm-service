@@ -6,27 +6,27 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class SectionFileEntityPK implements Serializable {
-    private int sectionSectionId;
-    private int filesourceFilesouceId;
+    private int sectionId;
+    private int fileSourceId;
 
-    @Column(name = "section_section_id")
+    @Column(name = "section_id", nullable = false)
     @Id
-    public int getSectionSectionId() {
-        return sectionSectionId;
+    public int getSectionId() {
+        return sectionId;
     }
 
-    public void setSectionSectionId(int sectionSectionId) {
-        this.sectionSectionId = sectionSectionId;
+    public void setSectionId(int sectionId) {
+        this.sectionId = sectionId;
     }
 
-    @Column(name = "filesource_filesouce_id")
+    @Column(name = "file_source_id", nullable = false)
     @Id
-    public int getFilesourceFilesouceId() {
-        return filesourceFilesouceId;
+    public int getFileSourceId() {
+        return fileSourceId;
     }
 
-    public void setFilesourceFilesouceId(int filesourceFilesouceId) {
-        this.filesourceFilesouceId = filesourceFilesouceId;
+    public void setFileSourceId(int fileSourceId) {
+        this.fileSourceId = fileSourceId;
     }
 
     @Override
@@ -34,12 +34,12 @@ public class SectionFileEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SectionFileEntityPK that = (SectionFileEntityPK) o;
-        return sectionSectionId == that.sectionSectionId &&
-                filesourceFilesouceId == that.filesourceFilesouceId;
+        return sectionId == that.sectionId &&
+                fileSourceId == that.fileSourceId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sectionSectionId, filesourceFilesouceId);
+        return Objects.hash(sectionId, fileSourceId);
     }
 }

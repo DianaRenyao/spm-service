@@ -7,9 +7,9 @@ import java.util.Objects;
 
 public class ApplicationEntityPK implements Serializable {
     private int studentUserId;
-    private int courseCourseId;
+    private int courseId;
 
-    @Column(name = "student_user_id")
+    @Column(name = "student_user_id", nullable = false)
     @Id
     public int getStudentUserId() {
         return studentUserId;
@@ -19,14 +19,14 @@ public class ApplicationEntityPK implements Serializable {
         this.studentUserId = studentUserId;
     }
 
-    @Column(name = "course_course_id")
+    @Column(name = "course_id", nullable = false)
     @Id
-    public int getCourseCourseId() {
-        return courseCourseId;
+    public int getCourseId() {
+        return courseId;
     }
 
-    public void setCourseCourseId(int courseCourseId) {
-        this.courseCourseId = courseCourseId;
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class ApplicationEntityPK implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         ApplicationEntityPK that = (ApplicationEntityPK) o;
         return studentUserId == that.studentUserId &&
-                courseCourseId == that.courseCourseId;
+                courseId == that.courseId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentUserId, courseCourseId);
+        return Objects.hash(studentUserId, courseId);
     }
 }

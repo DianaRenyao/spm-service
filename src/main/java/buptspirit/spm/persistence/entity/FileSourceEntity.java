@@ -1,10 +1,14 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "file_source", schema = "spm", catalog = "")
+@Table(name = "file_source", schema = "spm")
 public class FileSourceEntity {
     private int fileSourceId;
     private String filename;
@@ -12,7 +16,7 @@ public class FileSourceEntity {
     private String fileType;
 
     @Id
-    @Column(name = "file_source_id")
+    @Column(name = "file_source_id", nullable = false)
     public int getFileSourceId() {
         return fileSourceId;
     }
@@ -22,7 +26,7 @@ public class FileSourceEntity {
     }
 
     @Basic
-    @Column(name = "filename")
+    @Column(name = "filename", nullable = false, length = 256)
     public String getFilename() {
         return filename;
     }
@@ -32,7 +36,7 @@ public class FileSourceEntity {
     }
 
     @Basic
-    @Column(name = "identifier")
+    @Column(name = "identifier", nullable = false, length = 256)
     public String getIdentifier() {
         return identifier;
     }
@@ -42,7 +46,7 @@ public class FileSourceEntity {
     }
 
     @Basic
-    @Column(name = "file_type")
+    @Column(name = "file_type", nullable = false, length = 45)
     public String getFileType() {
         return fileType;
     }

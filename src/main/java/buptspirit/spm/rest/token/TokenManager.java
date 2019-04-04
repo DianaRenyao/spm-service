@@ -1,6 +1,6 @@
 package buptspirit.spm.rest.token;
 
-import buptspirit.spm.persistence.entity.TokenSecret;
+import buptspirit.spm.persistence.entity.TokenSecretEntity;
 import buptspirit.spm.persistence.facade.TokenSecretFacade;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -34,10 +34,10 @@ public class TokenManager {
     public void postConstruct() {
         secret = transactional(
                 em -> {
-                    TokenSecret entity = tokenSecretFacade.find(em, 0);
+                    TokenSecretEntity entity = tokenSecretFacade.find(em, 0);
                     if (entity == null) {
-                        entity = new TokenSecret();
-                        entity.setId(0);
+                        entity = new TokenSecretEntity();
+                        entity.setTokenSecretId(0);
                         entity.setSecret(generateSecret());
                         tokenSecretFacade.create(em, entity);
                     }

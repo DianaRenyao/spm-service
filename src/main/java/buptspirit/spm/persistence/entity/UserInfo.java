@@ -42,7 +42,7 @@ public class UserInfo implements Serializable {
     private String username;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "date_created", nullable = false)
+    @Column(name = "time_created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
     @Basic(optional = false)

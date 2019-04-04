@@ -1,16 +1,20 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "exam", schema = "spm", catalog = "")
+@Table(name = "exam", schema = "spm")
 public class ExamEntity {
     private int examId;
     private int chapterId;
 
     @Id
-    @Column(name = "exam_id")
+    @Column(name = "exam_id", nullable = false)
     public int getExamId() {
         return examId;
     }
@@ -20,7 +24,7 @@ public class ExamEntity {
     }
 
     @Basic
-    @Column(name = "chapter_id")
+    @Column(name = "chapter_id", nullable = false)
     public int getChapterId() {
         return chapterId;
     }
