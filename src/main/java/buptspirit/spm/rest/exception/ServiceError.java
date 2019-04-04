@@ -14,6 +14,10 @@ public enum ServiceError {
     UNAUTHENTICATED(10001, Response.Status.UNAUTHORIZED, "client must login to get access rights to the resource"),
     FORBIDDEN(10002, Response.Status.FORBIDDEN, "client does not have access rights to the resource"),
     INVALID_USERNAME_OR_PASSWORD(11001, Response.Status.UNAUTHORIZED, "username or password provided is invalid"),
+    USERNAME_IS_EMPTY(12001, Response.Status.BAD_REQUEST, "username is empty"),
+    PASSWORD_IS_EMPTY(12002, Response.Status.BAD_REQUEST, "password is empty"),
+    INVALID_ROLE(12003, Response.Status.BAD_REQUEST, "invalid role"),
+    USERNAME_ALREADY_EXISTS(12004, Response.Status.BAD_REQUEST, "username already exists")
     ;
 
     private int code;
