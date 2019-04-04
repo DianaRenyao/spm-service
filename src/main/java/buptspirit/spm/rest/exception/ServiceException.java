@@ -9,27 +9,22 @@ public class ServiceException extends Exception {
 
     private static final Response.Status DEFAULT_STATUS = Response.Status.BAD_REQUEST;
 
-    private ErrorMessage errorMessage;
+    private ServiceError serviceError;
 
-    public ServiceException(String message) {
-        this(DEFAULT_STATUS, message);
-    }
-
-    public ServiceException(Response.Status status, String message) {
-        super(message);
-        this.errorMessage = new ErrorMessage();
-        this.errorMessage.setStatus(status.getStatusCode());
-        this.errorMessage.setMessage(message);
+    // can only be created from ServiceError
+    ServiceException(ServiceError serviceError) {
+        super(serviceError.getMessage());
+        this.serviceError = serviceError;
     }
 
     @Override
     public String getMessage() {
-        return errorMessage.getMessage();
+        return serviceError.getMessage();
     }
 
-    public ErrorMessage getErrorMessage() {
-        return errorMessage;
+    ServiceError getServiceError() {
+        return serviceError;
     }
-
-
 }
+
+

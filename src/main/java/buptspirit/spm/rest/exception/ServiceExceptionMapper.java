@@ -10,7 +10,6 @@ public class ServiceExceptionMapper implements ExceptionMapper<ServiceException>
 
     @Override
     public Response toResponse(ServiceException e) {
-        return Response.status(e.getErrorMessage().getStatus())
-                .type(MediaType.APPLICATION_JSON).entity(e.getErrorMessage()).build();
+        return e.getServiceError().toResponse();
     }
 }

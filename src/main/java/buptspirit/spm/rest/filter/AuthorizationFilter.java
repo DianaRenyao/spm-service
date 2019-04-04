@@ -1,8 +1,6 @@
 package buptspirit.spm.rest.filter;
 
-import buptspirit.spm.rest.exception.ServiceException;
-import buptspirit.spm.rest.exception.ServiceExceptionMapper;
-import org.apache.logging.log4j.Logger;
+import buptspirit.spm.rest.exception.ServiceError;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -12,6 +10,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -24,14 +23,11 @@ import java.util.List;
 @Priority(Priorities.AUTHORIZATION)
 public class AuthorizationFilter implements ContainerRequestFilter {
 
-    @Inject
-    private Logger logger;
-
-    @Inject
-    private ServiceExceptionMapper serviceExceptionMapper;
-
     @Context
     private ResourceInfo resourceInfo;
+
+    @Context
+    private SecurityContext securityContext;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) {
@@ -47,12 +43,10 @@ public class AuthorizationFilter implements ContainerRequestFilter {
             havePermission = checkPermissions(containerRequestContext, methodRoles);
         }
         if (!havePermission) {
-            logger.info("unauthorized access");
-            ServiceException forbidden = new ServiceException(
-                    Response.Status.FORBIDDEN,
-                    "operation on the resource is not accessible from the user role or not logged in");
-            Response rejectWith = serviceExceptionMapper.toResponse(forbidden);
-            containerRequestContext.abortWith(rejectWith);
+            if (securityContext.getUserPrincipal() == null)
+                containerRequestContext.abortWith(ServiceError.UNAUTHENTICATED.toResponse());
+            else
+                containerRequestContext.abortWith(ServiceError.FORBIDDEN.toResponse());
         }
     }
 
