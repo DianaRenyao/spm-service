@@ -7,22 +7,23 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_info", schema = "spm", catalog = "")
 public class UserInfoEntity {
-    private int id;
+    private int userId;
     private String username;
     private String password;
     private Timestamp createTime;
     private String role;
     private String realname;
-    private Timestamp dateCreated;
+    private String email;
+    private String phone;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "user_id")
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Basic
@@ -76,13 +77,23 @@ public class UserInfoEntity {
     }
 
     @Basic
-    @Column(name = "date_created")
-    public Timestamp getDateCreated() {
-        return dateCreated;
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
     }
 
-    public void setDateCreated(Timestamp dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
+    @Column(name = "phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override
@@ -90,17 +101,18 @@ public class UserInfoEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserInfoEntity that = (UserInfoEntity) o;
-        return id == that.id &&
+        return userId == that.userId &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(createTime, that.createTime) &&
                 Objects.equals(role, that.role) &&
                 Objects.equals(realname, that.realname) &&
-                Objects.equals(dateCreated, that.dateCreated);
+                Objects.equals(email, that.email) &&
+                Objects.equals(phone, that.phone);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, createTime, role, realname, dateCreated);
+        return Objects.hash(userId, username, password, createTime, role, realname, email, phone);
     }
 }

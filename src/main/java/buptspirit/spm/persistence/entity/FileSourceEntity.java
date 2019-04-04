@@ -4,21 +4,21 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "filesource", schema = "spm", catalog = "")
-public class FilesourceEntity {
-    private int filesouceId;
+@Table(name = "file_source", schema = "spm", catalog = "")
+public class FileSourceEntity {
+    private int fileSourceId;
     private String filename;
     private String identifier;
-    private String filetype;
+    private String fileType;
 
     @Id
-    @Column(name = "filesouce_id")
-    public int getFilesouceId() {
-        return filesouceId;
+    @Column(name = "file_source_id")
+    public int getFileSourceId() {
+        return fileSourceId;
     }
 
-    public void setFilesouceId(int filesouceId) {
-        this.filesouceId = filesouceId;
+    public void setFileSourceId(int fileSourceId) {
+        this.fileSourceId = fileSourceId;
     }
 
     @Basic
@@ -42,28 +42,28 @@ public class FilesourceEntity {
     }
 
     @Basic
-    @Column(name = "filetype")
-    public String getFiletype() {
-        return filetype;
+    @Column(name = "file_type")
+    public String getFileType() {
+        return fileType;
     }
 
-    public void setFiletype(String filetype) {
-        this.filetype = filetype;
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FilesourceEntity that = (FilesourceEntity) o;
-        return filesouceId == that.filesouceId &&
+        FileSourceEntity that = (FileSourceEntity) o;
+        return fileSourceId == that.fileSourceId &&
                 Objects.equals(filename, that.filename) &&
                 Objects.equals(identifier, that.identifier) &&
-                Objects.equals(filetype, that.filetype);
+                Objects.equals(fileType, that.fileType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filesouceId, filename, identifier, filetype);
+        return Objects.hash(fileSourceId, filename, identifier, fileType);
     }
 }
