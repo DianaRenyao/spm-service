@@ -13,10 +13,8 @@
         <class>buptspirit.spm.persistence.entity.ExamEntity</class>
         <class>buptspirit.spm.persistence.entity.ExperimentEntity</class>
         <class>buptspirit.spm.persistence.entity.ExperimentFileEntity</class>
-        <class>buptspirit.spm.persistence.entity.FilesourceEntity</class>
         <class>buptspirit.spm.persistence.entity.MessageEntity</class>
         <class>buptspirit.spm.persistence.entity.NoticeEntity</class>
-        <class>buptspirit.spm.persistence.entity.OptionEntity</class>
         <class>buptspirit.spm.persistence.entity.QuestionEntity</class>
         <class>buptspirit.spm.persistence.entity.SectionEntity</class>
         <class>buptspirit.spm.persistence.entity.SectionFileEntity</class>
@@ -24,10 +22,12 @@
         <class>buptspirit.spm.persistence.entity.StudentEntity</class>
         <class>buptspirit.spm.persistence.entity.StudentCourseExperimentEntity</class>
         <class>buptspirit.spm.persistence.entity.TeacherEntity</class>
-        <class>buptspirit.spm.persistence.entity.TokenSecretEntity</class>
         <class>buptspirit.spm.persistence.entity.UserInfoEntity</class>
+        <class>buptspirit.spm.persistence.entity.ApplicationEntity</class>
+        <class>buptspirit.spm.persistence.entity.FileSourceEntity</class>
+        <class>buptspirit.spm.persistence.entity.QuestionOptionEntity</class>
         <properties>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url"
                       value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
             <property name="hibernate.connection.username" value="root"/>

@@ -7,8 +7,8 @@ import java.util.Objects;
 @Table(name = "student", schema = "spm", catalog = "")
 public class StudentEntity {
     private int userId;
+    private String clazz;
     private String nickname;
-    private String grade;
     private String college;
 
     @Id
@@ -22,6 +22,16 @@ public class StudentEntity {
     }
 
     @Basic
+    @Column(name = "class")
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
+
+    @Basic
     @Column(name = "nickname")
     public String getNickname() {
         return nickname;
@@ -29,16 +39,6 @@ public class StudentEntity {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    @Basic
-    @Column(name = "grade")
-    public String getGrade() {
-        return grade;
-    }
-
-    public void setGrade(String grade) {
-        this.grade = grade;
     }
 
     @Basic
@@ -57,13 +57,13 @@ public class StudentEntity {
         if (o == null || getClass() != o.getClass()) return false;
         StudentEntity that = (StudentEntity) o;
         return userId == that.userId &&
+                Objects.equals(clazz, that.clazz) &&
                 Objects.equals(nickname, that.nickname) &&
-                Objects.equals(grade, that.grade) &&
                 Objects.equals(college, that.college);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, nickname, grade, college);
+        return Objects.hash(userId, clazz, nickname, college);
     }
 }
