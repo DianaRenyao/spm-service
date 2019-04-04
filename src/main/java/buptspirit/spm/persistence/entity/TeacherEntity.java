@@ -7,12 +7,12 @@ import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "teacher", schema = "spm", catalog = "")
+@Table(name = "teacher", schema = "spm")
 public class TeacherEntity {
     private int userId;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }

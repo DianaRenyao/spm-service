@@ -1,21 +1,25 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "experiment", schema = "spm", catalog = "")
+@Table(name = "experiment", schema = "spm")
 public class ExperimentEntity {
     private int experimentId;
     private String experimentName;
     private String description;
-    private Date startTime;
-    private Date finishTime;
+    private Date startDate;
+    private Date finishDate;
     private int courseId;
 
     @Id
-    @Column(name = "experiment_id")
+    @Column(name = "experiment_id", nullable = false)
     public int getExperimentId() {
         return experimentId;
     }
@@ -25,7 +29,7 @@ public class ExperimentEntity {
     }
 
     @Basic
-    @Column(name = "experiment_name")
+    @Column(name = "experiment_name", nullable = false, length = 256)
     public String getExperimentName() {
         return experimentName;
     }
@@ -35,7 +39,7 @@ public class ExperimentEntity {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = true, length = -1)
     public String getDescription() {
         return description;
     }
@@ -45,27 +49,27 @@ public class ExperimentEntity {
     }
 
     @Basic
-    @Column(name = "start_time")
-    public Date getStartTime() {
-        return startTime;
+    @Column(name = "start_date", nullable = false)
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    @Basic
-    @Column(name = "finish_time")
-    public Date getFinishTime() {
-        return finishTime;
-    }
-
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     @Basic
-    @Column(name = "course_id")
+    @Column(name = "finish_date", nullable = false)
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    @Basic
+    @Column(name = "course_id", nullable = false)
     public int getCourseId() {
         return courseId;
     }
@@ -83,12 +87,12 @@ public class ExperimentEntity {
                 courseId == that.courseId &&
                 Objects.equals(experimentName, that.experimentName) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(startTime, that.startTime) &&
-                Objects.equals(finishTime, that.finishTime);
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(finishDate, that.finishDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(experimentId, experimentName, description, startTime, finishTime, courseId);
+        return Objects.hash(experimentId, experimentName, description, startDate, finishDate, courseId);
     }
 }

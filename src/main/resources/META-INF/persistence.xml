@@ -7,7 +7,6 @@
     <persistence-unit name="buptspirit.spm.persistence" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>buptspirit.spm.persistence.entity.UserInfo</class>
-        <class>buptspirit.spm.persistence.entity.TokenSecret</class>
         <class>buptspirit.spm.persistence.entity.ChapterEntity</class>
         <class>buptspirit.spm.persistence.entity.CourseEntity</class>
         <class>buptspirit.spm.persistence.entity.ExamEntity</class>
@@ -26,6 +25,7 @@
         <class>buptspirit.spm.persistence.entity.ApplicationEntity</class>
         <class>buptspirit.spm.persistence.entity.FileSourceEntity</class>
         <class>buptspirit.spm.persistence.entity.QuestionOptionEntity</class>
+        <class>buptspirit.spm.persistence.entity.TokenSecretEntity</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url"

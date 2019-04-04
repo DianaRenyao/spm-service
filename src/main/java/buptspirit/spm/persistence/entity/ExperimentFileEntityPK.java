@@ -6,27 +6,27 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class ExperimentFileEntityPK implements Serializable {
-    private int experimentExperimentId;
-    private int filesourceFilesouceId;
+    private int experimentId;
+    private int fileSourceId;
 
-    @Column(name = "experiment_experiment_id")
+    @Column(name = "experiment_id", nullable = false)
     @Id
-    public int getExperimentExperimentId() {
-        return experimentExperimentId;
+    public int getExperimentId() {
+        return experimentId;
     }
 
-    public void setExperimentExperimentId(int experimentExperimentId) {
-        this.experimentExperimentId = experimentExperimentId;
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
     }
 
-    @Column(name = "filesource_filesouce_id")
+    @Column(name = "file_source_id", nullable = false)
     @Id
-    public int getFilesourceFilesouceId() {
-        return filesourceFilesouceId;
+    public int getFileSourceId() {
+        return fileSourceId;
     }
 
-    public void setFilesourceFilesouceId(int filesourceFilesouceId) {
-        this.filesourceFilesouceId = filesourceFilesouceId;
+    public void setFileSourceId(int fileSourceId) {
+        this.fileSourceId = fileSourceId;
     }
 
     @Override
@@ -34,12 +34,12 @@ public class ExperimentFileEntityPK implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperimentFileEntityPK that = (ExperimentFileEntityPK) o;
-        return experimentExperimentId == that.experimentExperimentId &&
-                filesourceFilesouceId == that.filesourceFilesouceId;
+        return experimentId == that.experimentId &&
+                fileSourceId == that.fileSourceId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(experimentExperimentId, filesourceFilesouceId);
+        return Objects.hash(experimentId, fileSourceId);
     }
 }

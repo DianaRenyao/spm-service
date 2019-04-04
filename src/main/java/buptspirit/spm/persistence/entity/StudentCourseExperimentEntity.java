@@ -1,21 +1,26 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "student_course_experiment", schema = "spm", catalog = "")
+@Table(name = "student_course_experiment", schema = "spm")
 @IdClass(StudentCourseExperimentEntityPK.class)
 public class StudentCourseExperimentEntity {
     private int studentId;
     private int courseId;
-    private int experimentExperimentId;
+    private int experimentId;
     private int docFile;
-    private int vedioFile;
+    private int videoFile;
     private Integer score;
 
     @Id
-    @Column(name = "student_id")
+    @Column(name = "student_id", nullable = false)
     public int getStudentId() {
         return studentId;
     }
@@ -25,7 +30,7 @@ public class StudentCourseExperimentEntity {
     }
 
     @Id
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     public int getCourseId() {
         return courseId;
     }
@@ -35,17 +40,17 @@ public class StudentCourseExperimentEntity {
     }
 
     @Id
-    @Column(name = "experiment_experiment_id")
-    public int getExperimentExperimentId() {
-        return experimentExperimentId;
+    @Column(name = "experiment_id", nullable = false)
+    public int getExperimentId() {
+        return experimentId;
     }
 
-    public void setExperimentExperimentId(int experimentExperimentId) {
-        this.experimentExperimentId = experimentExperimentId;
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
     }
 
     @Basic
-    @Column(name = "doc_file")
+    @Column(name = "doc_file", nullable = false)
     public int getDocFile() {
         return docFile;
     }
@@ -55,17 +60,17 @@ public class StudentCourseExperimentEntity {
     }
 
     @Basic
-    @Column(name = "vedio_file")
-    public int getVedioFile() {
-        return vedioFile;
+    @Column(name = "video_file", nullable = false)
+    public int getVideoFile() {
+        return videoFile;
     }
 
-    public void setVedioFile(int vedioFile) {
-        this.vedioFile = vedioFile;
+    public void setVideoFile(int videoFile) {
+        this.videoFile = videoFile;
     }
 
     @Basic
-    @Column(name = "score")
+    @Column(name = "score", nullable = true)
     public Integer getScore() {
         return score;
     }
@@ -81,14 +86,14 @@ public class StudentCourseExperimentEntity {
         StudentCourseExperimentEntity that = (StudentCourseExperimentEntity) o;
         return studentId == that.studentId &&
                 courseId == that.courseId &&
-                experimentExperimentId == that.experimentExperimentId &&
+                experimentId == that.experimentId &&
                 docFile == that.docFile &&
-                vedioFile == that.vedioFile &&
+                videoFile == that.videoFile &&
                 Objects.equals(score, that.score);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, courseId, experimentExperimentId, docFile, vedioFile, score);
+        return Objects.hash(studentId, courseId, experimentId, docFile, videoFile, score);
     }
 }

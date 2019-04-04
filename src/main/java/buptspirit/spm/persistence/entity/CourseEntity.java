@@ -1,22 +1,26 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "course", schema = "spm", catalog = "")
+@Table(name = "course", schema = "spm")
 public class CourseEntity {
     private int courseId;
-    private int teacherId;
+    private int teacherUserId;
     private String courseName;
     private String description;
     private byte period;
-    private Date startTime;
-    private Date finishTime;
+    private Date startDate;
+    private Date finishDate;
 
     @Id
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     public int getCourseId() {
         return courseId;
     }
@@ -26,17 +30,17 @@ public class CourseEntity {
     }
 
     @Basic
-    @Column(name = "teacher_id")
-    public int getTeacherId() {
-        return teacherId;
+    @Column(name = "teacher_user_id", nullable = false)
+    public int getTeacherUserId() {
+        return teacherUserId;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacherUserId(int teacherUserId) {
+        this.teacherUserId = teacherUserId;
     }
 
     @Basic
-    @Column(name = "course_name")
+    @Column(name = "course_name", nullable = false, length = 128)
     public String getCourseName() {
         return courseName;
     }
@@ -46,7 +50,7 @@ public class CourseEntity {
     }
 
     @Basic
-    @Column(name = "description")
+    @Column(name = "description", nullable = false, length = -1)
     public String getDescription() {
         return description;
     }
@@ -56,7 +60,7 @@ public class CourseEntity {
     }
 
     @Basic
-    @Column(name = "period")
+    @Column(name = "period", nullable = false)
     public byte getPeriod() {
         return period;
     }
@@ -66,23 +70,23 @@ public class CourseEntity {
     }
 
     @Basic
-    @Column(name = "start_time")
-    public Date getStartTime() {
-        return startTime;
+    @Column(name = "start_date", nullable = false)
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     @Basic
-    @Column(name = "finish_time")
-    public Date getFinishTime() {
-        return finishTime;
+    @Column(name = "finish_date", nullable = false)
+    public Date getFinishDate() {
+        return finishDate;
     }
 
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 
     @Override
@@ -91,16 +95,16 @@ public class CourseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         CourseEntity that = (CourseEntity) o;
         return courseId == that.courseId &&
-                teacherId == that.teacherId &&
+                teacherUserId == that.teacherUserId &&
                 period == that.period &&
                 Objects.equals(courseName, that.courseName) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(startTime, that.startTime) &&
-                Objects.equals(finishTime, that.finishTime);
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(finishDate, that.finishDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(courseId, teacherId, courseName, description, period, startTime, finishTime);
+        return Objects.hash(courseId, teacherUserId, courseName, description, period, startDate, finishDate);
     }
 }

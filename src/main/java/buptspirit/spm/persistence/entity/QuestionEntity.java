@@ -1,10 +1,14 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "question", schema = "spm", catalog = "")
+@Table(name = "question", schema = "spm")
 public class QuestionEntity {
     private int questionId;
     private int exam;
@@ -12,7 +16,7 @@ public class QuestionEntity {
     private String detail;
 
     @Id
-    @Column(name = "question_id")
+    @Column(name = "question_id", nullable = false)
     public int getQuestionId() {
         return questionId;
     }
@@ -22,7 +26,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "exam")
+    @Column(name = "exam", nullable = false)
     public int getExam() {
         return exam;
     }
@@ -32,7 +36,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "answer")
+    @Column(name = "answer", nullable = false)
     public int getAnswer() {
         return answer;
     }
@@ -42,7 +46,7 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "detail")
+    @Column(name = "detail", nullable = false, length = -1)
     public String getDetail() {
         return detail;
     }

@@ -1,20 +1,24 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "notice", schema = "spm", catalog = "")
+@Table(name = "notice", schema = "spm")
 public class NoticeEntity {
     private int noticeId;
     private int author;
     private String title;
     private String detail;
-    private Timestamp dateCreate;
+    private Timestamp timeCreated;
 
     @Id
-    @Column(name = "notice_id")
+    @Column(name = "notice_id", nullable = false)
     public int getNoticeId() {
         return noticeId;
     }
@@ -24,7 +28,7 @@ public class NoticeEntity {
     }
 
     @Basic
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     public int getAuthor() {
         return author;
     }
@@ -34,7 +38,7 @@ public class NoticeEntity {
     }
 
     @Basic
-    @Column(name = "title")
+    @Column(name = "title", nullable = false, length = 128)
     public String getTitle() {
         return title;
     }
@@ -44,7 +48,7 @@ public class NoticeEntity {
     }
 
     @Basic
-    @Column(name = "detail")
+    @Column(name = "detail", nullable = false, length = -1)
     public String getDetail() {
         return detail;
     }
@@ -54,13 +58,13 @@ public class NoticeEntity {
     }
 
     @Basic
-    @Column(name = "date_create")
-    public Timestamp getDateCreate() {
-        return dateCreate;
+    @Column(name = "time_created", nullable = false)
+    public Timestamp getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setDateCreate(Timestamp dateCreate) {
-        this.dateCreate = dateCreate;
+    public void setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     @Override
@@ -72,11 +76,11 @@ public class NoticeEntity {
                 author == that.author &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(detail, that.detail) &&
-                Objects.equals(dateCreate, that.dateCreate);
+                Objects.equals(timeCreated, that.timeCreated);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noticeId, author, title, detail, dateCreate);
+        return Objects.hash(noticeId, author, title, detail, timeCreated);
     }
 }

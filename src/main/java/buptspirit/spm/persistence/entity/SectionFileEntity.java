@@ -1,33 +1,37 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "section_file", schema = "spm", catalog = "")
+@Table(name = "section_file", schema = "spm")
 @IdClass(SectionFileEntityPK.class)
 public class SectionFileEntity {
-    private int sectionSectionId;
-    private int filesourceFilesouceId;
+    private int sectionId;
+    private int fileSourceId;
 
     @Id
-    @Column(name = "section_section_id")
-    public int getSectionSectionId() {
-        return sectionSectionId;
+    @Column(name = "section_id", nullable = false)
+    public int getSectionId() {
+        return sectionId;
     }
 
-    public void setSectionSectionId(int sectionSectionId) {
-        this.sectionSectionId = sectionSectionId;
+    public void setSectionId(int sectionId) {
+        this.sectionId = sectionId;
     }
 
     @Id
-    @Column(name = "filesource_filesouce_id")
-    public int getFilesourceFilesouceId() {
-        return filesourceFilesouceId;
+    @Column(name = "file_source_id", nullable = false)
+    public int getFileSourceId() {
+        return fileSourceId;
     }
 
-    public void setFilesourceFilesouceId(int filesourceFilesouceId) {
-        this.filesourceFilesouceId = filesourceFilesouceId;
+    public void setFileSourceId(int fileSourceId) {
+        this.fileSourceId = fileSourceId;
     }
 
     @Override
@@ -35,12 +39,12 @@ public class SectionFileEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SectionFileEntity that = (SectionFileEntity) o;
-        return sectionSectionId == that.sectionSectionId &&
-                filesourceFilesouceId == that.filesourceFilesouceId;
+        return sectionId == that.sectionId &&
+                fileSourceId == that.fileSourceId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sectionSectionId, filesourceFilesouceId);
+        return Objects.hash(sectionId, fileSourceId);
     }
 }
