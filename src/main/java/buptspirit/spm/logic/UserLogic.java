@@ -47,13 +47,13 @@ public class UserLogic {
         newUser.setPassword(passwordHash.generate(password.toCharArray()));
         newUser.setRole(role);
         newUser.setDateCreated(new Date());
-        transactional(
+       /* transactional(
                 em -> {
                     userInfoFacade.create(em, newUser);
                     return null;
                 },
                 "failed to create user"
-        );
+        );*/
         return newUser;
     }
 }
