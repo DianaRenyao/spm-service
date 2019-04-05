@@ -30,9 +30,9 @@ public enum ServiceError {
     DELETE_NOTICE_NO_SUCH_NOTICE(41002, Response.Status.BAD_REQUEST, "no such notice"),
     ;
 
-    private int code;
-    private Response.Status status;
-    private String message;
+    private final int code;
+    private final Response.Status status;
+    private final String message;
 
     ServiceError(int code, Response.Status status, String message) {
         this.code = code;

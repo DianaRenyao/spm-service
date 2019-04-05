@@ -52,7 +52,7 @@ public class NoticeResource {
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public NoticeMessage createNotices(NoticeCreationMessage noticeCreationMessage) throws ServiceException, ServiceAssertionException {
+    public NoticeMessage createNotices(NoticeCreationMessage noticeCreationMessage) throws ServiceAssertionException {
         return noticeLogic.createNotice(sessionMessage, noticeCreationMessage);
     }
 

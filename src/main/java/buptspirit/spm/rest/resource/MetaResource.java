@@ -27,6 +27,7 @@ public class MetaResource {
         return builder.toString();
     }
 
+    @SuppressWarnings("SameReturnValue")
     @GET
     @Path("is-working")
     @Produces(MediaType.APPLICATION_JSON)
