@@ -1,18 +1,17 @@
 package buptspirit.spm.message;
 
-import buptspirit.spm.exception.ServiceError;
-import buptspirit.spm.exception.ServiceException;
+import buptspirit.spm.exception.ServiceAssertionException;
 
-public class LoginMessage {
+import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
+
+public class LoginMessage implements InputMessage {
 
     private String username;
     private String password;
 
-    public void enforce() throws ServiceException {
-        if (username == null)
-            throw ServiceError.LOGIN_USERNAME_IS_EMPTY.toException();
-        if (password == null)
-            throw ServiceError.LOGIN_PASSWORD_IS_EMPTY.toException();
+    public void enforce() throws ServiceAssertionException {
+        serviceAssert(username != null && !username.isEmpty());
+        serviceAssert(password != null && !password.isEmpty());
     }
 
     public String getUsername() {

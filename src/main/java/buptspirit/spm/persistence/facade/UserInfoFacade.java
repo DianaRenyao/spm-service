@@ -15,7 +15,7 @@ public class UserInfoFacade extends AbstractFacade<UserInfoEntity> {
 
     public UserInfoEntity findByUsername(EntityManager em, String username) {
         try {
-            return em.createQuery("select e from UserInfoEntity e where e.username = :username", UserInfoEntity.class)
+            return em.createQuery("select u from UserInfoEntity u where u.username = :username", UserInfoEntity.class)
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException e) {

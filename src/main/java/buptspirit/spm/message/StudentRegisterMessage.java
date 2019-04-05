@@ -1,9 +1,10 @@
 package buptspirit.spm.message;
 
-import buptspirit.spm.exception.ServiceError;
-import buptspirit.spm.exception.ServiceException;
+import buptspirit.spm.exception.ServiceAssertionException;
 
-public class StudentRegisterMessage {
+import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
+
+public class StudentRegisterMessage implements InputMessage {
 
     private String username;
     private String password;
@@ -14,21 +15,14 @@ public class StudentRegisterMessage {
     private String nickname;
     private String college;
 
-    public void enforce() throws ServiceException {
-        if (username == null || username.isEmpty())
-            throw ServiceError.POST_STUDENT_USERNAME_IS_EMPTY.toException();
-        if (password == null || password.isEmpty())
-            throw ServiceError.POST_STUDENT_PASSWORD_IS_EMPTY.toException();
-        if (realName == null || realName.isEmpty())
-            throw ServiceError.POST_STUDENT_REAL_NAME_IS_EMPTY.toException();
-        if (email == null || email.isEmpty())
-            throw ServiceError.POST_STUDENT_EMAIL_IS_EMPTY.toException();
-        if (phone == null || phone.isEmpty())
-            throw ServiceError.POST_STUDENT_PHONE_IS_EMPTY.toException();
-        if (clazz == null || clazz.isEmpty())
-            throw ServiceError.POST_STUDENT_CLAZZ_IS_EMPTY.toException();
-        if (!username.matches("\\d{10}"))
-            throw ServiceError.POST_STUDENT_USERNAME_IS_NOT_AN_ID.toException();
+    public void enforce() throws ServiceAssertionException {
+        serviceAssert(username != null && !username.isEmpty());
+        serviceAssert(password != null && !password.isEmpty());
+        serviceAssert(realName != null && !realName.isEmpty());
+        serviceAssert(email != null && !email.isEmpty());
+        serviceAssert(phone != null && !phone.isEmpty());
+        serviceAssert(clazz != null && !clazz.isEmpty());
+        serviceAssert(username.matches("$\\d{10}^"));
     }
 
     public String getUsername() {

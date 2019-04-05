@@ -1,5 +1,6 @@
 package buptspirit.spm.logic;
 
+import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.LoginMessage;
@@ -133,12 +134,12 @@ public class SessionLogic {
         }
     }
 
-    public SessionMessage createSession(LoginMessage login) throws ServiceException {
+    public SessionMessage createSession(LoginMessage login) throws ServiceException, ServiceAssertionException {
         UserInfoMessage userInfo = userLogic.verify(login); // enforced in userLogic.verify
         if (userInfo != null) {
             return issue(userInfo, EXPIRE_TIME);
         } else {
-            throw ServiceError.LOGIN_INVALID_USERNAME_OR_PASSWORD.toException();
+            throw ServiceError.POST_SESSION_INVALID_USERNAME_OR_PASSWORD.toException();
         }
     }
 

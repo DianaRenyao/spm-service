@@ -3,7 +3,9 @@ package buptspirit.spm.persistence.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -18,6 +20,7 @@ public class NoticeEntity {
     private Timestamp timeCreated;
 
     @Id
+    @GeneratedValue
     @Column(name = "notice_id", nullable = false)
     public int getNoticeId() {
         return noticeId;
@@ -82,5 +85,10 @@ public class NoticeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(noticeId, author, title, detail, timeCreated);
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        this.setTimeCreated(new Timestamp(System.currentTimeMillis()));
     }
 }

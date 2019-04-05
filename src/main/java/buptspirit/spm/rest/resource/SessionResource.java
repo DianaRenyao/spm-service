@@ -1,5 +1,6 @@
 package buptspirit.spm.rest.resource;
 
+import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.SessionLogic;
 import buptspirit.spm.message.LoginMessage;
@@ -44,7 +45,7 @@ public class SessionResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public SessionMessage createSession(LoginMessage login) throws ServiceException {
+    public SessionMessage createSession(LoginMessage login) throws ServiceException, ServiceAssertionException {
         return sessionLogic.createSession(login);
     }
 }

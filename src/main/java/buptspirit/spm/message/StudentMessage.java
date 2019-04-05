@@ -9,7 +9,7 @@ public class StudentMessage {
     private String nickname;
     private String college;
 
-    public static StudentMessage FromEntity(StudentEntity entity, UserInfoMessage userInfo) {
+    public static StudentMessage fromEntity(StudentEntity entity, UserInfoMessage userInfo) {
         StudentMessage message = new StudentMessage();
         message.userInfo = userInfo;
         message.clazz = entity.getClazz();

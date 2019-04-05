@@ -1,5 +1,6 @@
 package buptspirit.spm.logic;
 
+import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.LoginMessage;
@@ -17,6 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 @Singleton
@@ -40,7 +42,7 @@ public class UserLogic {
     }
 
     // return null if failed to verify user
-    UserInfoMessage verify(LoginMessage loginMessage) throws ServiceException {
+    UserInfoMessage verify(LoginMessage loginMessage) throws ServiceAssertionException {
         loginMessage.enforce();
 
         UserInfoEntity info = transactional(
@@ -48,13 +50,13 @@ public class UserLogic {
                 "failed to find user by username"
         );
         if (info != null && passwordHash.verify(loginMessage.getPassword().toCharArray(), info.getPassword())) {
-            return UserInfoMessage.FromEntity(info);
+            return UserInfoMessage.fromEntity(info);
         } else {
             return null;
         }
     }
 
-    public StudentMessage createStudent(StudentRegisterMessage registerMessage) throws ServiceException {
+    public StudentMessage createStudent(StudentRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         registerMessage.enforce();
 
         boolean exists = transactional(
@@ -85,15 +87,12 @@ public class UserLogic {
                 "failed to create user"
         );
 
-
-        UserInfoMessage userInfoMessage = UserInfoMessage.FromEntity(newUser);
-        return StudentMessage.FromEntity(newStudent, userInfoMessage);
+        UserInfoMessage userInfoMessage = UserInfoMessage.fromEntity(newUser);
+        return StudentMessage.fromEntity(newStudent, userInfoMessage);
     }
 
-    public StudentMessage getStudent(String username) throws ServiceException {
-        if (username != null && username.isEmpty()) {
-            throw ServiceError.GET_STUDENT_USERNAME_IS_EMPTY.toException();
-        }
+    public StudentMessage getStudent(String username) throws ServiceException, ServiceAssertionException {
+        serviceAssert(username != null && username.isEmpty());
 
         StudentMessage message = transactional(
                 em -> {
@@ -103,7 +102,7 @@ public class UserLogic {
                     StudentEntity student = studentFacade.find(em, user.getUserId());
                     if (student == null)
                         return null;
-                    return StudentMessage.FromEntity(student, UserInfoMessage.FromEntity(user));
+                    return StudentMessage.fromEntity(student, UserInfoMessage.fromEntity(user));
                 },
                 "failed to find student"
         );

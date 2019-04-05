@@ -1,5 +1,6 @@
 package buptspirit.spm.rest.resource;
 
+import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.UserLogic;
@@ -35,10 +36,10 @@ public class StudentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public StudentMessage getStudent(
             @PathParam("username") String username
-    ) throws ServiceException {
+    ) throws ServiceException, ServiceAssertionException {
         if (sessionMessage.getUserInfo().getRole().equals("student")) {
             if (!sessionMessage.getUserInfo().getUsername().equals(username)) {
-                throw ServiceError.GET_STUDENT_NO_PERMISSION.toException();
+                throw ServiceError.FORBIDDEN.toException();
             }
         }
         return userLogic.getStudent(username);
@@ -47,7 +48,7 @@ public class StudentResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StudentMessage register(StudentRegisterMessage registerMessage) throws ServiceException {
+    public StudentMessage register(StudentRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         return userLogic.createStudent(registerMessage);
     }
 }

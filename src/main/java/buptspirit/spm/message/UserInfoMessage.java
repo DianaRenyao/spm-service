@@ -14,7 +14,7 @@ public class UserInfoMessage {
     private String email;
     private String phone;
 
-    public static UserInfoMessage FromEntity(UserInfoEntity entity) {
+    public static UserInfoMessage fromEntity(UserInfoEntity entity) {
         UserInfoMessage message = new UserInfoMessage();
         message.id = entity.getUserId();
         message.username = entity.getUsername();

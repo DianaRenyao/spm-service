@@ -15,11 +15,6 @@ public class ServiceException extends Exception {
         this.serviceError = serviceError;
     }
 
-    @Override
-    public String getMessage() {
-        return serviceError.getMessage();
-    }
-
     public ServiceError getServiceError() {
         return serviceError;
     }
