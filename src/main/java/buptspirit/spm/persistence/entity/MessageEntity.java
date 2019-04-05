@@ -1,20 +1,24 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "message", schema = "spm", catalog = "")
+@Table(name = "message", schema = "spm")
 public class MessageEntity {
     private int messageId;
     private int author;
     private String content;
-    private Timestamp createTime;
+    private Timestamp timeCreated;
     private Integer replyTo;
 
     @Id
-    @Column(name = "message_id")
+    @Column(name = "message_id", nullable = false)
     public int getMessageId() {
         return messageId;
     }
@@ -24,7 +28,7 @@ public class MessageEntity {
     }
 
     @Basic
-    @Column(name = "author")
+    @Column(name = "author", nullable = false)
     public int getAuthor() {
         return author;
     }
@@ -34,7 +38,7 @@ public class MessageEntity {
     }
 
     @Basic
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, length = -1)
     public String getContent() {
         return content;
     }
@@ -44,17 +48,17 @@ public class MessageEntity {
     }
 
     @Basic
-    @Column(name = "create_time")
-    public Timestamp getCreateTime() {
-        return createTime;
+    @Column(name = "time_created", nullable = false)
+    public Timestamp getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setCreateTime(Timestamp createTime) {
-        this.createTime = createTime;
+    public void setTimeCreated(Timestamp timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     @Basic
-    @Column(name = "reply_to")
+    @Column(name = "reply_to", nullable = true)
     public Integer getReplyTo() {
         return replyTo;
     }
@@ -71,12 +75,12 @@ public class MessageEntity {
         return messageId == that.messageId &&
                 author == that.author &&
                 Objects.equals(content, that.content) &&
-                Objects.equals(createTime, that.createTime) &&
+                Objects.equals(timeCreated, that.timeCreated) &&
                 Objects.equals(replyTo, that.replyTo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(messageId, author, content, createTime, replyTo);
+        return Objects.hash(messageId, author, content, timeCreated, replyTo);
     }
 }

@@ -1,6 +1,7 @@
-package buptspirit.spm.rest.exception;
+package buptspirit.spm.rest.mapper;
 
-import buptspirit.spm.rest.message.ErrorMessage;
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.message.ErrorMessage;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;

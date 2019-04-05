@@ -7,8 +7,9 @@ import javax.ws.rs.ApplicationPath;
 @ApplicationPath("webapi")
 public class SpmResourceConfig extends ResourceConfig {
     public SpmResourceConfig() {
-        packages(false, "buptspirit.spm.rest.resource");
-        packages(false, "buptspirit.spm.rest.filter");
-        packages(false, "buptspirit.spm.rest.exception");
+        // use CDI instead
+//        packages(false, "buptspirit.spm.rest.filter");
+//        packages(false, "buptspirit.spm.rest.mapper");
+//        packages(false, "buptspirit.spm.rest.resource");
     }
 }

@@ -8,9 +8,9 @@ import java.util.Objects;
 public class StudentCourseExperimentEntityPK implements Serializable {
     private int studentId;
     private int courseId;
-    private int experimentExperimentId;
+    private int experimentId;
 
-    @Column(name = "student_id")
+    @Column(name = "student_id", nullable = false)
     @Id
     public int getStudentId() {
         return studentId;
@@ -20,7 +20,7 @@ public class StudentCourseExperimentEntityPK implements Serializable {
         this.studentId = studentId;
     }
 
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     @Id
     public int getCourseId() {
         return courseId;
@@ -30,14 +30,14 @@ public class StudentCourseExperimentEntityPK implements Serializable {
         this.courseId = courseId;
     }
 
-    @Column(name = "experiment_experiment_id")
+    @Column(name = "experiment_id", nullable = false)
     @Id
-    public int getExperimentExperimentId() {
-        return experimentExperimentId;
+    public int getExperimentId() {
+        return experimentId;
     }
 
-    public void setExperimentExperimentId(int experimentExperimentId) {
-        this.experimentExperimentId = experimentExperimentId;
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
     }
 
     @Override
@@ -47,11 +47,11 @@ public class StudentCourseExperimentEntityPK implements Serializable {
         StudentCourseExperimentEntityPK that = (StudentCourseExperimentEntityPK) o;
         return studentId == that.studentId &&
                 courseId == that.courseId &&
-                experimentExperimentId == that.experimentExperimentId;
+                experimentId == that.experimentId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, courseId, experimentExperimentId);
+        return Objects.hash(studentId, courseId, experimentId);
     }
 }

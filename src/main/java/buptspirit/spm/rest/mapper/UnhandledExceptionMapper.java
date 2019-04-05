@@ -1,9 +1,9 @@
-package buptspirit.spm.rest.exception;
+package buptspirit.spm.rest.mapper;
 
+import buptspirit.spm.exception.ServiceError;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;

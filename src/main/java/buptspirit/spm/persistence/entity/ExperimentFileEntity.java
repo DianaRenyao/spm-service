@@ -1,33 +1,37 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "experiment_file", schema = "spm", catalog = "")
+@Table(name = "experiment_file", schema = "spm")
 @IdClass(ExperimentFileEntityPK.class)
 public class ExperimentFileEntity {
-    private int experimentExperimentId;
-    private int filesourceFilesouceId;
+    private int experimentId;
+    private int fileSourceId;
 
     @Id
-    @Column(name = "experiment_experiment_id")
-    public int getExperimentExperimentId() {
-        return experimentExperimentId;
+    @Column(name = "experiment_id", nullable = false)
+    public int getExperimentId() {
+        return experimentId;
     }
 
-    public void setExperimentExperimentId(int experimentExperimentId) {
-        this.experimentExperimentId = experimentExperimentId;
+    public void setExperimentId(int experimentId) {
+        this.experimentId = experimentId;
     }
 
     @Id
-    @Column(name = "filesource_filesouce_id")
-    public int getFilesourceFilesouceId() {
-        return filesourceFilesouceId;
+    @Column(name = "file_source_id", nullable = false)
+    public int getFileSourceId() {
+        return fileSourceId;
     }
 
-    public void setFilesourceFilesouceId(int filesourceFilesouceId) {
-        this.filesourceFilesouceId = filesourceFilesouceId;
+    public void setFileSourceId(int fileSourceId) {
+        this.fileSourceId = fileSourceId;
     }
 
     @Override
@@ -35,12 +39,12 @@ public class ExperimentFileEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ExperimentFileEntity that = (ExperimentFileEntity) o;
-        return experimentExperimentId == that.experimentExperimentId &&
-                filesourceFilesouceId == that.filesourceFilesouceId;
+        return experimentId == that.experimentId &&
+                fileSourceId == that.fileSourceId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(experimentExperimentId, filesourceFilesouceId);
+        return Objects.hash(experimentId, fileSourceId);
     }
 }

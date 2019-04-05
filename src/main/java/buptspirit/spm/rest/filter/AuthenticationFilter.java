@@ -1,8 +1,7 @@
 package buptspirit.spm.rest.filter;
 
-import buptspirit.spm.rest.session.RemoteSession;
-import buptspirit.spm.rest.token.TokenManager;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import buptspirit.spm.logic.SessionLogic;
+import buptspirit.spm.message.SessionMessage;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -10,71 +9,55 @@ import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.security.Principal;
-import java.util.Date;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
 
-    @Inject
-    @AuthenticatedSession
-    Event<RemoteSession> userAuthenticatedEvent;
+    @Context
+    UriInfo uriInfo;
 
     @Inject
-    private TokenManager tokenManager;
+    @AuthenticatedSession
+    Event<SessionMessage> userAuthenticatedEvent;
+
+    @Inject
+    private SessionLogic sessionLogic;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
         String authorizationHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-        DecodedJWT jwt = null;
+        SessionMessage session = SessionMessage.Unauthenticated();
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring("Bearer".length()).trim();
-            jwt = tokenManager.verifiedOrNull(token);
-            if (jwt != null) {
-                Date expire = jwt.getExpiresAt();
-                if (expire.before(new Date())) {
-                    // expired
-                    jwt = null;
-                }
-            }
-        }
+            session = sessionLogic.getSessionFromToken(token);
 
-        if (jwt != null) {
-            // authenticated
-            int id = jwt.getClaim("id").asInt();
-            String username = jwt.getSubject();
-            String role = jwt.getClaim("role").asString();
-            requestContext.setSecurityContext(new SecurityContextImpl(
-                    username,
-                    role,
-                    false,
-                    null));
-            RemoteSession session = new RemoteSession();
-            session.setAuthenticated(true);
-            session.setId(id);
-            session.setRole(role);
-            session.setUsername(username);
-            session.setIssuedAt(jwt.getIssuedAt());
-            session.setExpiresAt(jwt.getExpiresAt());
-            userAuthenticatedEvent.fire(session);
-        } else {
-            RemoteSession session = new RemoteSession();
-            session.setAuthenticated(false);
-            userAuthenticatedEvent.fire(session);
+            requestContext.setSecurityContext(
+                    new SecurityContextImpl(
+                            session.getUserInfo().getUsername(),
+                            session.getUserInfo().getRole(),
+                            uriInfo.getAbsolutePath().toString().startsWith("https"),
+                            "BEARER"
+                    )
+            );
         }
+        userAuthenticatedEvent.fire(session);
     }
 }
 
 class SecurityContextImpl implements SecurityContext {
-    private Principal principal;
-    private String role;
-    private boolean secure;
-    private String authenticationScheme;
+    private final Principal principal;
+    private final String role;
+    private final boolean secure;
+    private final String authenticationScheme;
 
+    @SuppressWarnings("SameParameterValue")
     SecurityContextImpl(String username, String role, boolean secure, String authenticationScheme) {
         this.principal = new PrincipalImpl(username);
         this.role = role;
@@ -104,7 +87,7 @@ class SecurityContextImpl implements SecurityContext {
 }
 
 class PrincipalImpl implements Principal {
-    private String username;
+    private final String username;
 
     PrincipalImpl(String username) {
         this.username = username;

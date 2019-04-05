@@ -1,4 +1,4 @@
-package buptspirit.spm.rest.message;
+package buptspirit.spm.message;
 
 public class ErrorMessage {
     private int status;
@@ -13,9 +13,13 @@ public class ErrorMessage {
         this.status = status;
     }
 
-    public int getCode() { return code; }
+    public int getCode() {
+        return code;
+    }
 
-    public void setCode(int code) { this.code = code; }
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getMessage() {
         return message;

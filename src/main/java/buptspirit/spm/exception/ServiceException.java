@@ -1,6 +1,4 @@
-package buptspirit.spm.rest.exception;
-
-import buptspirit.spm.rest.message.ErrorMessage;
+package buptspirit.spm.exception;
 
 import javax.ws.rs.core.Response;
 
@@ -9,7 +7,7 @@ public class ServiceException extends Exception {
 
     private static final Response.Status DEFAULT_STATUS = Response.Status.BAD_REQUEST;
 
-    private ServiceError serviceError;
+    private final ServiceError serviceError;
 
     // can only be created from ServiceError
     ServiceException(ServiceError serviceError) {
@@ -17,12 +15,7 @@ public class ServiceException extends Exception {
         this.serviceError = serviceError;
     }
 
-    @Override
-    public String getMessage() {
-        return serviceError.getMessage();
-    }
-
-    ServiceError getServiceError() {
+    public ServiceError getServiceError() {
         return serviceError;
     }
 }

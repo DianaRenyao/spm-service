@@ -5,29 +5,26 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Table(name = "token_secret")
-public class TokenSecret {
-    private int id;
+@Table(name = "token_secret", schema = "spm")
+public class TokenSecretEntity {
+    private int tokenSecretId;
     private String secret;
 
     @Id
-    @NotNull
-    @Column(name = "id", nullable = false)
-    public int getId() {
-        return id;
+    @Column(name = "token_secret_id", nullable = false)
+    public int getTokenSecretId() {
+        return tokenSecretId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setTokenSecretId(int tokenSecretId) {
+        this.tokenSecretId = tokenSecretId;
     }
 
     @Basic
-    @NotNull
-    @Column(name = "secret", nullable = false, length = 256)
+    @Column(name = "secret", nullable = true, length = 256)
     public String getSecret() {
         return secret;
     }
@@ -40,13 +37,13 @@ public class TokenSecret {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TokenSecret that = (TokenSecret) o;
-        return id == that.id &&
+        TokenSecretEntity that = (TokenSecretEntity) o;
+        return tokenSecretId == that.tokenSecretId &&
                 Objects.equals(secret, that.secret);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, secret);
+        return Objects.hash(tokenSecretId, secret);
     }
 }

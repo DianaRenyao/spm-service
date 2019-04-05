@@ -1,10 +1,14 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
-@Table(name = "chapter", schema = "spm", catalog = "")
+@Table(name = "chapter", schema = "spm")
 public class ChapterEntity {
     private int chapterId;
     private int courseId;
@@ -12,7 +16,7 @@ public class ChapterEntity {
     private String chapterName;
 
     @Id
-    @Column(name = "chapter_id")
+    @Column(name = "chapter_id", nullable = false)
     public int getChapterId() {
         return chapterId;
     }
@@ -22,7 +26,7 @@ public class ChapterEntity {
     }
 
     @Basic
-    @Column(name = "course_id")
+    @Column(name = "course_id", nullable = false)
     public int getCourseId() {
         return courseId;
     }
@@ -32,7 +36,7 @@ public class ChapterEntity {
     }
 
     @Basic
-    @Column(name = "sequence")
+    @Column(name = "sequence", nullable = false)
     public byte getSequence() {
         return sequence;
     }
@@ -42,7 +46,7 @@ public class ChapterEntity {
     }
 
     @Basic
-    @Column(name = "chapter_name")
+    @Column(name = "chapter_name", nullable = false, length = 256)
     public String getChapterName() {
         return chapterName;
     }

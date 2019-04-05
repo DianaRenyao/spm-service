@@ -9,7 +9,7 @@ public class SelectedCourseEntityPK implements Serializable {
     private int studentUserId;
     private int courseCourseId;
 
-    @Column(name = "student_user_id")
+    @Column(name = "student_user_id", nullable = false)
     @Id
     public int getStudentUserId() {
         return studentUserId;
@@ -19,7 +19,7 @@ public class SelectedCourseEntityPK implements Serializable {
         this.studentUserId = studentUserId;
     }
 
-    @Column(name = "course_course_id")
+    @Column(name = "course_course_id", nullable = false)
     @Id
     public int getCourseCourseId() {
         return courseCourseId;
