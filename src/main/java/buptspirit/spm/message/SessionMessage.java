@@ -4,12 +4,11 @@ import java.util.Date;
 
 public class SessionMessage {
 
-    private String token;
-
     private boolean authenticated;
-    private UserInfoMessage userInfo;
+    private String token;
     private Date issuedAt;
     private Date expiresAt;
+    private UserInfoMessage userInfo;
 
     public static SessionMessage Unauthenticated() {
         SessionMessage message = new SessionMessage();
