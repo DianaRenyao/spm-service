@@ -1,15 +1,13 @@
 package buptspirit.spm.rest.filter;
 
-import buptspirit.spm.rest.exception.ServiceError;
+import buptspirit.spm.exception.ServiceError;
 
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 import java.lang.reflect.AnnotatedElement;

@@ -1,6 +1,17 @@
 package buptspirit.spm.message;
 
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
+
 public class LoginMessage {
+
+    public void enforce() throws ServiceException {
+        if (username == null)
+            throw ServiceError.LOGIN_USERNAME_IS_EMPTY.toException();
+        if (password == null)
+            throw ServiceError.LOGIN_PASSWORD_IS_EMPTY.toException();
+    }
+
     private String username;
     private String password;
 

@@ -9,8 +9,8 @@ import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
-import buptspirit.spm.rest.exception.ServiceError;
-import buptspirit.spm.rest.exception.ServiceException;
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -40,7 +40,9 @@ public class UserLogic {
     }
 
     // return null if failed to verify user
-    UserInfoMessage verify(LoginMessage loginMessage) {
+    UserInfoMessage verify(LoginMessage loginMessage) throws ServiceException {
+        loginMessage.enforce();
+
         UserInfoEntity info = transactional(
                 em -> userInfoFacade.findByUsername(em, loginMessage.getUsername()),
                 "failed to find user by username"
@@ -53,12 +55,14 @@ public class UserLogic {
     }
 
     public StudentMessage createStudent(StudentRegisterMessage registerMessage) throws ServiceException {
+        registerMessage.enforce();
+
         boolean exists = transactional(
                 em -> userInfoFacade.findByUsername(em, registerMessage.getUsername()) != null,
                 "failed to find user by name"
         );
         if (exists)
-            throw ServiceError.USERNAME_ALREADY_EXISTS.toException();
+            throw ServiceError.POST_STUDENT_USERNAME_ALREADY_EXISTS.toException();
         UserInfoEntity newUser = new UserInfoEntity();
         newUser.setUsername(registerMessage.getUsername());
         newUser.setPassword(passwordHash.generate(registerMessage.getPassword().toCharArray()));
@@ -84,5 +88,27 @@ public class UserLogic {
 
         UserInfoMessage userInfoMessage = UserInfoMessage.FromEntity(newUser);
         return StudentMessage.FromEntity(newStudent, userInfoMessage);
+    }
+
+    public StudentMessage getStudent(String username) throws ServiceException {
+        if (username != null && username.isEmpty()) {
+            throw ServiceError.GET_STUDENT_USERNAME_IS_EMPTY.toException();
+        }
+
+        StudentMessage message = transactional(
+                em -> {
+                    UserInfoEntity user = userInfoFacade.findByUsername(em, username);
+                    if (user == null)
+                        return null;
+                    StudentEntity student = studentFacade.find(em, user.getUserId());
+                    if (student == null)
+                        return null;
+                    return StudentMessage.FromEntity(student, UserInfoMessage.FromEntity(user));
+                },
+                "failed to find student"
+        );
+        if (message == null)
+            throw ServiceError.GET_STUDENT_NO_SUCH_STUDENT.toException();
+        return message;
     }
 }

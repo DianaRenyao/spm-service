@@ -10,20 +10,35 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
+    <name>SPM MOOC Service</name>
+
     <properties>
-        <version.javaee.servlet>4.0.1</version.javaee.servlet>
+        <version.javax.servlet-api>4.0.1</version.javax.servlet-api>
         <version.jersey>2.28</version.jersey>
         <version.javax.servlet.api>4.0.1</version.javax.servlet.api>
         <version.log4j>2.11.2</version.log4j>
-        <version.weld>2.4.8.Final</version.weld>
-        <version.cdi>2.0</version.cdi>
+        <version.weld-servlet>2.4.8.Final</version.weld-servlet>
+        <version.cdi-api>2.0</version.cdi-api>
         <version.hibernate>5.4.2.Final</version.hibernate>
-        <version.hibernate.jpa>1.0.2.Final</version.hibernate.jpa>
-        <version.mysql>8.0.15</version.mysql>
+<!--        <version.hibernate-jpa>1.0.2.Final</version.hibernate-jpa>-->
+        <version.mysql-connector-java>8.0.15</version.mysql-connector-java>
         <version.jboss.logging>3.3.2.Final</version.jboss.logging>
-        <version.infinispan>9.4.11.Final</version.infinispan>
-        <version.apache.commons.lang>3.8.1</version.apache.commons.lang>
-        <version.jwt>3.8.0</version.jwt>
+        <version.infinispan-core>9.4.11.Final</version.infinispan-core>
+        <version.commons-lang3>3.8.1</version.commons-lang3>
+        <version.java-jwt>3.8.0</version.java-jwt>
+<!--        <version.junit>4.12</version.junit>-->
+<!--        <version.assertj-core>3.12.2</version.assertj-core>-->
+<!--        <version.mockito-core>2.26.0</version.mockito-core>-->
+<!--        <version.rest-assured>3.3.0</version.rest-assured>-->
+<!--        <version.arquillian-junit-container>1.4.1.Final</version.arquillian-junit-container>-->
+<!--        <version.arquillian-tomcat-embedded-8>1.1.0.Final</version.arquillian-tomcat-embedded-8>-->
+<!--        <version.tomcat-embed>8.5.39</version.tomcat-embed>-->
+<!--        <version.shrinkwrap-depchain>1.2.6</version.shrinkwrap-depchain>-->
+<!--        <version.el-impl>2.2</version.el-impl>-->
+
+        <version.plugin.surefire>3.0.0-M3</version.plugin.surefire>
+        <version.plugin.failsafe>3.0.0-M3</version.plugin.failsafe>
+        <version.plugin.compiler>3.8.0</version.plugin.compiler>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -32,6 +47,60 @@
 
     <build>
         <finalName>spm-service</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.plugin.compiler}</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+
+<!--            &lt;!&ndash; tell surefire not to run integration tests during 'test' phase (unit test phase) &ndash;&gt;-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+            <!--                <version>${version.plugin.surefire}</version>-->
+            <!--                <configuration>-->
+            <!--                    <excludes>-->
+            <!--                        <exclude>**/*IntegrationTest.java</exclude>-->
+            <!--                        <exclude>**/*ApplicationTest.java</exclude>-->
+            <!--                        <exclude>**/*ApiTest.java</exclude>-->
+            <!--                    </excludes>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+            <!--            &lt;!&ndash; tell failsafe to specifically run integration tests during 'integration-test' phase (after the war has been generated) &ndash;&gt;-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+            <!--                <version>${version.plugin.failsafe}</version>-->
+            <!--                <configuration>-->
+            <!--                    <encoding>UTF-8</encoding>-->
+            <!--                    <includes>-->
+            <!--                        <include>**/*IntegrationTest.java</include>-->
+            <!--                        <exclude>**/*ApplicationTest.java</exclude>-->
+            <!--                        <exclude>**/*ApiTest.java</exclude>-->
+            <!--                    </includes>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>integration-test</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>integration-test</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                    <execution>-->
+            <!--                        <id>verify</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>verify</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+        </plugins>
     </build>
 
     <dependencyManagement>
@@ -51,9 +120,9 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${version.javaee.servlet}</version>
+            <version>${version.javax.servlet-api}</version>
         </dependency>
-        
+
         <!-- for logging -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -67,10 +136,10 @@
         </dependency>
 
         <!-- for jersey -->
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.jersey.core</groupId>-->
+<!--            <artifactId>jersey-server</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -78,6 +147,18 @@
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-binding</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-processing</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-sse</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
@@ -93,12 +174,12 @@
         <dependency>
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
-            <version>${version.weld}</version>
+            <version>${version.weld-servlet}</version>
         </dependency>
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
-            <version>${version.cdi}</version>
+            <version>${version.cdi-api}</version>
         </dependency>
 
         <!-- persistence -->
@@ -107,16 +188,15 @@
             <artifactId>hibernate-core</artifactId>
             <version>${version.hibernate}</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${version.hibernate.jpa}</version>
-        </dependency>
-        <!-- needed by hibernate -->
+<!--        <dependency>-->
+<!--            <groupId>com.h2database</groupId>-->
+<!--            <artifactId>h2</artifactId>-->
+<!--            <version>${version.h2}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${version.mysql}</version>
+            <version>${version.mysql-connector-java}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -124,21 +204,87 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
-            <version>${version.infinispan}</version>
+            <version>${version.infinispan-core}</version>
         </dependency>
 
         <!-- jwt -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>${version.jwt}</version>
+            <version>${version.java-jwt}</version>
         </dependency>
 
+        <!-- utility -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${version.apache.commons.lang}</version>
+            <version>${version.commons-lang3}</version>
         </dependency>
+
+<!--        &lt;!&ndash; test &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>junit</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <version>${version.junit}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.assertj</groupId>-->
+<!--            <artifactId>assertj-core</artifactId>-->
+<!--            <version>${version.assertj-core}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-core</artifactId>-->
+<!--            <version>${version.mockito-core}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>io.rest-assured</groupId>-->
+<!--            <artifactId>rest-assured</artifactId>-->
+<!--            <version>${version.rest-assured}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; arquillian test &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.arquillian.junit</groupId>-->
+<!--            <artifactId>arquillian-junit-container</artifactId>-->
+<!--            <version>${version.arquillian-junit-container}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.arquillian.container</groupId>-->
+<!--            <artifactId>arquillian-tomcat-embedded-8</artifactId>-->
+<!--            <version>${version.arquillian-tomcat-embedded-8}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.tomcat.embed</groupId>-->
+<!--            <artifactId>tomcat-embed-core</artifactId>-->
+<!--            <version>${version.tomcat-embed}</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.tomcat</groupId>-->
+<!--            <artifactId>tomcat-util</artifactId>-->
+<!--            <version>${version.tomcat-embed}</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss.shrinkwrap</groupId>-->
+<!--            <artifactId>shrinkwrap-depchain</artifactId>-->
+<!--            <version>${version.shrinkwrap-depchain}</version>-->
+<!--            <type>pom</type>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.glassfish.web</groupId>-->
+<!--            <artifactId>el-impl</artifactId>-->
+<!--            <version>${version.el-impl}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
     </dependencies>
 
 </project>

@@ -5,8 +5,8 @@ import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.persistence.entity.TokenSecretEntity;
 import buptspirit.spm.persistence.facade.TokenSecretFacade;
-import buptspirit.spm.rest.exception.ServiceError;
-import buptspirit.spm.rest.exception.ServiceException;
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -134,11 +134,11 @@ public class SessionLogic {
     }
 
     public SessionMessage createSession(LoginMessage login) throws ServiceException {
-        UserInfoMessage userInfo = userLogic.verify(login);
+        UserInfoMessage userInfo = userLogic.verify(login); // enforced in userLogic.verify
         if (userInfo != null) {
             return issue(userInfo, EXPIRE_TIME);
         } else {
-            throw ServiceError.INVALID_USERNAME_OR_PASSWORD.toException();
+            throw ServiceError.LOGIN_INVALID_USERNAME_OR_PASSWORD.toException();
         }
     }
 

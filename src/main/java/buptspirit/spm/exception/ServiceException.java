@@ -1,4 +1,4 @@
-package buptspirit.spm.rest.exception;
+package buptspirit.spm.exception;
 
 import javax.ws.rs.core.Response;
 
@@ -20,7 +20,7 @@ public class ServiceException extends Exception {
         return serviceError.getMessage();
     }
 
-    ServiceError getServiceError() {
+    public ServiceError getServiceError() {
         return serviceError;
     }
 }

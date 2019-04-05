@@ -32,6 +32,15 @@ public class AuthenticationFilter implements ContainerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring("Bearer".length()).trim();
             session = sessionLogic.getSessionFromToken(token);
+
+            requestContext.setSecurityContext(
+                    new SecurityContextImpl(
+                            session.getUserInfo().getUsername(),
+                            session.getUserInfo().getRole(),
+                            false,
+                            null
+                    )
+            );
         }
         userAuthenticatedEvent.fire(session);
     }
