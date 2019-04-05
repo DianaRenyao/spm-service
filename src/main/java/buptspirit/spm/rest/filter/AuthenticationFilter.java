@@ -9,14 +9,19 @@ import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.security.Principal;
 
 @Provider
 @Priority(Priorities.AUTHENTICATION)
 public class AuthenticationFilter implements ContainerRequestFilter {
+
+    @Context
+    UriInfo uriInfo;
 
     @Inject
     @AuthenticatedSession
@@ -37,8 +42,8 @@ public class AuthenticationFilter implements ContainerRequestFilter {
                     new SecurityContextImpl(
                             session.getUserInfo().getUsername(),
                             session.getUserInfo().getRole(),
-                            false,
-                            null
+                            uriInfo.getAbsolutePath().toString().startsWith("https"),
+                            "BEARER"
                     )
             );
         }
@@ -47,11 +52,12 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 }
 
 class SecurityContextImpl implements SecurityContext {
-    private Principal principal;
-    private String role;
-    private boolean secure;
-    private String authenticationScheme;
+    private final Principal principal;
+    private final String role;
+    private final boolean secure;
+    private final String authenticationScheme;
 
+    @SuppressWarnings("SameParameterValue")
     SecurityContextImpl(String username, String role, boolean secure, String authenticationScheme) {
         this.principal = new PrincipalImpl(username);
         this.role = role;
@@ -81,7 +87,7 @@ class SecurityContextImpl implements SecurityContext {
 }
 
 class PrincipalImpl implements Principal {
-    private String username;
+    private final String username;
 
     PrincipalImpl(String username) {
         this.username = username;
