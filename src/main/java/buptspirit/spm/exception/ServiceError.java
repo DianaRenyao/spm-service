@@ -28,6 +28,11 @@ public enum ServiceError {
     /* notice resource errors */
     PUT_NOTICE_NO_SUCH_NOTICE(40001, Response.Status.BAD_REQUEST, "no such notice"),
     DELETE_NOTICE_NO_SUCH_NOTICE(41002, Response.Status.BAD_REQUEST, "no such notice"),
+
+    /* teacher resource errors */
+    POST_TEACHER_USERNAME_ALREADY_EXISTS(50001, Response.Status.BAD_REQUEST, "username already exists"),
+    GET_TEACHER_NO_SUCH_TEACHER(51001, Response.Status.BAD_REQUEST, "no such user"),
+
     ;
 
     private final int code;

@@ -1,4 +1,4 @@
-package buptspirit.spm.rest.message;
+package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 
