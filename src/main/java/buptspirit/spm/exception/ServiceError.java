@@ -18,16 +18,23 @@ public enum ServiceError {
     UNAUTHENTICATED(10001, Response.Status.UNAUTHORIZED, "client must login to get access rights to the resource"),
     FORBIDDEN(10002, Response.Status.FORBIDDEN, "client does not have access rights to the resource"),
 
+    // third position
+    // GET - 1
+    // POST - 2
+    // PUT - 3
+    // DELETE - 4
+
     /* session resource errors */
-    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20001, Response.Status.UNAUTHORIZED, "username or password provided is invalid"),
+    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20201, Response.Status.UNAUTHORIZED, "username or password provided is invalid"),
 
     /* student resource errors */
-    POST_STUDENT_USERNAME_ALREADY_EXISTS(30001, Response.Status.BAD_REQUEST, "username already exists"),
-    GET_STUDENT_NO_SUCH_STUDENT(31001, Response.Status.BAD_REQUEST, "no such user"),
+    GET_STUDENT_NO_SUCH_STUDENT(30101, Response.Status.BAD_REQUEST, "no such user"),
+    POST_STUDENT_USERNAME_ALREADY_EXISTS(30201, Response.Status.BAD_REQUEST, "username already exists"),
 
     /* notice resource errors */
-    PUT_NOTICE_NO_SUCH_NOTICE(40001, Response.Status.BAD_REQUEST, "no such notice"),
-    DELETE_NOTICE_NO_SUCH_NOTICE(41002, Response.Status.BAD_REQUEST, "no such notice"),
+    GET_NOTICE_NO_SUCH_NOTICE(40101, Response.Status.BAD_REQUEST, "no such notice"),
+    PUT_NOTICE_NO_SUCH_NOTICE(40302, Response.Status.BAD_REQUEST, "no such notice"),
+    DELETE_NOTICE_NO_SUCH_NOTICE(40403, Response.Status.BAD_REQUEST, "no such notice"),
     ;
 
     private final int code;

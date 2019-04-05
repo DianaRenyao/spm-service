@@ -45,14 +45,18 @@ public class NoticeLogic {
         );
     }
 
-    public NoticeMessage getNotice(int id) {
-        return transactional(
-                em -> {
-                    NoticeEntity notice = noticeFacade.find(em, id);
-                    return messageMapper.intoMessage(em, notice);
-                },
+    public NoticeMessage getNotice(int id) throws ServiceException {
+        NoticeEntity notice = transactional(
+                em -> noticeFacade.find(em, id),
                 "failed to find notice"
         );
+        if (notice == null)
+            throw ServiceError.GET_NOTICE_NO_SUCH_NOTICE.toException();
+        return transactional(
+                em -> messageMapper.intoMessage(em, notice),
+                "failed to map notice into message"
+        );
+
     }
 
     public NoticeMessage createNotice(
