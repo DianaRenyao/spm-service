@@ -38,7 +38,7 @@ public class UserLogic {
 
     @PostConstruct
     public void postConstruct() {
-        logger.info("successfully constructed");
+        logger.trace("successfully constructed");
     }
 
     // return null if failed to verify user

@@ -9,8 +9,9 @@ import buptspirit.spm.message.NoticeMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.NoticeEntity;
 import buptspirit.spm.persistence.facade.NoticeFacade;
-import buptspirit.spm.persistence.facade.TeacherFacade;
+import org.apache.logging.log4j.Logger;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
@@ -22,13 +23,18 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 public class NoticeLogic {
 
     @Inject
+    private Logger logger;
+
+    @Inject
     private NoticeFacade noticeFacade;
 
     @Inject
     private MessageMapper messageMapper;
 
-    @Inject
-    private TeacherFacade teacherFacade;
+    @PostConstruct
+    public void postConstruct() {
+        logger.trace("successfully constructed");
+    }
 
     public List<NoticeMessage> getAllNotice() {
         return transactional(

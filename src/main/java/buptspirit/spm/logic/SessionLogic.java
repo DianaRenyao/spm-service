@@ -40,11 +40,9 @@ public class SessionLogic {
     @Inject
     private UserLogic userLogic;
 
-    @Inject
-
     @PostConstruct
     public void postConstruct() {
-        logger.info("successfully constructed");
+        logger.trace("successfully constructed");
         secret = transactional(
                 em -> {
                     TokenSecretEntity entity = tokenSecretFacade.find(em, 0);
@@ -65,12 +63,12 @@ public class SessionLogic {
         return RandomStringUtils.randomAlphanumeric(64);
     }
 
-    private SessionMessage issue(UserInfoMessage userInfo, long expireTime) {
+    private SessionMessage issue(UserInfoMessage userInfo) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             long current = System.currentTimeMillis();
             Date issuedAt = new Date(current);
-            Date expiresAt = new Date(current + expireTime);
+            Date expiresAt = new Date(current + SessionLogic.EXPIRE_TIME);
             SessionMessage message = new SessionMessage();
             message.setAuthenticated(true);
             message.setIssuedAt(issuedAt);
@@ -137,7 +135,7 @@ public class SessionLogic {
     public SessionMessage createSession(LoginMessage login) throws ServiceException, ServiceAssertionException {
         UserInfoMessage userInfo = userLogic.verify(login); // enforced in userLogic.verify
         if (userInfo != null) {
-            return issue(userInfo, EXPIRE_TIME);
+            return issue(userInfo);
         } else {
             throw ServiceError.POST_SESSION_INVALID_USERNAME_OR_PASSWORD.toException();
         }

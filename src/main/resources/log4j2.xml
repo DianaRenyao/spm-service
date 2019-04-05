@@ -6,8 +6,11 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="warn" additivity="false">
             <AppenderRef ref="Console"/>
         </Root>
+        <Logger name="buptspirit.spm" level="trace" additivity="false">
+            <Appender-ref ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>
