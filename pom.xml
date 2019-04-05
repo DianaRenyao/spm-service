@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -20,21 +20,21 @@
         <version.weld-servlet>2.4.8.Final</version.weld-servlet>
         <version.cdi-api>2.0</version.cdi-api>
         <version.hibernate>5.4.2.Final</version.hibernate>
-<!--        <version.hibernate-jpa>1.0.2.Final</version.hibernate-jpa>-->
+        <!--        <version.hibernate-jpa>1.0.2.Final</version.hibernate-jpa>-->
         <version.mysql-connector-java>8.0.15</version.mysql-connector-java>
         <version.jboss.logging>3.3.2.Final</version.jboss.logging>
         <version.infinispan-core>9.4.11.Final</version.infinispan-core>
         <version.commons-lang3>3.8.1</version.commons-lang3>
         <version.java-jwt>3.8.0</version.java-jwt>
-<!--        <version.junit>4.12</version.junit>-->
-<!--        <version.assertj-core>3.12.2</version.assertj-core>-->
-<!--        <version.mockito-core>2.26.0</version.mockito-core>-->
-<!--        <version.rest-assured>3.3.0</version.rest-assured>-->
-<!--        <version.arquillian-junit-container>1.4.1.Final</version.arquillian-junit-container>-->
-<!--        <version.arquillian-tomcat-embedded-8>1.1.0.Final</version.arquillian-tomcat-embedded-8>-->
-<!--        <version.tomcat-embed>8.5.39</version.tomcat-embed>-->
-<!--        <version.shrinkwrap-depchain>1.2.6</version.shrinkwrap-depchain>-->
-<!--        <version.el-impl>2.2</version.el-impl>-->
+        <!--        <version.junit>4.12</version.junit>-->
+        <!--        <version.assertj-core>3.12.2</version.assertj-core>-->
+        <!--        <version.mockito-core>2.26.0</version.mockito-core>-->
+        <!--        <version.rest-assured>3.3.0</version.rest-assured>-->
+        <!--        <version.arquillian-junit-container>1.4.1.Final</version.arquillian-junit-container>-->
+        <!--        <version.arquillian-tomcat-embedded-8>1.1.0.Final</version.arquillian-tomcat-embedded-8>-->
+        <!--        <version.tomcat-embed>8.5.39</version.tomcat-embed>-->
+        <!--        <version.shrinkwrap-depchain>1.2.6</version.shrinkwrap-depchain>-->
+        <!--        <version.el-impl>2.2</version.el-impl>-->
 
         <version.plugin.surefire>3.0.0-M3</version.plugin.surefire>
         <version.plugin.failsafe>3.0.0-M3</version.plugin.failsafe>
@@ -58,7 +58,7 @@
                 </configuration>
             </plugin>
 
-<!--            &lt;!&ndash; tell surefire not to run integration tests during 'test' phase (unit test phase) &ndash;&gt;-->
+            <!--            &lt;!&ndash; tell surefire not to run integration tests during 'test' phase (unit test phase) &ndash;&gt;-->
             <!--            <plugin>-->
             <!--                <groupId>org.apache.maven.plugins</groupId>-->
             <!--                <artifactId>maven-surefire-plugin</artifactId>-->
@@ -136,10 +136,10 @@
         </dependency>
 
         <!-- for jersey -->
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish.jersey.core</groupId>-->
-<!--            <artifactId>jersey-server</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.glassfish.jersey.core</groupId>-->
+        <!--            <artifactId>jersey-server</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
@@ -188,11 +188,11 @@
             <artifactId>hibernate-core</artifactId>
             <version>${version.hibernate}</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.h2database</groupId>-->
-<!--            <artifactId>h2</artifactId>-->
-<!--            <version>${version.h2}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.h2database</groupId>-->
+        <!--            <artifactId>h2</artifactId>-->
+        <!--            <version>${version.h2}</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -221,70 +221,70 @@
             <version>${version.commons-lang3}</version>
         </dependency>
 
-<!--        &lt;!&ndash; test &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>junit</groupId>-->
-<!--            <artifactId>junit</artifactId>-->
-<!--            <version>${version.junit}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.assertj</groupId>-->
-<!--            <artifactId>assertj-core</artifactId>-->
-<!--            <version>${version.assertj-core}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.mockito</groupId>-->
-<!--            <artifactId>mockito-core</artifactId>-->
-<!--            <version>${version.mockito-core}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.rest-assured</groupId>-->
-<!--            <artifactId>rest-assured</artifactId>-->
-<!--            <version>${version.rest-assured}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; test &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>junit</groupId>-->
+        <!--            <artifactId>junit</artifactId>-->
+        <!--            <version>${version.junit}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.assertj</groupId>-->
+        <!--            <artifactId>assertj-core</artifactId>-->
+        <!--            <version>${version.assertj-core}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.mockito</groupId>-->
+        <!--            <artifactId>mockito-core</artifactId>-->
+        <!--            <version>${version.mockito-core}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.rest-assured</groupId>-->
+        <!--            <artifactId>rest-assured</artifactId>-->
+        <!--            <version>${version.rest-assured}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
-<!--        &lt;!&ndash; arquillian test &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.junit</groupId>-->
-<!--            <artifactId>arquillian-junit-container</artifactId>-->
-<!--            <version>${version.arquillian-junit-container}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.arquillian.container</groupId>-->
-<!--            <artifactId>arquillian-tomcat-embedded-8</artifactId>-->
-<!--            <version>${version.arquillian-tomcat-embedded-8}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.tomcat.embed</groupId>-->
-<!--            <artifactId>tomcat-embed-core</artifactId>-->
-<!--            <version>${version.tomcat-embed}</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.tomcat</groupId>-->
-<!--            <artifactId>tomcat-util</artifactId>-->
-<!--            <version>${version.tomcat-embed}</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss.shrinkwrap</groupId>-->
-<!--            <artifactId>shrinkwrap-depchain</artifactId>-->
-<!--            <version>${version.shrinkwrap-depchain}</version>-->
-<!--            <type>pom</type>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish.web</groupId>-->
-<!--            <artifactId>el-impl</artifactId>-->
-<!--            <version>${version.el-impl}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        &lt;!&ndash; arquillian test &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.jboss.arquillian.junit</groupId>-->
+        <!--            <artifactId>arquillian-junit-container</artifactId>-->
+        <!--            <version>${version.arquillian-junit-container}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.jboss.arquillian.container</groupId>-->
+        <!--            <artifactId>arquillian-tomcat-embedded-8</artifactId>-->
+        <!--            <version>${version.arquillian-tomcat-embedded-8}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.tomcat.embed</groupId>-->
+        <!--            <artifactId>tomcat-embed-core</artifactId>-->
+        <!--            <version>${version.tomcat-embed}</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.tomcat</groupId>-->
+        <!--            <artifactId>tomcat-util</artifactId>-->
+        <!--            <version>${version.tomcat-embed}</version>-->
+        <!--            <scope>provided</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.jboss.shrinkwrap</groupId>-->
+        <!--            <artifactId>shrinkwrap-depchain</artifactId>-->
+        <!--            <version>${version.shrinkwrap-depchain}</version>-->
+        <!--            <type>pom</type>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.glassfish.web</groupId>-->
+        <!--            <artifactId>el-impl</artifactId>-->
+        <!--            <version>${version.el-impl}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
     </dependencies>
 
 </project>

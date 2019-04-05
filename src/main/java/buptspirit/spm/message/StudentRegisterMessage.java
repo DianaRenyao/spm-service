@@ -5,6 +5,15 @@ import buptspirit.spm.exception.ServiceException;
 
 public class StudentRegisterMessage {
 
+    private String username;
+    private String password;
+    private String realName;
+    private String email;
+    private String phone;
+    private String clazz;
+    private String nickname;
+    private String college;
+
     public void enforce() throws ServiceException {
         if (username == null || username.isEmpty())
             throw ServiceError.POST_STUDENT_USERNAME_IS_EMPTY.toException();
@@ -21,15 +30,6 @@ public class StudentRegisterMessage {
         if (!username.matches("\\d{10}"))
             throw ServiceError.POST_STUDENT_USERNAME_IS_NOT_AN_ID.toException();
     }
-
-    private String username;
-    private String password;
-    private String realName;
-    private String email;
-    private String phone;
-    private String clazz;
-    private String nickname;
-    private String college;
 
     public String getUsername() {
         return username;

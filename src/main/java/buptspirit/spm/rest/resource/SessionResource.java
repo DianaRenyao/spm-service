@@ -1,9 +1,9 @@
 package buptspirit.spm.rest.resource;
 
+import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.SessionLogic;
 import buptspirit.spm.message.LoginMessage;
 import buptspirit.spm.message.SessionMessage;
-import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 
 import javax.inject.Inject;

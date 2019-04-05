@@ -1,12 +1,12 @@
 package buptspirit.spm.logic;
 
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.LoginMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.persistence.entity.TokenSecretEntity;
 import buptspirit.spm.persistence.facade.TokenSecretFacade;
-import buptspirit.spm.exception.ServiceError;
-import buptspirit.spm.exception.ServiceException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

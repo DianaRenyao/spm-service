@@ -30,7 +30,7 @@ public enum ServiceError {
     POST_STUDENT_EMAIL_IS_EMPTY(20004, Response.Status.BAD_REQUEST, "email is empty"),
     POST_STUDENT_PHONE_IS_EMPTY(20005, Response.Status.BAD_REQUEST, "phone is empty"),
     POST_STUDENT_CLAZZ_IS_EMPTY(20006, Response.Status.BAD_REQUEST, "clazz is empty"),
-    POST_STUDENT_USERNAME_IS_NOT_AN_ID(20007,  Response.Status.BAD_REQUEST, "username is not an student or teacher id"),
+    POST_STUDENT_USERNAME_IS_NOT_AN_ID(20007, Response.Status.BAD_REQUEST, "username is not an student or teacher id"),
     POST_STUDENT_USERNAME_ALREADY_EXISTS(20101, Response.Status.BAD_REQUEST, "username already exists"),
     GET_STUDENT_USERNAME_IS_EMPTY(21001, Response.Status.BAD_REQUEST, "username is empty"),
     GET_STUDENT_NO_SUCH_STUDENT(21101, Response.Status.BAD_REQUEST, "no such user"),

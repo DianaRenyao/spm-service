@@ -1,5 +1,7 @@
 package buptspirit.spm.logic;
 
+import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.LoginMessage;
 import buptspirit.spm.message.StudentMessage;
 import buptspirit.spm.message.StudentRegisterMessage;
@@ -9,8 +11,6 @@ import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
-import buptspirit.spm.exception.ServiceError;
-import buptspirit.spm.exception.ServiceException;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;

@@ -5,15 +5,15 @@ import buptspirit.spm.exception.ServiceException;
 
 public class LoginMessage {
 
+    private String username;
+    private String password;
+
     public void enforce() throws ServiceException {
         if (username == null)
             throw ServiceError.LOGIN_USERNAME_IS_EMPTY.toException();
         if (password == null)
             throw ServiceError.LOGIN_PASSWORD_IS_EMPTY.toException();
     }
-
-    private String username;
-    private String password;
 
     public String getUsername() {
         return username;

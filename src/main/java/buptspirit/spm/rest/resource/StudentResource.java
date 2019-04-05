@@ -1,11 +1,11 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceError;
+import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.UserLogic;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.StudentMessage;
 import buptspirit.spm.message.StudentRegisterMessage;
-import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
@@ -17,9 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.SecurityContext;
 
 @Path("students")
 public class StudentResource {
