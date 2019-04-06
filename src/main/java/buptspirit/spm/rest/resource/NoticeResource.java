@@ -21,6 +21,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.List;
 
 @Path("notices")
@@ -44,7 +46,7 @@ public class NoticeResource {
     @Produces(MediaType.APPLICATION_JSON)
     public NoticeMessage getNotice(
             @PathParam("id") int id
-    ) {
+    ) throws ServiceException {
         return noticeLogic.getNotice(id);
     }
 
@@ -52,8 +54,12 @@ public class NoticeResource {
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public NoticeMessage createNotices(NoticeCreationMessage noticeCreationMessage) throws ServiceAssertionException {
-        return noticeLogic.createNotice(sessionMessage, noticeCreationMessage);
+    public Response createNotices(NoticeCreationMessage noticeCreationMessage) throws ServiceAssertionException {
+        NoticeMessage message = noticeLogic.createNotice(sessionMessage, noticeCreationMessage);
+        URI createdUri = UriBuilder.fromResource(NoticeResource.class)
+                .path(Integer.toString(message.getNoticeId()))
+                .build();
+        return Response.created(createdUri).entity(message).build();
     }
 
     @PUT

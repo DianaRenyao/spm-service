@@ -1,9 +1,8 @@
 package buptspirit.spm.message;
 
-import buptspirit.spm.persistence.entity.UserInfoEntity;
-
 import java.sql.Date;
 
+// TODO not finished yet
 public class OptionalCourseMessage {
 
     private String courseName;
@@ -17,44 +16,44 @@ public class OptionalCourseMessage {
         return courseName;
     }
 
-    public String getDescriptionSummary() {
-        return descriptionSummary;
-    }
-
-    public String getTeacherName() {
-        return teacherName;
-    }
-
-    public byte getPeriod() {
-        return period;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public Date getFinishTime() {
-        return finishTime;
-    }
-
     public void setCourseName(String courseName) {
         this.courseName = courseName;
+    }
+
+    public String getDescriptionSummary() {
+        return descriptionSummary;
     }
 
     public void setDescriptionSummary(String descriptionSummary) {
         this.descriptionSummary = descriptionSummary;
     }
 
+    public String getTeacherName() {
+        return teacherName;
+    }
+
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
+    }
+
+    public byte getPeriod() {
+        return period;
     }
 
     public void setPeriod(byte period) {
         this.period = period;
     }
 
+    public Date getStartTime() {
+        return startTime;
+    }
+
     public void setStartTime(Date startTime) {
         this.startTime = startTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
     }
 
     public void setFinishTime(Date finishTime) {

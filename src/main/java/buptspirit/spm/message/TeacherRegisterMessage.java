@@ -12,6 +12,7 @@ public class TeacherRegisterMessage implements InputMessage {
     private String email;
     private String phone;
 
+    @SuppressWarnings("Duplicates")
     @Override
     public void enforce() throws ServiceAssertionException {
         serviceAssert(username != null && !username.isEmpty());

@@ -3,7 +3,12 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.*;
+import buptspirit.spm.message.LoginMessage;
+import buptspirit.spm.message.StudentMessage;
+import buptspirit.spm.message.StudentRegisterMessage;
+import buptspirit.spm.message.TeacherMessage;
+import buptspirit.spm.message.TeacherRegisterMessage;
+import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.password.PasswordHash;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
@@ -11,6 +16,7 @@ import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.rest.filter.Role;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +28,8 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 @Singleton
 public class UserLogic {
+
+    private static final String DEFAULT_ADMIN_PASSWORD = "bupt-spirit";
 
     @Inject
     private UserInfoFacade userInfoFacade;
@@ -41,6 +49,10 @@ public class UserLogic {
     @PostConstruct
     public void postConstruct() {
         logger.trace("successfully constructed");
+
+        // ensure an administrator exists
+        if (!isAdministratorExists())
+            createAdministrator();
     }
 
     // return null if failed to verify user
@@ -58,6 +70,8 @@ public class UserLogic {
         }
     }
 
+    // TODO remote duplicates with createTeacher
+    @SuppressWarnings("Duplicates")
     public StudentMessage createStudent(StudentRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         registerMessage.enforce();
 
@@ -70,7 +84,7 @@ public class UserLogic {
         UserInfoEntity newUser = new UserInfoEntity();
         newUser.setUsername(registerMessage.getUsername());
         newUser.setPassword(passwordHash.generate(registerMessage.getPassword().toCharArray()));
-        newUser.setRole("student");
+        newUser.setRole(Role.Student.getName());
         newUser.setRealName(registerMessage.getRealName());
         newUser.setEmail(registerMessage.getEmail());
         newUser.setPhone(registerMessage.getPhone());
@@ -133,6 +147,7 @@ public class UserLogic {
         return message;
     }
 
+    @SuppressWarnings("Duplicates")
     public TeacherMessage createTeacher(TeacherRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         registerMessage.enforce();
 
@@ -145,11 +160,11 @@ public class UserLogic {
         UserInfoEntity newUser = new UserInfoEntity();
         newUser.setUsername(registerMessage.getUsername());
         newUser.setPassword(passwordHash.generate(registerMessage.getPassword().toCharArray()));
-        newUser.setRole("teacher");
+        newUser.setRole(Role.Teacher.getName());
         newUser.setRealName(registerMessage.getRealName());
         newUser.setEmail(registerMessage.getEmail());
         newUser.setPhone(registerMessage.getPhone());
-        TeacherEntity newTeacher = new TeacherEntity();;
+        TeacherEntity newTeacher = new TeacherEntity();
         transactional(
                 em -> {
                     userInfoFacade.create(em, newUser);
@@ -165,5 +180,31 @@ public class UserLogic {
         return TeacherMessage.fromEntity(newTeacher, userInfoMessage);
     }
 
+    @SuppressWarnings("Duplicates")
+    private boolean isAdministratorExists() {
+        UserInfoEntity admin = transactional(
+                em -> userInfoFacade.findByUsername(em, "0000000000"),
+                "failed to create user"
+        );
+        return admin != null;
+    }
 
+    @SuppressWarnings("Duplicates")
+    private void createAdministrator() {
+        UserInfoEntity newUser = new UserInfoEntity();
+        newUser.setUsername("0000000000");
+        newUser.setPassword(passwordHash.generate(DEFAULT_ADMIN_PASSWORD.toCharArray()));
+        newUser.setRole(Role.Administrator.getName());
+        newUser.setRealName("管理员");
+        newUser.setEmail("");
+        newUser.setPhone("");
+        transactional(
+                em -> {
+                    userInfoFacade.create(em, newUser);
+                    logger.debug("user id={} created", newUser.getUserId());
+                    return null;
+                },
+                "failed to create user"
+        );
+    }
 }
