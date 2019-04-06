@@ -5,8 +5,8 @@ import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.UserLogic;
 import buptspirit.spm.message.SessionMessage;
-import buptspirit.spm.message.StudentMessage;
-import buptspirit.spm.message.StudentRegisterMessage;
+import buptspirit.spm.message.TeacherMessage;
+import buptspirit.spm.message.TeacherRegisterMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
@@ -20,8 +20,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("students")
-public class StudentResource {
+@Path("teachers")
+public class TeacherResource {
 
     @Inject
     private UserLogic userLogic;
@@ -32,23 +32,24 @@ public class StudentResource {
 
     @GET
     @Path("{username}")
-    @Secured({Role.Student, Role.Teacher, Role.Administrator})
+    @Secured({Role.Teacher, Role.Administrator})
     @Produces(MediaType.APPLICATION_JSON)
-    public StudentMessage getStudent(
+    public TeacherMessage getTeacher(
             @PathParam("username") String username
     ) throws ServiceException, ServiceAssertionException {
-        if (sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())) {
+        if (sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName())) {
             if (!sessionMessage.getUserInfo().getUsername().equals(username)) {
                 throw ServiceError.FORBIDDEN.toException();
             }
         }
-        return userLogic.getStudent(username);
+        return userLogic.getTeacher(username);
     }
 
     @POST
+    @Secured({Role.Administrator})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public StudentMessage register(StudentRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
-        return userLogic.createStudent(registerMessage);
+    public TeacherMessage register(TeacherRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
+        return userLogic.createTeacher(registerMessage);
     }
 }
