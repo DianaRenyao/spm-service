@@ -48,12 +48,31 @@ public class UserLogic {
     private MessageMapper messageMapper;
 
     @PostConstruct
-    public void postConstruct() {
+    public void postConstruct() throws ServiceException, ServiceAssertionException {
         logger.trace("successfully constructed");
 
         // ensure an administrator exists
-        if (!isAdministratorExists())
+        if (!isAdministratorExists()) {
             createAdministrator();
+
+            StudentRegisterMessage studentRegisterMessage = new StudentRegisterMessage();
+            studentRegisterMessage.setClazz("2016211501");
+            studentRegisterMessage.setEmail("student@bupt.edu.cn");
+            studentRegisterMessage.setCollege("BUPT");
+            studentRegisterMessage.setUsername("2016211000");
+            studentRegisterMessage.setPassword(passwordHash.generate(DEFAULT_ADMIN_PASSWORD.toCharArray()));
+            studentRegisterMessage.setRealName("学生");
+            studentRegisterMessage.setPhone("");
+            createStudent(studentRegisterMessage);
+
+            TeacherRegisterMessage teacherRegisterMessage = new TeacherRegisterMessage();
+            teacherRegisterMessage.setEmail("teacher@bupt.edu.cn");
+            teacherRegisterMessage.setPhone("");
+            teacherRegisterMessage.setUsername("2016000000");
+            teacherRegisterMessage.setPassword(passwordHash.generate(DEFAULT_ADMIN_PASSWORD.toCharArray()));
+            teacherRegisterMessage.setRealName("老师");
+            createTeacher(teacherRegisterMessage);
+        }
     }
 
     // return null if failed to verify user

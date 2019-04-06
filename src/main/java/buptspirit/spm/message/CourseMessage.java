@@ -3,7 +3,7 @@ package buptspirit.spm.message;
 import java.sql.Date;
 
 // TODO not finished yet
-public class OptionalCourseMessage {
+public class CourseMessage {
 
     private String courseName;
     private String descriptionSummary;
