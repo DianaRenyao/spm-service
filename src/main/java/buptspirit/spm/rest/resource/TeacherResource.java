@@ -46,6 +46,7 @@ public class TeacherResource {
     }
 
     @POST
+    @Secured({ Role.Administrator})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public TeacherMessage register(TeacherRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
