@@ -20,7 +20,7 @@ public class TeacherRegisterMessage implements InputMessage {
         serviceAssert(realName != null && !realName.isEmpty());
         serviceAssert(email != null && !email.isEmpty());
         serviceAssert(phone != null && !phone.isEmpty());
-        serviceAssert(username.matches("$\\d{10}^"));
+        serviceAssert(username.matches("^\\d{10}$"));
     }
 
     public String getUsername() {
