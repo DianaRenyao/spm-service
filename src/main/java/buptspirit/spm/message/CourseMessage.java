@@ -1,16 +1,30 @@
 package buptspirit.spm.message;
 
+import buptspirit.spm.exception.ServiceAssertionException;
+
 import java.sql.Date;
 
-// TODO not finished yet
-public class CourseMessage {
+import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
+
+public class CourseMessage implements InputMessage {
 
     private String courseName;
-    private String descriptionSummary;
-    private String teacherName;
+    private String description;
+    private String teacherUsername;
+    private String teacherRealName;
     private byte period;
-    private Date startTime;
-    private Date finishTime;
+    private Date startDate;
+    private Date finishDate;
+
+    @Override
+    public void enforce() throws ServiceAssertionException {
+        serviceAssert(courseName != null && !courseName.isEmpty());
+        serviceAssert(description != null && !description.isEmpty());
+        serviceAssert(teacherUsername != null && !teacherUsername.isEmpty());
+        serviceAssert(period != 0);
+        serviceAssert(startDate != null);
+        serviceAssert(finishDate != null);
+    }
 
     public String getCourseName() {
         return courseName;
@@ -20,20 +34,28 @@ public class CourseMessage {
         this.courseName = courseName;
     }
 
-    public String getDescriptionSummary() {
-        return descriptionSummary;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptionSummary(String descriptionSummary) {
-        this.descriptionSummary = descriptionSummary;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getTeacherName() {
-        return teacherName;
+    public String getTeacherUsername() {
+        return teacherUsername;
     }
 
-    public void setTeacherName(String teacherName) {
-        this.teacherName = teacherName;
+    public void setTeacherUsername(String teacherUsername) {
+        this.teacherUsername = teacherUsername;
+    }
+
+    public String getTeacherRealName() {
+        return teacherRealName;
+    }
+
+    public void setTeacherRealName(String teacherRealName) {
+        this.teacherRealName = teacherRealName;
     }
 
     public byte getPeriod() {
@@ -44,19 +66,19 @@ public class CourseMessage {
         this.period = period;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
-    public Date getFinishTime() {
-        return finishTime;
+    public Date getFinishDate() {
+        return finishDate;
     }
 
-    public void setFinishTime(Date finishTime) {
-        this.finishTime = finishTime;
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
     }
 }
