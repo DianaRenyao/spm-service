@@ -1,11 +1,9 @@
 package buptspirit.spm.message;
 
-import buptspirit.spm.persistence.entity.NoticeEntity;
-import buptspirit.spm.persistence.entity.StudentEntity;
-import buptspirit.spm.persistence.entity.TeacherEntity;
-import buptspirit.spm.persistence.entity.UserInfoEntity;
+import buptspirit.spm.persistence.entity.*;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.persistence.facade.ScoreFacade;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,5 +38,11 @@ public class MessageMapper {
         int userId = entity.getUserId();
         UserInfoMessage user = intoMessage(em, userInfoFacade.find(em, userId));
         return StudentMessage.fromEntity(entity, user);
+    }
+
+    public ScoreMessage intoMessage(EntityManager em, SelectedCourseEntity entity) {
+        int StudentId = entity.getStudentUserId();
+
+        return ScoreMessage.fromEntity(entity);
     }
 }
