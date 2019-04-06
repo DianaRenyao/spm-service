@@ -3,12 +3,7 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.LoginMessage;
-import buptspirit.spm.message.StudentMessage;
-import buptspirit.spm.message.StudentRegisterMessage;
-import buptspirit.spm.message.TeacherMessage;
-import buptspirit.spm.message.TeacherRegisterMessage;
-import buptspirit.spm.message.UserInfoMessage;
+import buptspirit.spm.message.*;
 import buptspirit.spm.password.PasswordHash;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
@@ -22,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 import static buptspirit.spm.persistence.JpaUtility.transactional;
@@ -45,6 +43,9 @@ public class UserLogic {
 
     @Inject
     private TeacherFacade teacherFacade;
+
+    @Inject
+    private MessageMapper messageMapper;
 
     @PostConstruct
     public void postConstruct() {
@@ -206,5 +207,22 @@ public class UserLogic {
                 },
                 "failed to create user"
         );
+    }
+
+    public List<TeacherMessage> getAllTeachers() throws ServiceException, ServiceAssertionException {
+        List<TeacherMessage> messages = transactional(
+                em -> {
+                    List<TeacherEntity> teachers = teacherFacade.findAll(em);
+                    if (teachers == null)
+                        return null;
+                    return teachers.stream().map(
+                            teacher -> messageMapper.intoMessage(em,teacher)
+                    ).collect(Collectors.toList());
+                },
+                "failed to find teacher"
+        );
+        if (messages == null)
+            throw ServiceError.GET_TEACHER_NO_SUCH_TEACHER.toException();
+        return messages;
     }
 }
