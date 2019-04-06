@@ -37,7 +37,7 @@ public class TeacherResource {
     public TeacherMessage getTeacher(
             @PathParam("username") String username
     ) throws ServiceException, ServiceAssertionException {
-        if (sessionMessage.getUserInfo().getRole().equals("teacher")) {
+        if (sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName())) {
             if (!sessionMessage.getUserInfo().getUsername().equals(username)) {
                 throw ServiceError.FORBIDDEN.toException();
             }
