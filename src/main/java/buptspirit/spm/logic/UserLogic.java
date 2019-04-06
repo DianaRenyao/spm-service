@@ -109,7 +109,7 @@ public class UserLogic {
     }
 
     public StudentMessage getStudent(String username) throws ServiceException, ServiceAssertionException {
-        serviceAssert(username != null && username.isEmpty());
+        serviceAssert(username != null && !username.isEmpty());
 
         StudentMessage message = transactional(
                 em -> {
@@ -129,7 +129,7 @@ public class UserLogic {
     }
 
     public TeacherMessage getTeacher(String username) throws ServiceException, ServiceAssertionException {
-        serviceAssert(username != null && username.isEmpty());
+        serviceAssert(username != null && !username.isEmpty());
 
         TeacherMessage message = transactional(
                 em -> {
