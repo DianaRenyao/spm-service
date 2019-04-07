@@ -4,23 +4,26 @@ import buptspirit.spm.persistence.entity.CourseEntity;
 
 import java.sql.Date;
 
-public class CourseMessage {
+public class CourseSummaryMessage {
 
     private int courseId;
     private String courseName;
-    private String description;
+    private String descriptionSummary;
     private TeacherMessage teacher;
     private byte period;
     private Date startDate;
     private Date finishDate;
 
-    public static CourseMessage fromEntity(CourseEntity entity, TeacherMessage teacher) {
-        CourseMessage courseMessage = new CourseMessage();
+    public static CourseSummaryMessage fromEntity(CourseEntity entity, TeacherMessage teacher) {
+        CourseSummaryMessage courseMessage = new CourseSummaryMessage();
         courseMessage.setCourseId(entity.getCourseId());
         courseMessage.setStartDate(entity.getStartDate());
         courseMessage.setFinishDate(entity.getFinishDate());
         courseMessage.setCourseName(entity.getCourseName());
-        courseMessage.setDescription(entity.getDescription());
+        if (entity.getDescription().length() >= 256)
+            courseMessage.setDescriptionSummary(entity.getDescription().substring(0, 256));
+        else
+            courseMessage.setDescriptionSummary(entity.getDescription());
         courseMessage.setPeriod(entity.getPeriod());
         courseMessage.setTeacher(teacher);
         return courseMessage;
@@ -42,12 +45,12 @@ public class CourseMessage {
         this.courseName = courseName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionSummary() {
+        return descriptionSummary;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionSummary(String descriptionSummary) {
+        this.descriptionSummary = descriptionSummary;
     }
 
     public TeacherMessage getTeacher() {

@@ -3,7 +3,13 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.*;
+import buptspirit.spm.message.LoginMessage;
+import buptspirit.spm.message.MessageMapper;
+import buptspirit.spm.message.StudentMessage;
+import buptspirit.spm.message.StudentRegisterMessage;
+import buptspirit.spm.message.TeacherMessage;
+import buptspirit.spm.message.TeacherRegisterMessage;
+import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.password.PasswordHash;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
@@ -17,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,7 +53,7 @@ public class UserLogic {
     private MessageMapper messageMapper;
 
     @PostConstruct
-    public void postConstruct() throws ServiceException, ServiceAssertionException {
+    public void postConstruct() {
         logger.trace("successfully constructed");
 
         // ensure an administrator exists
@@ -210,12 +215,12 @@ public class UserLogic {
         );
     }
 
-    public List<TeacherMessage> getAllTeachers() throws ServiceException, ServiceAssertionException {
+    public List<TeacherMessage> getAllTeachers() throws ServiceException {
         List<TeacherMessage> messages = transactional(
                 em -> {
                     List<TeacherEntity> teachers = teacherFacade.findAll(em);
                     return teachers.stream().map(
-                            teacher -> messageMapper.intoMessage(em,teacher)
+                            teacher -> messageMapper.intoTeacherMessage(em, teacher)
                     ).collect(Collectors.toList());
                 },
                 "failed to find teacher"

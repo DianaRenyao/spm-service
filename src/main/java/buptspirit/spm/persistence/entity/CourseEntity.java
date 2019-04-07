@@ -3,6 +3,7 @@ package buptspirit.spm.persistence.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
@@ -20,6 +21,7 @@ public class CourseEntity {
     private Date finishDate;
 
     @Id
+    @GeneratedValue
     @Column(name = "course_id", nullable = false)
     public int getCourseId() {
         return courseId;

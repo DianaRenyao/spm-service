@@ -11,7 +11,6 @@ public class CourseCreationMessage implements InputMessage {
 
     private String courseName;
     private String description;
-    private String teacherUsername;
     private byte period;
     private Date startDate;
     private Date finishDate;
@@ -23,7 +22,6 @@ public class CourseCreationMessage implements InputMessage {
         courseCreationMessage.setCourseName(entity.getCourseName());
         courseCreationMessage.setDescription(entity.getDescription());
         courseCreationMessage.setPeriod(entity.getPeriod());
-        courseCreationMessage.setTeacherUsername(user.getUsername());
         return courseCreationMessage;
     }
 
@@ -31,7 +29,6 @@ public class CourseCreationMessage implements InputMessage {
     public void enforce() throws ServiceAssertionException {
         serviceAssert(courseName != null && !courseName.isEmpty());
         serviceAssert(description != null && !description.isEmpty());
-        serviceAssert(teacherUsername != null && !teacherUsername.isEmpty());
         serviceAssert(period != 0);
         serviceAssert(startDate != null);
         serviceAssert(finishDate != null);
@@ -51,14 +48,6 @@ public class CourseCreationMessage implements InputMessage {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getTeacherUsername() {
-        return teacherUsername;
-    }
-
-    public void setTeacherUsername(String teacherUsername) {
-        this.teacherUsername = teacherUsername;
     }
 
     public byte getPeriod() {

@@ -41,8 +41,8 @@ public enum ServiceError {
     POST_TEACHER_USERNAME_ALREADY_EXISTS(50201, Response.Status.BAD_REQUEST, "username already exists"),
 
     /* course resource errors*/
-    GET_COURSE_NO_SUCH_COURSE(60101,Response.Status.BAD_REQUEST,"no such course"),
-    POST_COURSE_ALREADY_EXISTS(60201,Response.Status.BAD_REQUEST,"course already exists"),
+    GET_COURSE_NO_SUCH_COURSE(60101, Response.Status.BAD_REQUEST, "no such course"),
+    POST_COURSE_ALREADY_EXISTS(60201, Response.Status.BAD_REQUEST, "course already exists"),
     ;
 
 
