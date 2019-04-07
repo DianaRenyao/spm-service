@@ -214,7 +214,7 @@ public class UserLogic {
         List<TeacherMessage> messages = transactional(
                 em -> {
                     List<TeacherEntity> teachers = teacherFacade.findAll(em);
-                    if (teachers == null)
+                    if (teachers.isEmpty())
                         return null;
                     return teachers.stream().map(
                             teacher -> messageMapper.intoMessage(em,teacher)

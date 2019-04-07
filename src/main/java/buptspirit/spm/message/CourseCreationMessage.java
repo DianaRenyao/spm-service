@@ -35,8 +35,8 @@ public class CourseCreationMessage implements InputMessage {
         serviceAssert(description != null && !description.isEmpty());
         serviceAssert(teacherUsername != null && !teacherUsername.isEmpty());
         serviceAssert(period != 0);
-//        serviceAssert(startDate != null);
-//        serviceAssert(finishDate != null);
+        serviceAssert(startDate != null);
+        serviceAssert(finishDate != null);
     }
 
     public String getCourseName() {
