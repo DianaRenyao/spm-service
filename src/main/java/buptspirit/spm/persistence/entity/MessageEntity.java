@@ -3,13 +3,29 @@ package buptspirit.spm.persistence.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name = "message", schema = "spm")
+@NamedQueries({
+        @NamedQuery(name = "message.findAllWithAuthorAndReplied",
+                query = "SELECT m, u, r, ru FROM MessageEntity m " +
+                        "JOIN UserInfoEntity u ON m.author = u.id " +
+                        "LEFT OUTER JOIN MessageEntity r ON m.replyTo = r.id " +
+                        "LEFT OUTER JOIN UserInfoEntity ru ON r.author = ru.id " +
+                        "ORDER BY m.messageId DESC"),
+        @NamedQuery(name = "message.findAllWithAuthor",
+                query = "SELECT m, u FROM MessageEntity m " +
+                        "JOIN UserInfoEntity u ON m.author = u.id " +
+                        "ORDER BY m.messageId DESC"),
+})
 public class MessageEntity {
     private int messageId;
     private int author;
@@ -18,6 +34,7 @@ public class MessageEntity {
     private Integer replyTo;
 
     @Id
+    @GeneratedValue
     @Column(name = "message_id", nullable = false)
     public int getMessageId() {
         return messageId;
@@ -82,5 +99,10 @@ public class MessageEntity {
     @Override
     public int hashCode() {
         return Objects.hash(messageId, author, content, timeCreated, replyTo);
+    }
+
+    @PrePersist
+    protected void prePersist() {
+        this.setTimeCreated(new Timestamp(System.currentTimeMillis()));
     }
 }
