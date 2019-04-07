@@ -5,6 +5,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.sql.Timestamp;
@@ -12,6 +14,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "notice", schema = "spm")
+@NamedQueries({
+        @NamedQuery(name = "notice.findAllWithAuthor",
+                query = "SELECT n, t, u FROM NoticeEntity n " +
+                        "JOIN TeacherEntity t ON n.author = t.userId " +
+                        "JOIN UserInfoEntity u ON u.userId = t.userId " +
+                        "ORDER BY n.id DESC"
+        )
+})
 public class NoticeEntity {
     private int noticeId;
     private int author;

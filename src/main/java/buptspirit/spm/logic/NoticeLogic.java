@@ -38,8 +38,17 @@ public class NoticeLogic {
 
     public List<NoticeMessage> getAllNotice() {
         return transactional(
-                em -> noticeFacade.findAll(em).stream().map(
-                        notice -> messageMapper.intoNoticeMessage(em, notice)
+                em -> noticeFacade.findAllWithAuthor(em).map(
+                        NoticeMessage::fromEntity
+                ).collect(Collectors.toList()),
+                "failed to find notices"
+        );
+    }
+
+    public List<NoticeMessage> getAllNoticeRanged(int first, int number) {
+        return transactional(
+                em -> noticeFacade.findAllWithAuthorRanged(em, first, number).map(
+                        NoticeMessage::fromEntity
                 ).collect(Collectors.toList()),
                 "failed to find notices"
         );
