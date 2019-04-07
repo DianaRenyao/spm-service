@@ -1,15 +1,5 @@
 package buptspirit.spm.message;
 
-<<<<<<< HEAD
-import java.util.Date;
-
-public class CourseMessage {
-    private int courseId;
-    private int studentId;
-    private String courseName;
-    private String description;
-    private int period;
-=======
 import buptspirit.spm.persistence.entity.CourseEntity;
 
 import java.sql.Date;
@@ -35,7 +25,6 @@ public class CourseMessage {
         courseMessage.setTeacher(teacher);
         return courseMessage;
     }
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
 
     public int getCourseId() {
         return courseId;
@@ -45,17 +34,6 @@ public class CourseMessage {
         this.courseId = courseId;
     }
 
-<<<<<<< HEAD
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-=======
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
     public String getCourseName() {
         return courseName;
     }
@@ -72,13 +50,6 @@ public class CourseMessage {
         this.description = description;
     }
 
-<<<<<<< HEAD
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-=======
     public TeacherMessage getTeacher() {
         return teacher;
     }
@@ -92,7 +63,6 @@ public class CourseMessage {
     }
 
     public void setPeriod(byte period) {
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
         this.period = period;
     }
 
@@ -111,11 +81,4 @@ public class CourseMessage {
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
-<<<<<<< HEAD
-
-    private Date startDate;
-    private Date finishDate;
-
-=======
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
 }

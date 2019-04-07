@@ -8,6 +8,7 @@ import buptspirit.spm.message.CourseMessage;
 import buptspirit.spm.message.CourseSummaryMessage;
 import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.UserInfoFacade;

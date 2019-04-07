@@ -9,7 +9,8 @@ import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.ScoreFacade;
-
+import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.persistence.facade.CourseFacade;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
