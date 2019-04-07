@@ -4,6 +4,7 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.CourseCreationMessage;
+import buptspirit.spm.message.CourseMessage;
 import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
@@ -47,11 +48,11 @@ public class CourseLogic {
         return courseCreationMessage;
     }
 
-    public List<CourseCreationMessage> getAllCourses() throws ServiceException {
-        List<CourseCreationMessage> messages = transactional(
+    public List<CourseMessage> getAllCourses() throws ServiceException {
+        List<CourseMessage> messages = transactional(
                 em -> {
                     List<CourseEntity> courses = courseFacade.findAll(em);
-                    if (courses == null)
+                    if (courses.isEmpty())
                         return null;
                     return courses.stream().map(
                             course -> messageMapper.intoMessage(em,course)

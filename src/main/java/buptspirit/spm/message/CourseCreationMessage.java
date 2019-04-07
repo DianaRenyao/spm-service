@@ -12,7 +12,6 @@ public class CourseCreationMessage implements InputMessage {
     private String courseName;
     private String description;
     private String teacherUsername;
-    private String teacherRealName;
     private byte period;
     private Date startDate;
     private Date finishDate;
@@ -24,7 +23,6 @@ public class CourseCreationMessage implements InputMessage {
         courseCreationMessage.setCourseName(entity.getCourseName());
         courseCreationMessage.setDescription(entity.getDescription());
         courseCreationMessage.setPeriod(entity.getPeriod());
-        courseCreationMessage.setTeacherRealName(user.getRealName());
         courseCreationMessage.setTeacherUsername(user.getUsername());
         return courseCreationMessage;
     }
@@ -61,14 +59,6 @@ public class CourseCreationMessage implements InputMessage {
 
     public void setTeacherUsername(String teacherUsername) {
         this.teacherUsername = teacherUsername;
-    }
-
-    public String getTeacherRealName() {
-        return teacherRealName;
-    }
-
-    public void setTeacherRealName(String teacherRealName) {
-        this.teacherRealName = teacherRealName;
     }
 
     public byte getPeriod() {

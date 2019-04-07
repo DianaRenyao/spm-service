@@ -39,9 +39,9 @@ public class MessageMapper {
         return StudentMessage.fromEntity(entity, user);
     }
 
-    public CourseCreationMessage intoMessage(EntityManager em, CourseEntity entity) {
+    public CourseMessage intoMessage(EntityManager em, CourseEntity entity) {
         int userId = entity.getTeacherUserId();
         UserInfoMessage user = intoMessage(em, userInfoFacade.find(em, userId));
-        return CourseCreationMessage.fromEntity(entity, user);
+        return CourseMessage.fromEntity(entity, user);
     }
 }

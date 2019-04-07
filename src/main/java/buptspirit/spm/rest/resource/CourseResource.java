@@ -1,9 +1,11 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceAssertionException;
+import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.CourseLogic;
 import buptspirit.spm.message.CourseCreationMessage;
+import buptspirit.spm.message.CourseMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
@@ -33,15 +35,21 @@ public class CourseResource {
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public CourseCreationMessage createCourse(CourseCreationMessage courseCreationMessage) throws ServiceAssertionException {
-        System.out.print(courseCreationMessage.getStartDate());
+    public CourseCreationMessage createCourse(CourseCreationMessage courseCreationMessage) throws ServiceAssertionException, ServiceException {
+        logger.trace(courseCreationMessage.getStartDate());
+        logger.trace(courseCreationMessage.getFinishDate());
+        if (sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName())) {
+            if (!sessionMessage.getUserInfo().getUsername().equals(courseCreationMessage.getTeacherUsername())) {
+                throw ServiceError.FORBIDDEN.toException();
+            }
+        }
         return courseLogic.createCourse(courseCreationMessage);
     }
 
     @GET
     @Secured({Role.Administrator,Role.Teacher,Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CourseCreationMessage> getAllCourses() throws ServiceException, ServiceAssertionException {
+    public List<CourseMessage> getAllCourses() throws ServiceException {
         return courseLogic.getAllCourses();
     }
 
