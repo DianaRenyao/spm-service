@@ -1,6 +1,7 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.*;
+
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.NoticeEntity;
 import buptspirit.spm.persistence.entity.StudentEntity;
@@ -25,10 +26,12 @@ public class MessageMapper {
     @Inject
     private TeacherFacade teacherFacade;
 
+    @Inject
     private StudentFacade studentFacade;
 
     @Inject
     private CourseFacade courseFacade;
+
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
         TeacherMessage teacher = intoTeacherMessage(em, teacherFacade.find(em, authorId));

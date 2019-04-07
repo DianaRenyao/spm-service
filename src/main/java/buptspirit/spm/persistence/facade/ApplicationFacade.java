@@ -8,4 +8,3 @@ public class ApplicationFacade extends AbstractFacade<ApplicationEntity> {
         super(ApplicationEntity.class);
     }
 }
-
