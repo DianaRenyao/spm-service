@@ -15,7 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path("Init")
+@Path("init")
 public class InitResource {
     @Inject
     UserLogic userLogic;
@@ -24,7 +24,6 @@ public class InitResource {
 
     @POST
     @Secured({Role.Administrator})
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean init() throws ServiceAssertionException, ServiceException, ServiceAssertionException {
         StudentRegisterMessage studentRegisterMessage = new StudentRegisterMessage();
@@ -34,12 +33,12 @@ public class InitResource {
         studentRegisterMessage.setUsername("0000000002");
         studentRegisterMessage.setPassword(DEFAULT_ADMIN_PASSWORD);
         studentRegisterMessage.setRealName("学生");
-        studentRegisterMessage.setPhone("");
+        studentRegisterMessage.setPhone("11011011010");
         userLogic.createStudent(studentRegisterMessage);
 
         TeacherRegisterMessage teacherRegisterMessage = new TeacherRegisterMessage();
         teacherRegisterMessage.setEmail("teacher@bupt.edu.cn");
-        teacherRegisterMessage.setPhone("");
+        teacherRegisterMessage.setPhone("10010010010");
         teacherRegisterMessage.setUsername("0000000001");
         teacherRegisterMessage.setPassword(DEFAULT_ADMIN_PASSWORD);
         teacherRegisterMessage.setRealName("老师");
