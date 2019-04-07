@@ -31,7 +31,7 @@ public class ApplicationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public ApplicationMessage createApplication(ApplicationCreationMessage applicationCreationMessage) throws ServiceAssertionException, ServiceException {
-        return applicationLogic.createApplication(applicationCreationMessage,sessionMessage);
+        return applicationLogic.createApplication(applicationCreationMessage, sessionMessage);
     }
 
     @PUT

@@ -13,11 +13,10 @@ import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import buptspirit.spm.persistence.facade.ApplicationFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.SelectedCourseFacade;
+import buptspirit.spm.persistence.entity.ApplicationEntityPK;
 import buptspirit.spm.rest.filter.ApplicationState;
-import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -26,8 +25,9 @@ import java.util.stream.Collectors;
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class ApplicationLogic {
+
     @Inject
-    ApplicationFacade applicationFacade;
+    private ApplicationFacade applicationFacade;
 
     @Inject
     CourseFacade courseFacade;
@@ -38,8 +38,6 @@ public class ApplicationLogic {
     @Inject
     private MessageMapper messageMapper;
 
-    @Inject
-    private Logger logger;
 
     public ApplicationMessage createApplication(ApplicationCreationMessage applicationCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
         applicationCreationMessage.enforce();
@@ -50,20 +48,38 @@ public class ApplicationLogic {
                 "failed to find user by name"
         );
         if (exists)
-            throw ServiceError.POST_APPLICATION_ALREADY_EXISTS.toException();
+            throw ServiceError.POST_APPLICATION_ALREADY_APPLIED.toException();
+        CourseEntity course = transactional(
+                em -> courseFacade.find(em, applicationCreationMessage.getCourseId()),
+                "failed to create course"
+        );
+        if (course == null)
+            throw ServiceError.POST_APPLICATION_NO_SUCH_COURSE.toException();
+        if (course.getFinishDate().before(new Date()))
+            throw ServiceError.POST_APPLICATION_COURSE_CAN_NOT_BE_APPLIED.toException();
+
+        ApplicationEntityPK pk = new ApplicationEntityPK();
+        pk.setCourseId(applicationCreationMessage.getCourseId());
+        pk.setStudentUserId(sessionMessage.getUserInfo().getId());
+        boolean alreadyApplied = transactional(
+                em -> applicationFacade.find(em, pk) != null,
+                "failed to find application"
+        );
+        if (alreadyApplied)
+            throw ServiceError.POST_APPLICATION_ALREADY_APPLIED.toException();
+
         ApplicationEntity newApplication = new ApplicationEntity();
         newApplication.setComment(applicationCreationMessage.getComment());
         newApplication.setState(ApplicationState.Waiting.getState());
         newApplication.setTimeCreated(new Timestamp(System.currentTimeMillis()));
+        newApplication.setCourseId(applicationCreationMessage.getCourseId());
+        newApplication.setStudentUserId(sessionMessage.getUserInfo().getId());
         return transactional(
                 em -> {
-                    newApplication.setCourseId(applicationCreationMessage.getCourseId());
-                    newApplication.setStudentUserId(sessionMessage.getUserInfo().getId());
-                    logger.debug("ready to create");
                     applicationFacade.create(em, newApplication);
                     return messageMapper.intoApplicationMessage(em, newApplication);
                 },
-                "failed to create course"
+                "failed to create application"
         );
     }
 
@@ -87,7 +103,7 @@ public class ApplicationLogic {
                 "failed to find user by name"
         );
         if (exists)
-            throw ServiceError.POST_APPLICATION_ALREADY_EXISTS.toException();
+            throw ServiceError.POST_SELECTEDCOURSE_ALREADY_EXISTS.toException();
         SelectedCourseEntity newSelected = new SelectedCourseEntity();
         newSelected.setCourseCourseId(courseId);
         newSelected.setStudentUserId(studentUserId);
