@@ -23,6 +23,16 @@ public class MessageMessage {
         return message;
     }
 
+    public static MessageMessage fromEntity(MessageEntity entity, UserInfoMessage userInfoMessage) {
+        MessageMessage message = new MessageMessage();
+        message.setMessageId(entity.getMessageId());
+        message.setAuthor(PublicUserInfoMessage.fromUserInfoMessage(userInfoMessage));
+        message.setContent(entity.getContent());
+        message.setTimeCreated(entity.getTimeCreated());
+        message.setReplyTo(entity.getReplyTo());
+        return message;
+    }
+
     public int getMessageId() {
         return messageId;
     }

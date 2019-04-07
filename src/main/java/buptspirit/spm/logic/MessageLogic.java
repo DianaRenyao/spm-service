@@ -4,7 +4,6 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.message.MessageCreationMessage;
 import buptspirit.spm.message.MessageMessage;
 import buptspirit.spm.message.MessageWithRepliedMessage;
-import buptspirit.spm.message.PublicUserInfoMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.MessageEntity;
 import buptspirit.spm.persistence.facade.MessageFacade;
@@ -67,21 +66,13 @@ public class MessageLogic {
         entity.setAuthor(sessionMessage.getUserInfo().getId());
         entity.setContent(creationMessage.getContent());
         entity.setReplyTo(creationMessage.getReplyTo());
-        return transactional(
+        transactional(
                 em -> {
                     messageFacade.create(em, entity);
-                    PublicUserInfoMessage userInfoMessage = new PublicUserInfoMessage();
-                    userInfoMessage.setUsername(sessionMessage.getUserInfo().getUsername());
-                    userInfoMessage.setRealName(sessionMessage.getUserInfo().getRealName());
-                    MessageMessage message = new MessageMessage();
-                    message.setTimeCreated(entity.getTimeCreated());
-                    message.setContent(entity.getContent());
-                    message.setMessageId(entity.getMessageId());
-                    message.setAuthor(userInfoMessage);
-                    message.setReplyTo(entity.getReplyTo());
-                    return message;
+                    return null;
                 },
                 "failed to create message "
         );
+        return MessageMessage.fromEntity(entity, sessionMessage.getUserInfo());
     }
 }

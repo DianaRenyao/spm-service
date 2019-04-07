@@ -14,6 +14,13 @@ public class PublicUserInfoMessage {
         return message;
     }
 
+    public static PublicUserInfoMessage fromUserInfoMessage(UserInfoMessage userInfoMessage) {
+        PublicUserInfoMessage message = new PublicUserInfoMessage();
+        message.setUsername(userInfoMessage.getUsername());
+        message.setRealName(userInfoMessage.getRealName());
+        return message;
+    }
+
     public String getUsername() {
         return username;
     }
