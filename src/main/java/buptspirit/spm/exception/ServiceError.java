@@ -39,7 +39,12 @@ public enum ServiceError {
     /* teacher resource errors */
     GET_TEACHER_NO_SUCH_TEACHER(50101, Response.Status.BAD_REQUEST, "no such user"),
     POST_TEACHER_USERNAME_ALREADY_EXISTS(50201, Response.Status.BAD_REQUEST, "username already exists"),
+
+    /* course resource errors*/
+    GET_COURSE_NO_SUCH_COURSE(60101,Response.Status.BAD_REQUEST,"no such course"),
+    POST_COURSE_ALREADY_EXISTS(60201,Response.Status.BAD_REQUEST,"course already exists"),
     ;
+
 
     private final int code;
     private final Response.Status status;

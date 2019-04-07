@@ -61,7 +61,42 @@ public class CourseLogic {
                 "failed to find teacher"
         );
         if (messages == null)
-            throw ServiceError.GET_TEACHER_NO_SUCH_TEACHER.toException();
+            throw ServiceError.GET_COURSE_NO_SUCH_COURSE.toException();
+        return messages;
+    }
+
+    public List<CourseMessage> getOptionalCourses() throws ServiceException {
+        List<CourseMessage> messages = transactional(
+                em -> {
+                    List<CourseEntity> courses = courseFacade.findOptionalCourses(em);
+                    if (courses.isEmpty())
+                        return null;
+                    return courses.stream().map(
+                            course -> messageMapper.intoMessage(em,course)
+                    ).collect(Collectors.toList());
+                },
+                "failed to find teacher"
+        );
+        if (messages == null)
+            throw ServiceError.GET_COURSE_NO_SUCH_COURSE.toException();
+        return messages;
+    }
+
+    public List<CourseMessage> getTeacherCourses(String condition) throws ServiceException {
+        List<CourseMessage> messages = transactional(
+                em -> {
+                    UserInfoEntity teacher = userInfoFacade.findByUsername(em, condition);
+                    List<CourseEntity> courses = courseFacade.findTeacherCourses(em,teacher);
+                    if (courses.isEmpty())
+                        return null;
+                    return courses.stream().map(
+                            course -> messageMapper.intoMessage(em,course)
+                    ).collect(Collectors.toList());
+                },
+                "failed to find teacher's course"
+        );
+        if (messages == null)
+            throw ServiceError.GET_COURSE_NO_SUCH_COURSE.toException();
         return messages;
     }
 }

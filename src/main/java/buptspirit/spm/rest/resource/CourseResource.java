@@ -53,4 +53,18 @@ public class CourseResource {
         return courseLogic.getAllCourses();
     }
 
+
+    @GET
+    @Path("{condition}")
+    @Secured({Role.Administrator,Role.Teacher,Role.Student})
+    @Produces(MediaType.APPLICATION_JSON)
+    public  List<CourseMessage> getWantedCourses(
+            @PathParam("condition") String condition
+    ) throws ServiceException, ServiceAssertionException {
+        if (condition.equals("optionalCourses"))
+            return courseLogic.getOptionalCourses();
+        else {
+            return courseLogic.getTeacherCourses(condition);
+        }
+    }
 }
