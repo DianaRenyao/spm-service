@@ -68,4 +68,5 @@ public class CourseResource {
     public CourseMessage createCourse(CourseCreationMessage courseCreationMessage) throws ServiceAssertionException {
         return courseLogic.createCourse(sessionMessage, courseCreationMessage);
     }
+
 }

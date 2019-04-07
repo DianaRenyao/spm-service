@@ -46,7 +46,7 @@ public class ScoreResource {
     }
 
     @GET
-    // @Secured({Role.Student})
+    @Secured({Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
     public List<ScoreMessage> getScores() {
         return scoreLogic.getAllScores();
