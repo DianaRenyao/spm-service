@@ -52,8 +52,6 @@ public class CourseLogic {
         List<CourseMessage> messages = transactional(
                 em -> {
                     List<CourseEntity> courses = courseFacade.findAll(em);
-                    if (courses.isEmpty())
-                        return null;
                     return courses.stream().map(
                             course -> messageMapper.intoMessage(em,course)
                     ).collect(Collectors.toList());
@@ -69,8 +67,6 @@ public class CourseLogic {
         List<CourseMessage> messages = transactional(
                 em -> {
                     List<CourseEntity> courses = courseFacade.findOptionalCourses(em);
-                    if (courses.isEmpty())
-                        return null;
                     return courses.stream().map(
                             course -> messageMapper.intoMessage(em,course)
                     ).collect(Collectors.toList());
@@ -87,8 +83,6 @@ public class CourseLogic {
                 em -> {
                     UserInfoEntity teacher = userInfoFacade.findByUsername(em, condition);
                     List<CourseEntity> courses = courseFacade.findTeacherCourses(em,teacher);
-                    if (courses.isEmpty())
-                        return null;
                     return courses.stream().map(
                             course -> messageMapper.intoMessage(em,course)
                     ).collect(Collectors.toList());
