@@ -1,7 +1,9 @@
 package buptspirit.spm.rest.resource;
 
+import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.message.ApplicationCreationMessage;
+import buptspirit.spm.message.ApplicationMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
@@ -28,7 +30,7 @@ public class ApplicationResource {
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ApplicationCreationMessage createApplication(ApplicationCreationMessage applicationCreationMessage){
+    public ApplicationMessage createApplication(ApplicationCreationMessage applicationCreationMessage) throws ServiceAssertionException {
         return applicationLogic.createApplication(applicationCreationMessage,sessionMessage);
     }
 }
