@@ -38,7 +38,7 @@ public class ApplicationResource {
     @Secured({Role.Teacher, Role.Administrator})
     @Produces(MediaType.APPLICATION_JSON)
     public ApplicationMessage modifyApplication(
-            @QueryParam("isPass") boolean isPass,
+            @DefaultValue("false") @QueryParam("isPass") boolean isPass,
             @QueryParam("courseId") int courseId,
             @QueryParam("studentUserId") int studentUserId) throws ServiceException {
         if (isPass)
@@ -53,7 +53,7 @@ public class ApplicationResource {
     public List<ApplicationMessage> getWantedApplications(
             @QueryParam("courseId") int courseId,
             @QueryParam("studentUserId") int studentUserId
-    ){
+    ) throws ServiceException {
      return applicationLogic.getWantedApplications(courseId,sessionMessage);
     }
 

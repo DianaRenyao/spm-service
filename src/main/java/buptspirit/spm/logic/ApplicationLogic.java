@@ -9,8 +9,10 @@ import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.ApplicationEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import buptspirit.spm.persistence.facade.ApplicationFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
+import buptspirit.spm.persistence.facade.SelectedCourseFacade;
 import buptspirit.spm.rest.filter.ApplicationState;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +31,9 @@ public class ApplicationLogic {
 
     @Inject
     CourseFacade courseFacade;
+
+    @Inject
+    SelectedCourseFacade selectedCourseFacade;
 
     @Inject
     private MessageMapper messageMapper;
@@ -76,8 +81,20 @@ public class ApplicationLogic {
         if (thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
         thisApplication.setState(ApplicationState.Pass.getState());
+        boolean exists = transactional(
+                em -> selectedCourseFacade.findByCourseIdAndStudentId(em,
+                        courseId, studentUserId) != null,
+                "failed to find user by name"
+        );
+        if (exists)
+            throw ServiceError.POST_APPLICATION_ALREADY_EXISTS.toException();
+        SelectedCourseEntity newSelected = new SelectedCourseEntity();
+        newSelected.setCourseCourseId(courseId);
+        newSelected.setStudentUserId(studentUserId);
+        newSelected.setTimeApproved(new Timestamp(System.currentTimeMillis()));
         return transactional(
                 em -> {
+                    selectedCourseFacade.create(em, newSelected);
                     applicationFacade.edit(em, thisApplication);
                     return messageMapper.intoApplicationMessage(em, thisApplication);
                 },
@@ -108,7 +125,7 @@ public class ApplicationLogic {
         );
     }
 
-    public List<ApplicationMessage> getWantedApplications(int courseId,SessionMessage sessionMessage) throws ServiceException {
+    public List<ApplicationMessage> getWantedApplications(int courseId, SessionMessage sessionMessage) throws ServiceException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
