@@ -44,12 +44,20 @@ public enum ServiceError {
     GET_COURSE_NO_SUCH_COURSE(60101, Response.Status.BAD_REQUEST, "no such course"),
     POST_COURSE_ALREADY_EXISTS(60201, Response.Status.BAD_REQUEST, "course already exists"),
 
-    /**/
+    /* application resource errors*/
     POST_APPLICATION_ALREADY_EXISTS(70201, Response.Status.BAD_REQUEST, "application already exists"),
     PUT_APPLICATION_NO_SUCH_APPLICATION(70301, Response.Status.BAD_REQUEST, "application cannot be modified"),
 
     ;
 
+
+    /* message resource error */
+//    GET_MESSAGE_NO_SUCH_MESSAGE(70101, Response.Status.BAD_REQUEST, "no such message"),
+//    PUT_MESSAGE_NO_SUCH_MESSAGE(70301, Response.Status.BAD_REQUEST, "no such message"),
+//    PUT_MESSAGE_UNAUTHORIZED(70302, Response.Status.UNAUTHORIZED, "unauthorized modification for message"),
+//    DELETE_MESSAGE_UNAUTHORIZED(70404, Response.Status.UNAUTHORIZED, "unauthorized deletion for message"),
+//    DELETE_MESSAGE_NO_SUCH_MESSAGE(70405, Response.Status.BAD_REQUEST, "no such message"),
+    ;
 
     private final int code;
     private final Response.Status status;
