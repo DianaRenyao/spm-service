@@ -1,12 +1,13 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.exception.ServiceAssertionException;
+import buptspirit.spm.persistence.entity.CourseEntity;
 
 import java.sql.Date;
 
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
-public class CourseMessage implements InputMessage {
+public class CourseCreationMessage implements InputMessage {
 
     private String courseName;
     private String description;
@@ -16,14 +17,26 @@ public class CourseMessage implements InputMessage {
     private Date startDate;
     private Date finishDate;
 
+    public static CourseCreationMessage fromEntity(CourseEntity entity, UserInfoMessage user) {
+        CourseCreationMessage courseCreationMessage = new CourseCreationMessage();
+        courseCreationMessage.setStartDate(entity.getStartDate());
+        courseCreationMessage.setFinishDate(entity.getFinishDate());
+        courseCreationMessage.setCourseName(entity.getCourseName());
+        courseCreationMessage.setDescription(entity.getDescription());
+        courseCreationMessage.setPeriod(entity.getPeriod());
+        courseCreationMessage.setTeacherRealName(user.getRealName());
+        courseCreationMessage.setTeacherUsername(user.getUsername());
+        return courseCreationMessage;
+    }
+
     @Override
     public void enforce() throws ServiceAssertionException {
         serviceAssert(courseName != null && !courseName.isEmpty());
         serviceAssert(description != null && !description.isEmpty());
         serviceAssert(teacherUsername != null && !teacherUsername.isEmpty());
         serviceAssert(period != 0);
-        serviceAssert(startDate != null);
-        serviceAssert(finishDate != null);
+//        serviceAssert(startDate != null);
+//        serviceAssert(finishDate != null);
     }
 
     public String getCourseName() {

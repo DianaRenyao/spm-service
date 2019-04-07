@@ -54,24 +54,6 @@ public class UserLogic {
         // ensure an administrator exists
         if (!isAdministratorExists()) {
             createAdministrator();
-
-            StudentRegisterMessage studentRegisterMessage = new StudentRegisterMessage();
-            studentRegisterMessage.setClazz("2016211501");
-            studentRegisterMessage.setEmail("student@bupt.edu.cn");
-            studentRegisterMessage.setCollege("BUPT");
-            studentRegisterMessage.setUsername("0000000002");
-            studentRegisterMessage.setPassword(passwordHash.generate(DEFAULT_ADMIN_PASSWORD.toCharArray()));
-            studentRegisterMessage.setRealName("学生");
-            studentRegisterMessage.setPhone("");
-            createStudent(studentRegisterMessage);
-
-            TeacherRegisterMessage teacherRegisterMessage = new TeacherRegisterMessage();
-            teacherRegisterMessage.setEmail("teacher@bupt.edu.cn");
-            teacherRegisterMessage.setPhone("");
-            teacherRegisterMessage.setUsername("0000000001");
-            teacherRegisterMessage.setPassword(passwordHash.generate(DEFAULT_ADMIN_PASSWORD.toCharArray()));
-            teacherRegisterMessage.setRealName("老师");
-            createTeacher(teacherRegisterMessage);
         }
     }
 
