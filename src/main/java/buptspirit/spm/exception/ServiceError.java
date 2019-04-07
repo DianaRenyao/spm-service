@@ -43,6 +43,11 @@ public enum ServiceError {
     /* course resource errors*/
     GET_COURSE_NO_SUCH_COURSE(60101, Response.Status.BAD_REQUEST, "no such course"),
     POST_COURSE_ALREADY_EXISTS(60201, Response.Status.BAD_REQUEST, "course already exists"),
+
+    /**/
+    POST_APPLICATION_ALREADY_EXISTS(70201, Response.Status.BAD_REQUEST, "application already exists"),
+    PUT_APPLICATION_NO_SUCH_APPLICATION(70301, Response.Status.BAD_REQUEST, "application cannot be modified"),
+
     ;
 
 
