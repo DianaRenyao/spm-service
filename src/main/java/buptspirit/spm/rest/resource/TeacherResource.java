@@ -19,6 +19,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("teachers")
 public class TeacherResource {
@@ -43,6 +44,13 @@ public class TeacherResource {
             }
         }
         return userLogic.getTeacher(username);
+    }
+
+    @GET
+    @Secured({Role.Administrator})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<TeacherMessage> getAllTeachers() throws ServiceException, ServiceAssertionException {
+        return userLogic.getAllTeachers();
     }
 
     @POST

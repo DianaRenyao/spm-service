@@ -39,7 +39,7 @@ public class NoticeLogic {
     public List<NoticeMessage> getAllNotice() {
         return transactional(
                 em -> noticeFacade.findAll(em).stream().map(
-                        notice -> messageMapper.intoMessage(em, notice)
+                        notice -> messageMapper.intoNoticeMessage(em, notice)
                 ).collect(Collectors.toList()),
                 "failed to find notices"
         );
@@ -53,7 +53,7 @@ public class NoticeLogic {
         if (notice == null)
             throw ServiceError.GET_NOTICE_NO_SUCH_NOTICE.toException();
         return transactional(
-                em -> messageMapper.intoMessage(em, notice),
+                em -> messageMapper.intoNoticeMessage(em, notice),
                 "failed to map notice into message"
         );
 
@@ -72,7 +72,7 @@ public class NoticeLogic {
                 em -> {
                     noticeFacade.create(em, entity);
                     // fetch all information to construct full notice message
-                    return messageMapper.intoMessage(em, entity);
+                    return messageMapper.intoNoticeMessage(em, entity);
                 },
                 "failed to create notice"
         );
@@ -96,7 +96,7 @@ public class NoticeLogic {
         return transactional(
                 em -> {
                     noticeFacade.edit(em, noticeEntity);
-                    return messageMapper.intoMessage(em, noticeEntity);
+                    return messageMapper.intoNoticeMessage(em, noticeEntity);
                 },
                 "failed to edit notice"
         );

@@ -1,22 +1,14 @@
 package buptspirit.spm.logic;
 
 import buptspirit.spm.exception.ServiceAssertionException;
-import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.*;
 import org.apache.logging.log4j.Logger;
 ;
-import buptspirit.spm.persistence.entity.TeacherEntity;
-import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.ScoreFacade;
 import buptspirit.spm.persistence.entity.SelectedCourseEntity;
-import buptspirit.spm.persistence.facade.CourseFacade;
-import buptspirit.spm.rest.filter.Role;
-import buptspirit.spm.message.SessionMessage;
-import java.math.BigDecimal;
 
 import javax.inject.Inject;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 import static buptspirit.spm.persistence.JpaUtility.transactional;
@@ -25,8 +17,7 @@ public class ScoreLogic {
 
     @Inject
     private ScoreFacade scoreFacade;
-    @Inject
-    private CourseFacade courseFacade;
+
 
     @Inject
     private MessageMapper messageMapper;

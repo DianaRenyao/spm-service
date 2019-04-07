@@ -1,41 +1,33 @@
 package buptspirit.spm.message;
 
-<<<<<<< HEAD
-import java.util.Date;
-
-public class CourseMessage {
-    private int courseId;
-    private int studentId;
-    private String courseName;
-    private String description;
-    private int period;
-=======
 import buptspirit.spm.persistence.entity.CourseEntity;
 
 import java.sql.Date;
 
-public class CourseMessage {
+public class CourseSummaryMessage {
 
     private int courseId;
     private String courseName;
-    private String description;
+    private String descriptionSummary;
     private TeacherMessage teacher;
     private byte period;
     private Date startDate;
     private Date finishDate;
 
-    public static CourseMessage fromEntity(CourseEntity entity, TeacherMessage teacher) {
-        CourseMessage courseMessage = new CourseMessage();
+    public static CourseSummaryMessage fromEntity(CourseEntity entity, TeacherMessage teacher) {
+        CourseSummaryMessage courseMessage = new CourseSummaryMessage();
         courseMessage.setCourseId(entity.getCourseId());
         courseMessage.setStartDate(entity.getStartDate());
         courseMessage.setFinishDate(entity.getFinishDate());
         courseMessage.setCourseName(entity.getCourseName());
-        courseMessage.setDescription(entity.getDescription());
+        if (entity.getDescription().length() >= 256)
+            courseMessage.setDescriptionSummary(entity.getDescription().substring(0, 256));
+        else
+            courseMessage.setDescriptionSummary(entity.getDescription());
         courseMessage.setPeriod(entity.getPeriod());
         courseMessage.setTeacher(teacher);
         return courseMessage;
     }
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
 
     public int getCourseId() {
         return courseId;
@@ -45,17 +37,6 @@ public class CourseMessage {
         this.courseId = courseId;
     }
 
-<<<<<<< HEAD
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-=======
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
     public String getCourseName() {
         return courseName;
     }
@@ -64,21 +45,14 @@ public class CourseMessage {
         this.courseName = courseName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionSummary() {
+        return descriptionSummary;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionSummary(String descriptionSummary) {
+        this.descriptionSummary = descriptionSummary;
     }
 
-<<<<<<< HEAD
-    public int getPeriod() {
-        return period;
-    }
-
-    public void setPeriod(int period) {
-=======
     public TeacherMessage getTeacher() {
         return teacher;
     }
@@ -92,7 +66,6 @@ public class CourseMessage {
     }
 
     public void setPeriod(byte period) {
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
         this.period = period;
     }
 
@@ -111,11 +84,4 @@ public class CourseMessage {
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
     }
-<<<<<<< HEAD
-
-    private Date startDate;
-    private Date finishDate;
-
-=======
->>>>>>> 7ba5f37474420fc49795323aa5ab0afb3202636a
 }
