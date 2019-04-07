@@ -1,6 +1,9 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.NoticeEntity;
+import buptspirit.spm.persistence.entity.TeacherEntity;
+import buptspirit.spm.persistence.entity.UserInfoEntity;
+import org.javatuples.Pair;
 
 import java.util.Date;
 
@@ -11,6 +14,16 @@ public class NoticeMessage {
     private String title;
     private String detail;
     private Date timeCreated;
+
+    public static NoticeMessage fromEntity(Pair<NoticeEntity, Pair<TeacherEntity, UserInfoEntity>> entities) {
+        NoticeMessage message = new NoticeMessage();
+        message.setNoticeId(entities.getValue0().getNoticeId());
+        message.setAuthor(TeacherMessage.fromEntity(entities.getValue1()));
+        message.setTitle(entities.getValue0().getTitle());
+        message.setDetail(entities.getValue0().getDetail());
+        message.setTimeCreated(entities.getValue0().getTimeCreated());
+        return message;
+    }
 
     public static NoticeMessage fromEntity(NoticeEntity entity, TeacherMessage author) {
         NoticeMessage message = new NoticeMessage();

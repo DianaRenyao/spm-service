@@ -5,28 +5,28 @@ import buptspirit.spm.persistence.entity.ApplicationEntity;
 import java.util.Date;
 
 public class ApplicationMessage {
-    private CourseMessage courseMessage;
+    private CourseSummaryMessage courseSummary;
     private String comment;
     private StudentMessage student;
-    private Date time_created;
+    private Date timeCreated;
     private byte state;
 
-    public static ApplicationMessage fromEntity(ApplicationEntity applicationEntity, CourseMessage courseMessage, StudentMessage studentMessage){
+    public static ApplicationMessage fromEntity(ApplicationEntity applicationEntity, CourseSummaryMessage courseMessage, StudentMessage studentMessage) {
         ApplicationMessage applicationMessage = new ApplicationMessage();
-        applicationMessage.setTime_created(applicationEntity.getTimeCreated());
+        applicationMessage.setTimeCreated(applicationEntity.getTimeCreated());
         applicationMessage.setComment(applicationEntity.getComment());
         applicationMessage.setState(applicationEntity.getState());
         applicationMessage.setStudent(studentMessage);
-        applicationMessage.setCourseMessage(courseMessage);
+        applicationMessage.setCourseSummary(courseMessage);
         return applicationMessage;
     }
 
-    public CourseMessage getCourseMessage() {
-        return courseMessage;
+    public CourseSummaryMessage getCourseSummary() {
+        return courseSummary;
     }
 
-    public void setCourseMessage(CourseMessage courseMessage) {
-        this.courseMessage = courseMessage;
+    public void setCourseSummary(CourseSummaryMessage courseSummary) {
+        this.courseSummary = courseSummary;
     }
 
     public String getComment() {
@@ -45,12 +45,12 @@ public class ApplicationMessage {
         this.student = student;
     }
 
-    public Date getTime_created() {
-        return time_created;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setTime_created(Date time_created) {
-        this.time_created = time_created;
+    public void setTimeCreated(Date time_created) {
+        this.timeCreated = time_created;
     }
 
     public byte getState() {

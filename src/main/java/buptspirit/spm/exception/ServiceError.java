@@ -51,6 +51,11 @@ public enum ServiceError {
 //    PUT_MESSAGE_UNAUTHORIZED(70302, Response.Status.UNAUTHORIZED, "unauthorized modification for message"),
 //    DELETE_MESSAGE_UNAUTHORIZED(70404, Response.Status.UNAUTHORIZED, "unauthorized deletion for message"),
 //    DELETE_MESSAGE_NO_SUCH_MESSAGE(70405, Response.Status.BAD_REQUEST, "no such message"),
+
+    /* application error */
+    POST_APPLICATION_NO_SUCH_COURSE(80201, Response.Status.BAD_REQUEST, "no such course"),
+    POST_APPLICATION_COURSE_CAN_NOT_BE_APPLIED(80202, Response.Status.BAD_REQUEST, "course can not be applied"),
+    POST_APPLICATION_ALREADY_APPLIED(80203, Response.Status.BAD_REQUEST, "already applied"),
     ;
 
     private final int code;
