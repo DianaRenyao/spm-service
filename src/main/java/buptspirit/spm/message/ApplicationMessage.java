@@ -18,6 +18,7 @@ public class ApplicationMessage {
         applicationMessage.setState(applicationEntity.getState());
         applicationMessage.setStudent(studentMessage);
         applicationMessage.setCourseMessage(courseMessage);
+        return applicationMessage;
     }
 
     public CourseMessage getCourseMessage() {
