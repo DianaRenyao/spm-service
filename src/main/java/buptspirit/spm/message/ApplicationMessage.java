@@ -8,12 +8,12 @@ public class ApplicationMessage {
     private CourseMessage courseMessage;
     private String comment;
     private StudentMessage student;
-    private Date time_created;
+    private Date timeCreated;
     private byte state;
 
     public static ApplicationMessage fromEntity(ApplicationEntity applicationEntity, CourseMessage courseMessage, StudentMessage studentMessage){
         ApplicationMessage applicationMessage = new ApplicationMessage();
-        applicationMessage.setTime_created(applicationEntity.getTimeCreated());
+        applicationMessage.setTimeCreated(applicationEntity.getTimeCreated());
         applicationMessage.setComment(applicationEntity.getComment());
         applicationMessage.setState(applicationEntity.getState());
         applicationMessage.setStudent(studentMessage);
@@ -45,12 +45,12 @@ public class ApplicationMessage {
         this.student = student;
     }
 
-    public Date getTime_created() {
-        return time_created;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setTime_created(Date time_created) {
-        this.time_created = time_created;
+    public void setTimeCreated(Date time_created) {
+        this.timeCreated = time_created;
     }
 
     public byte getState() {
