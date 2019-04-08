@@ -53,13 +53,12 @@ public enum ServiceError {
 //    DELETE_MESSAGE_NO_SUCH_MESSAGE(70405, Response.Status.BAD_REQUEST, "no such message"),
 
     /* application resource errors*/
-     POST_APPLICATION_NO_SUCH_COURSE(80201, Response.Status.BAD_REQUEST, "no such course"),
+    GET_APPLICATION_NO_SUCH_COURSE(80101, Response.Status.BAD_REQUEST, "no such course"),
+    POST_APPLICATION_NO_SUCH_COURSE(80201, Response.Status.BAD_REQUEST, "no such course"),
     POST_APPLICATION_COURSE_CAN_NOT_BE_APPLIED(80202, Response.Status.BAD_REQUEST, "course can not be applied"),
     POST_APPLICATION_ALREADY_APPLIED(80203, Response.Status.BAD_REQUEST, "already applied"),
-    PUT_APPLICATION_NO_SUCH_APPLICATION(70301, Response.Status.BAD_REQUEST, "application cannot be modified"),
-
-    /*selectedCourse erroes*/
-    POST_SELECTEDCOURSE_ALREADY_EXISTS(90201, Response.Status.BAD_REQUEST, "selected course already exists"),
+    PUT_APPLICATION_NO_SUCH_APPLICATION(80301, Response.Status.BAD_REQUEST, "no such application"),
+    PUT_APPLICATION_CAN_NOT_REJECT_APPLICATION_ALREADY_PASSED(80302, Response.Status.BAD_REQUEST, "can not reject accepted application"),
     ;
 
     private final int code;

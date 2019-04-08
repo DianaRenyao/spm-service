@@ -1,4 +1,4 @@
-package buptspirit.spm.rest.filter;
+package buptspirit.spm.message;
 
 public enum ApplicationState {
     Waiting((byte) 1),
