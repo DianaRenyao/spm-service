@@ -53,6 +53,7 @@ public enum ServiceError {
 
     /* application resource errors*/
     GET_APPLICATION_NO_SUCH_COURSE(80101, Response.Status.BAD_REQUEST, "no such course"),
+    GET_APPLICATION_NO_SUCH_APPLICATION(80102, Response.Status.BAD_REQUEST, "no such application"),
     POST_APPLICATION_NO_SUCH_COURSE(80201, Response.Status.BAD_REQUEST, "no such course"),
     POST_APPLICATION_COURSE_CAN_NOT_BE_APPLIED(80202, Response.Status.BAD_REQUEST, "course can not be applied"),
     POST_APPLICATION_ALREADY_APPLIED(80203, Response.Status.BAD_REQUEST, "already applied"),

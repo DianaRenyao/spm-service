@@ -182,6 +182,12 @@ public class ApplicationLogic {
     }
 
     public ApplicationMessage getStudentCourseApplication(SessionMessage sessionMessage, Integer courseId) throws ServiceException {
+        CourseEntity thisCourse = transactional(
+                em -> courseFacade.find(em, courseId),
+                "failed to find course"
+        );
+        if (thisCourse == null)
+            throw ServiceError.GET_APPLICATION_NO_SUCH_COURSE.toException();
         ApplicationEntity application = transactional(
                 em -> {
                     ApplicationEntityPK pk = new ApplicationEntityPK();
@@ -192,7 +198,7 @@ public class ApplicationLogic {
                 "failed to find application"
         );
         if (application == null)
-            throw ServiceError.GET_APPLICATION_NO_SUCH_COURSE.toException();
+            throw ServiceError.GET_APPLICATION_NO_SUCH_APPLICATION.toException();
         return transactional(
                 em -> messageMapper.intoApplicationMessage(em, application),
                 "failed to convert application to message"
