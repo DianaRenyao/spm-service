@@ -40,17 +40,19 @@ public class NoticeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<NoticeMessage> getNotices(
+    public Response getNotices(
             @QueryParam("first") Integer first,
             @QueryParam("number") Integer number
     ) throws ServiceAssertionException {
+        List<NoticeMessage> results;
         if (first != null && number != null) {
             serviceAssert(first >= 0);
             serviceAssert(number > 0);
-            return noticeLogic.getAllNoticeRanged(first, number);
+            results = noticeLogic.getAllNoticeRanged(first, number);
         } else {
-            return noticeLogic.getAllNotice();
+            results = noticeLogic.getAllNotice();
         }
+        return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
     }
 
     @GET
