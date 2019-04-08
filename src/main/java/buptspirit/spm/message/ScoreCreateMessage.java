@@ -9,29 +9,12 @@ import java.math.BigDecimal;
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
 public class ScoreCreateMessage {
-    private int studentUserId;
-    private int courseCourseId;
+
     private BigDecimal avgOnlineScore;
     private BigDecimal midScore;
     private BigDecimal finalScore;
     private Timestamp timeApproved;
     private BigDecimal totolScore;
-
-    public int getStudentUserId() {
-        return studentUserId;
-    }
-
-    public void setStudentUserId(int studentUserId) {
-        this.studentUserId = studentUserId;
-    }
-
-    public int getCourseCourseId() {
-        return courseCourseId;
-    }
-
-    public void setCourseCourseId(int courseCourseId) {
-        this.courseCourseId = courseCourseId;
-    }
 
     public BigDecimal getAvgOnlineScore() {
         return avgOnlineScore;

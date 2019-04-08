@@ -11,6 +11,7 @@ import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class ScoreLogic {
@@ -34,20 +35,29 @@ public class ScoreLogic {
         );
     }
 
-    public List<ScoreMessage> getScore(int id) throws ServiceException {
+    public List<ScoreMessage> getStudentScores(String username) throws ServiceException {
         return transactional(
-                em -> scoreFacade.findBystudentUserId(em, id).stream().map(
+                em -> scoreFacade.findBystudentUserName(em, username).stream().map(
                         score -> messageMapper.intoMessage(em, score)
                 ).collect(Collectors.toList()),
                 "failed to find scores"
         );
-
     }
 
-    public ScoreMessage createScore( ScoreCreateMessage scoreCreateMessage) throws ServiceException, ServiceAssertionException {
+    public List<ScoreMessage> getCourseScores(int id) throws ServiceException {
+        return transactional(
+                em -> scoreFacade.findBycourseCourseId(em, id).stream().map(
+                        score -> messageMapper.intoMessage(em, score)
+                ).collect(Collectors.toList()),
+                "failed to find scores"
+        );
+    }
+
+
+    public ScoreMessage createScore(ScoreCreateMessage scoreCreateMessage, int studentUserId, int courseCourseId) throws ServiceException, ServiceAssertionException {
 
         SelectedCourseEntity selectedCourseEntity = transactional(
-                em -> scoreFacade.findBystudentUserIdAndCourseId(em, scoreCreateMessage.getStudentUserId(),scoreCreateMessage.getCourseCourseId()),
+                em -> scoreFacade.findBystudentUserIdAndCourseId(em, studentUserId, courseCourseId),
                 "failed to find notice"
         );
 

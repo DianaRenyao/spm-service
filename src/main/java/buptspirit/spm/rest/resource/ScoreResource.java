@@ -12,14 +12,7 @@ import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -35,28 +28,49 @@ public class ScoreResource {
     @AuthenticatedSession
     private SessionMessage sessionMessage;
 
-    // TODO
-    @GET
-    @Path("{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ScoreMessage> getScore(
-            @PathParam("id") int id
-    ) throws ServiceException {
-        return scoreLogic.getScore(id);
-    }
+//    @GET
+//    @Secured({Role.Student})
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<ScoreMessage> getStudentScores(
+//            @QueryParam("username") String username
+//    ) throws ServiceException {
+//        return scoreLogic.getStudentScores(username);
+//    }
+
+//    @GET
+//    @Secured({Role.Teacher})
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<ScoreMessage> getCourseScores(
+//            @QueryParam("courseCourseId") int courseCourseId
+//    ) throws ServiceException {
+//        return scoreLogic.getCourseScores(courseCourseId);
+//    }
 
     @GET
-    @Secured({Role.Student})
+    @Secured({Role.Teacher,Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ScoreMessage> getScores() {
-        return scoreLogic.getAllScores();
+    public List<ScoreMessage> getScores(
+            @QueryParam("courseCourseId") int courseCourseId,
+            @QueryParam("username") String username
+    ) throws ServiceException {
+        if(sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())){
+            return scoreLogic.getStudentScores(username);
+        }
+        else{
+            return scoreLogic.getCourseScores(courseCourseId);
+        }
     }
 
     @POST
+    @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ScoreMessage createScore(ScoreCreateMessage scoreCreateMessage) throws ServiceException, ServiceAssertionException {
-        return scoreLogic.createScore(scoreCreateMessage);
+    public ScoreMessage createScore(
+            ScoreCreateMessage scoreCreateMessage,
+            @QueryParam("studentUserId") int studentUseId,
+            @QueryParam("courseCourseId") int courseCourseId
+    ) throws ServiceException, ServiceAssertionException {
+        return scoreLogic.createScore(scoreCreateMessage,studentUseId,courseCourseId);
     }
 }
 
