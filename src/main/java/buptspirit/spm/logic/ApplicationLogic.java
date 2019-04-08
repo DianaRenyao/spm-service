@@ -168,7 +168,7 @@ public class ApplicationLogic {
                 em -> applicationFacade.findByCourseId(em, courseId)
                         .map(application -> messageMapper.intoApplicationMessage(em, application))
                         .collect(Collectors.toList()),
-                "failed to find teacher"
+                "failed to find application"
         );
     }
 
@@ -177,7 +177,25 @@ public class ApplicationLogic {
                 em -> applicationFacade.findByStudentId(em, sessionMessage.getUserInfo().getId())
                         .map(application -> messageMapper.intoApplicationMessage(em, application))
                         .collect(Collectors.toList()),
-                "failed to find teacher"
+                "failed to find application"
+        );
+    }
+
+    public ApplicationMessage getStudentCourseApplication(SessionMessage sessionMessage, Integer courseId) throws ServiceException {
+        ApplicationEntity application = transactional(
+                em -> {
+                    ApplicationEntityPK pk = new ApplicationEntityPK();
+                    pk.setCourseId(courseId);
+                    pk.setStudentUserId(sessionMessage.getUserInfo().getId());
+                    return applicationFacade.find(em, pk);
+                },
+                "failed to find application"
+        );
+        if (application == null)
+            throw ServiceError.GET_APPLICATION_NO_SUCH_COURSE.toException();
+        return transactional(
+                em -> messageMapper.intoApplicationMessage(em, application),
+                "failed to convert application to message"
         );
     }
 }
