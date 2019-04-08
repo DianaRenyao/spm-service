@@ -21,15 +21,15 @@ USE `spm` ;
 DROP TABLE IF EXISTS `spm`.`user_info` ;
 
 CREATE TABLE IF NOT EXISTS `spm`.`user_info` (
-                                               `user_id`      INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                               `username`     CHAR(10)     NOT NULL,
-                                               `password`     VARCHAR(256) NOT NULL,
-                                               `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                               `role`         VARCHAR(32)  NOT NULL,
-                                               `real_name`    VARCHAR(64)  NOT NULL,
-                                               `email`        VARCHAR(45)  NOT NULL,
-                                               `phone`        VARCHAR(45)  NOT NULL,
-                                               PRIMARY KEY (`user_id`)
+                                                 `user_id`      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                                 `username`     CHAR(10)     NOT NULL,
+                                                 `password`     VARCHAR(256) NOT NULL,
+                                                 `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                 `role`         VARCHAR(32)  NOT NULL,
+                                                 `real_name`    VARCHAR(64)  NOT NULL,
+                                                 `email`        VARCHAR(45)  NOT NULL,
+                                                 `phone`        VARCHAR(45)  NOT NULL,
+                                                 PRIMARY KEY (`user_id`)
 );
 
 
@@ -58,9 +58,10 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `spm`.`teacher` ;
 
 CREATE TABLE IF NOT EXISTS `spm`.`teacher` (
-  `user_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`user_id`),
-  CONSTRAINT `fk_teacher_userinfo`
+                                               `user_id`      INT UNSIGNED NOT NULL,
+                                               `introduction` VARCHAR(256) NOT NULL,
+                                               PRIMARY KEY (`user_id`),
+                                               CONSTRAINT `fk_teacher_userinfo`
     FOREIGN KEY (`user_id`)
     REFERENCES `spm`.`user_info` (`user_id`)
     ON DELETE NO ACTION
@@ -354,14 +355,14 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `spm`.`notice` ;
 
 CREATE TABLE IF NOT EXISTS `spm`.`notice` (
-                                            `notice_id`    INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                            `author`       INT UNSIGNED NOT NULL,
-                                            `title`        VARCHAR(128) NOT NULL,
-                                            `detail`       TEXT         NOT NULL,
-                                            `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                            PRIMARY KEY (`notice_id`),
-                                            INDEX `fk_notiece_author_idx` (`author` ASC) VISIBLE,
-                                            CONSTRAINT `fk_notiece_author`
+                                              `notice_id`    INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                              `author`       INT UNSIGNED NOT NULL,
+                                              `title`        VARCHAR(128) NOT NULL,
+                                              `detail`       TEXT         NOT NULL,
+                                              `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                              PRIMARY KEY (`notice_id`),
+                                              INDEX `fk_notiece_author_idx` (`author` ASC) VISIBLE,
+                                              CONSTRAINT `fk_notiece_author`
     FOREIGN KEY (`author`)
     REFERENCES `spm`.`teacher` (`user_id`)
     ON DELETE NO ACTION
@@ -375,20 +376,20 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `spm`.`message` ;
 
 CREATE TABLE IF NOT EXISTS `spm`.`message` (
-                                             `message_id`   INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                                             `author`       INT UNSIGNED NOT NULL,
-                                             `content`      TEXT         NOT NULL,
-                                             `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                             `reply_to`     INT UNSIGNED NULL,
-                                             PRIMARY KEY (`message_id`),
-                                             INDEX `fk_message_reply_idx` (`reply_to` ASC) VISIBLE,
-                                             INDEX `fk_message_author_idx` (`author` ASC) VISIBLE,
-                                             CONSTRAINT `fk_message_reply`
+                                               `message_id`   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+                                               `author`       INT UNSIGNED NOT NULL,
+                                               `content`      TEXT         NOT NULL,
+                                               `time_created` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                               `reply_to`     INT UNSIGNED NULL,
+                                               PRIMARY KEY (`message_id`),
+                                               INDEX `fk_message_reply_idx` (`reply_to` ASC) VISIBLE,
+                                               INDEX `fk_message_author_idx` (`author` ASC) VISIBLE,
+                                               CONSTRAINT `fk_message_reply`
     FOREIGN KEY (`reply_to`)
     REFERENCES `spm`.`message` (`message_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-                                             CONSTRAINT `fk_message_author`
+                                               CONSTRAINT `fk_message_author`
     FOREIGN KEY (`author`)
     REFERENCES `spm`.`user_info` (`user_id`)
     ON DELETE NO ACTION

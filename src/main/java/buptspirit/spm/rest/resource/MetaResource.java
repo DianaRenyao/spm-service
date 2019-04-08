@@ -61,6 +61,7 @@ public class MetaResource {
         teacher1.setPhone("10010010010");
         teacher1.setPassword(DEFAULT_MOCK_PASSWORD);
         teacher1.setRealName("韩万江");
+        teacher1.setIntroduction("北京邮电大学软件学院副教授。在软件开发、项目管理、质量保证等研究领域积累了丰富的软件开发经验，尤其是在项目管理和软件工程方面具有大量的实践经验。");
         userLogic.createTeacher(teacher1);
 
         TeacherRegisterMessage teacher2 = new TeacherRegisterMessage();
@@ -69,6 +70,7 @@ public class MetaResource {
         teacher2.setPhone("10010010010");
         teacher2.setPassword(DEFAULT_MOCK_PASSWORD);
         teacher2.setRealName("张笑燕");
+        teacher2.setIntroduction("博士，教授，硕士生导师，北京邮电大学软件学院副院长兼党委副书记。主讲个体软件开发过程（PSP）、小组软件开发过程（TSP）、现代通信网络、计算机网络、操作系统等课程。");
         userLogic.createTeacher(teacher2);
 
         StudentRegisterMessage student1 = new StudentRegisterMessage();
