@@ -3,7 +3,9 @@ package buptspirit.spm.rest.resource;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
+import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.UserLogic;
+import buptspirit.spm.message.ApplicationMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.StudentMessage;
 import buptspirit.spm.message.StudentRegisterMessage;
@@ -19,12 +21,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("students")
 public class StudentResource {
 
     @Inject
     private UserLogic userLogic;
+
+    @Inject
+    private ApplicationLogic applicationLogic;
 
     @Inject
     @AuthenticatedSession
@@ -50,5 +56,20 @@ public class StudentResource {
     @Produces(MediaType.APPLICATION_JSON)
     public StudentMessage register(StudentRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         return userLogic.createStudent(registerMessage);
+    }
+
+    @GET
+    @Secured({Role.Student})
+    @Path("{username}/applications")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ApplicationMessage> getStudentApplication(
+            @PathParam("username") String username
+    ) throws ServiceException {
+        if (sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())) {
+            if (!sessionMessage.getUserInfo().getUsername().equals(username)) {
+                throw ServiceError.FORBIDDEN.toException();
+            }
+        }
+        return applicationLogic.getStudentApplication(sessionMessage);
     }
 }

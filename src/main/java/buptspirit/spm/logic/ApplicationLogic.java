@@ -1,20 +1,20 @@
 package buptspirit.spm.logic;
 
-import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.ApplicationCreationMessage;
 import buptspirit.spm.message.ApplicationMessage;
+import buptspirit.spm.message.ApplicationState;
 import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.ApplicationEntity;
+import buptspirit.spm.persistence.entity.ApplicationEntityPK;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import buptspirit.spm.persistence.facade.ApplicationFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.SelectedCourseFacade;
-import buptspirit.spm.persistence.entity.ApplicationEntityPK;
-import buptspirit.spm.rest.filter.ApplicationState;
+import buptspirit.spm.rest.filter.Role;
 
 import javax.inject.Inject;
 import java.sql.Timestamp;
@@ -39,18 +39,24 @@ public class ApplicationLogic {
     private MessageMapper messageMapper;
 
 
-    public ApplicationMessage createApplication(ApplicationCreationMessage applicationCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
+    public ApplicationMessage createApplication(
+            SessionMessage sessionMessage,
+            int courseId,
+            ApplicationCreationMessage applicationCreationMessage) throws ServiceException {
         applicationCreationMessage.enforce();
-        boolean exists = transactional(
-                em -> applicationFacade.findByCourseIdAndStudentId(em,
-                        applicationCreationMessage.getCourseId(),
-                        sessionMessage.getUserInfo().getId()) != null,
-                "failed to find user by name"
+        boolean alreadyExists = transactional(
+                em -> {
+                    ApplicationEntityPK pk = new ApplicationEntityPK();
+                    pk.setCourseId(courseId);
+                    pk.setStudentUserId(sessionMessage.getUserInfo().getId());
+                    return applicationFacade.find(em, pk) != null;
+                },
+                "failed to find application"
         );
-        if (exists)
+        if (alreadyExists)
             throw ServiceError.POST_APPLICATION_ALREADY_APPLIED.toException();
         CourseEntity course = transactional(
-                em -> courseFacade.find(em, applicationCreationMessage.getCourseId()),
+                em -> courseFacade.find(em, courseId),
                 "failed to create course"
         );
         if (course == null)
@@ -58,21 +64,11 @@ public class ApplicationLogic {
         if (course.getFinishDate().before(new Date()))
             throw ServiceError.POST_APPLICATION_COURSE_CAN_NOT_BE_APPLIED.toException();
 
-        ApplicationEntityPK pk = new ApplicationEntityPK();
-        pk.setCourseId(applicationCreationMessage.getCourseId());
-        pk.setStudentUserId(sessionMessage.getUserInfo().getId());
-        boolean alreadyApplied = transactional(
-                em -> applicationFacade.find(em, pk) != null,
-                "failed to find application"
-        );
-        if (alreadyApplied)
-            throw ServiceError.POST_APPLICATION_ALREADY_APPLIED.toException();
-
         ApplicationEntity newApplication = new ApplicationEntity();
         newApplication.setComment(applicationCreationMessage.getComment());
         newApplication.setState(ApplicationState.Waiting.getState());
         newApplication.setTimeCreated(new Timestamp(System.currentTimeMillis()));
-        newApplication.setCourseId(applicationCreationMessage.getCourseId());
+        newApplication.setCourseId(courseId);
         newApplication.setStudentUserId(sessionMessage.getUserInfo().getId());
         return transactional(
                 em -> {
@@ -85,52 +81,69 @@ public class ApplicationLogic {
 
     public ApplicationMessage passApplication(int courseId, int studentUserId, SessionMessage sessionMessage) throws ServiceException {
         ApplicationEntity thisApplication = transactional(
-                em -> applicationFacade.findByCourseIdAndStudentId(em, courseId, studentUserId),
+                em -> {
+                    ApplicationEntityPK pk = new ApplicationEntityPK();
+                    pk.setCourseId(courseId);
+                    pk.setStudentUserId(studentUserId);
+                    return applicationFacade.find(em, pk);
+                },
                 "failed to find application"
         );
         if (thisApplication == null)
             throw ServiceError.PUT_APPLICATION_NO_SUCH_APPLICATION.toException();
+        // check permission
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
         );
-        if (thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Administrator.getName()) &&
+                thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
-        thisApplication.setState(ApplicationState.Pass.getState());
-        boolean exists = transactional(
-                em -> selectedCourseFacade.findByCourseIdAndStudentId(em,
-                        courseId, studentUserId) != null,
-                "failed to find user by name"
-        );
-        if (exists)
-            throw ServiceError.POST_SELECTEDCOURSE_ALREADY_EXISTS.toException();
-        SelectedCourseEntity newSelected = new SelectedCourseEntity();
-        newSelected.setCourseCourseId(courseId);
-        newSelected.setStudentUserId(studentUserId);
-        newSelected.setTimeApproved(new Timestamp(System.currentTimeMillis()));
-        return transactional(
-                em -> {
-                    selectedCourseFacade.create(em, newSelected);
-                    applicationFacade.edit(em, thisApplication);
-                    return messageMapper.intoApplicationMessage(em, thisApplication);
-                },
-                "failed to edit application"
-        );
+        if (thisApplication.getState() == ApplicationState.Pass.getState()) {
+            return transactional(
+                    em -> messageMapper.intoApplicationMessage(em, thisApplication),
+                    "failed to edit application"
+            );
+        } else {
+            thisApplication.setState(ApplicationState.Pass.getState());
+            // newSelected can not be existed
+            SelectedCourseEntity newSelected = new SelectedCourseEntity();
+            newSelected.setCourseCourseId(courseId);
+            newSelected.setStudentUserId(studentUserId);
+            newSelected.setTimeApproved(new Timestamp(System.currentTimeMillis()));
+            return transactional(
+                    em -> {
+                        selectedCourseFacade.create(em, newSelected);
+                        applicationFacade.edit(em, thisApplication);
+                        return messageMapper.intoApplicationMessage(em, thisApplication);
+                    },
+                    "failed to edit application"
+            );
+        }
     }
 
     public ApplicationMessage rejectApplication(int courseId, int studentUserId, SessionMessage sessionMessage) throws ServiceException {
         ApplicationEntity thisApplication = transactional(
-                em -> applicationFacade.findByCourseIdAndStudentId(em, courseId, studentUserId),
+                em -> {
+                    ApplicationEntityPK pk = new ApplicationEntityPK();
+                    pk.setCourseId(courseId);
+                    pk.setStudentUserId(studentUserId);
+                    return applicationFacade.find(em, pk);
+                },
                 "failed to find application"
         );
         if (thisApplication == null)
             throw ServiceError.PUT_APPLICATION_NO_SUCH_APPLICATION.toException();
+        // check permission
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
         );
-        if (thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Administrator.getName()) &&
+                thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
+        if (thisApplication.getState() == ApplicationState.Pass.getState())
+            throw ServiceError.PUT_APPLICATION_CAN_NOT_REJECT_APPLICATION_ALREADY_PASSED.toException();
         thisApplication.setState(ApplicationState.Reject.getState());
         return transactional(
                 em -> {
@@ -141,15 +154,27 @@ public class ApplicationLogic {
         );
     }
 
-    public List<ApplicationMessage> getWantedApplications(int courseId, SessionMessage sessionMessage) throws ServiceException {
+    public List<ApplicationMessage> getCourseApplication(int courseId, SessionMessage sessionMessage) throws ServiceException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
         );
-        if (thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+        if (thisCourse == null)
+            throw ServiceError.GET_APPLICATION_NO_SUCH_COURSE.toException();
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Administrator.getName()) &&
+                thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
         return transactional(
-                em -> applicationFacade.findByCourseId(em, courseId).stream()
+                em -> applicationFacade.findByCourseId(em, courseId)
+                        .map(application -> messageMapper.intoApplicationMessage(em, application))
+                        .collect(Collectors.toList()),
+                "failed to find teacher"
+        );
+    }
+
+    public List<ApplicationMessage> getStudentApplication(SessionMessage sessionMessage) {
+        return transactional(
+                em -> applicationFacade.findByStudentId(em, sessionMessage.getUserInfo().getId())
                         .map(application -> messageMapper.intoApplicationMessage(em, application))
                         .collect(Collectors.toList()),
                 "failed to find teacher"
