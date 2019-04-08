@@ -10,6 +10,7 @@ import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 import jdk.nashorn.internal.objects.annotations.Getter;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -26,6 +27,9 @@ public class ApplicationResource {
     @Inject
     private ApplicationLogic applicationLogic;
 
+    @Inject
+    private Logger logger;
+
     @POST
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
@@ -35,7 +39,7 @@ public class ApplicationResource {
     }
 
     @PUT
-    @Secured({Role.Teacher, Role.Administrator})
+    @Secured({Role.Teacher})
     @Produces(MediaType.APPLICATION_JSON)
     public ApplicationMessage modifyApplication(
             @DefaultValue("false") @QueryParam("isPass") boolean isPass,
@@ -48,12 +52,13 @@ public class ApplicationResource {
     }
 
     @GET
-    @Secured({Role.Teacher})
+    @Secured({Role.Teacher,Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
     public List<ApplicationMessage> getWantedApplications(
             @QueryParam("courseId") int courseId,
             @QueryParam("studentUserId") int studentUserId
     ) throws ServiceException {
+    logger.debug("studentUserId:={}",studentUserId);
      return applicationLogic.getWantedApplications(courseId,sessionMessage);
     }
 
