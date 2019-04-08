@@ -1,5 +1,6 @@
 package buptspirit.spm.persistence.entity;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @Table(name = "teacher", schema = "spm")
 public class TeacherEntity {
     private int userId;
+    private String introduction;
 
     @Id
     @Column(name = "user_id", nullable = false)
@@ -19,6 +21,16 @@ public class TeacherEntity {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "introduction", nullable = false, length = 256)
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 
     @Override
