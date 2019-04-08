@@ -9,13 +9,12 @@ import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
+import jdk.nashorn.internal.objects.annotations.Getter;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path("applications")
 public class ApplicationResource {
@@ -34,4 +33,28 @@ public class ApplicationResource {
     public ApplicationMessage createApplication(ApplicationCreationMessage applicationCreationMessage) throws ServiceAssertionException, ServiceException {
         return applicationLogic.createApplication(applicationCreationMessage, sessionMessage);
     }
+
+    @PUT
+    @Secured({Role.Teacher, Role.Administrator})
+    @Produces(MediaType.APPLICATION_JSON)
+    public ApplicationMessage modifyApplication(
+            @DefaultValue("false") @QueryParam("isPass") boolean isPass,
+            @QueryParam("courseId") int courseId,
+            @QueryParam("studentUserId") int studentUserId) throws ServiceException {
+        if (isPass)
+            return applicationLogic.passApplication(courseId,studentUserId,sessionMessage);
+        else
+            return applicationLogic.rejectApplication(courseId,studentUserId,sessionMessage);
+    }
+
+    @GET
+    @Secured({Role.Teacher})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ApplicationMessage> getWantedApplications(
+            @QueryParam("courseId") int courseId,
+            @QueryParam("studentUserId") int studentUserId
+    ) throws ServiceException {
+     return applicationLogic.getWantedApplications(courseId,sessionMessage);
+    }
+
 }
