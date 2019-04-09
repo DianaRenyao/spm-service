@@ -4,6 +4,7 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.logic.MessageLogic;
 import buptspirit.spm.message.MessageCreationMessage;
 import buptspirit.spm.message.MessageMessage;
+import buptspirit.spm.message.MessageWithRepliedMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
@@ -19,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
@@ -44,17 +46,21 @@ public class MessageResource {
             serviceAssert(number > 0);
         }
         if (withReplied) {
+            List<MessageWithRepliedMessage> results;
             if (first != null && number != null) {
-                return Response.ok().entity(messageLogic.getAllMessageWithRepliedRanged(first, number)).build();
+                results = messageLogic.getAllMessageWithRepliedRanged(first, number);
             } else {
-                return Response.ok().entity(messageLogic.getAllMessageWithReplied()).build();
+                results = messageLogic.getAllMessageWithReplied();
             }
+            return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
         } else {
+            List<MessageMessage> results;
             if (first != null && number != null) {
-                return Response.ok().entity(messageLogic.getAllMessageRanged(first, number)).build();
+                results = messageLogic.getAllMessageRanged(first, number);
             } else {
-                return Response.ok().entity(messageLogic.getAllMessage()).build();
+                results = messageLogic.getAllMessage();
             }
+            return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
         }
     }
 
@@ -62,7 +68,7 @@ public class MessageResource {
     @Secured({Role.Student, Role.Teacher, Role.Administrator})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public MessageMessage createMessage(MessageCreationMessage creationMessage) throws ServiceAssertionException {
+    public MessageWithRepliedMessage createMessage(MessageCreationMessage creationMessage) throws ServiceAssertionException {
         return messageLogic.createMessage(sessionMessage, creationMessage);
     }
 }

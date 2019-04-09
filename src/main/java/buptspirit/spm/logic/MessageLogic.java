@@ -59,20 +59,20 @@ public class MessageLogic {
         );
     }
 
-    public MessageMessage createMessage(SessionMessage sessionMessage, MessageCreationMessage creationMessage)
+    public MessageWithRepliedMessage createMessage(SessionMessage sessionMessage, MessageCreationMessage creationMessage)
             throws ServiceAssertionException {
         creationMessage.enforce();
         MessageEntity entity = new MessageEntity();
         entity.setAuthor(sessionMessage.getUserInfo().getId());
         entity.setContent(creationMessage.getContent());
         entity.setReplyTo(creationMessage.getReplyTo());
-        transactional(
+        return transactional(
                 em -> {
                     messageFacade.create(em, entity);
-                    return null;
+                    return MessageWithRepliedMessage.fromEntity(
+                            messageFacade.findWithAuthorAndReplied(em, entity.getMessageId()));
                 },
                 "failed to create message "
         );
-        return MessageMessage.fromEntity(entity, sessionMessage.getUserInfo());
     }
 }

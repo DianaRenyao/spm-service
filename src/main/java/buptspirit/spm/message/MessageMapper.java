@@ -7,7 +7,6 @@ import buptspirit.spm.persistence.entity.NoticeEntity;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
-
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.TeacherFacade;
@@ -77,5 +76,13 @@ public class MessageMapper {
         int courseId = entity.getCourseId();
         CourseSummaryMessage courseMessage = intoCourseSummaryMessage(em, courseFacade.find(em, courseId));
         return ApplicationMessage.fromEntity(entity, courseMessage, student);
+    }
+
+    public ChapterMessage intoChapterMessage(EntityManager em, ChapterEntity entity) {
+        return ChapterMessage.fromEntity(entity);
+    }
+
+    public SectionMessage intoSectionMessage(EntityManager em, SectionEntity entity) {
+        return SectionMessage.fromEntity(entity);
     }
 }

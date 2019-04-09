@@ -60,6 +60,15 @@ public enum ServiceError {
     POST_APPLICATION_ALREADY_APPLIED(80203, Response.Status.BAD_REQUEST, "already applied"),
     PUT_APPLICATION_NO_SUCH_APPLICATION(80301, Response.Status.BAD_REQUEST, "no such application"),
     PUT_APPLICATION_CAN_NOT_REJECT_APPLICATION_ALREADY_PASSED(80302, Response.Status.BAD_REQUEST, "can not reject accepted application"),
+
+    /* chapter resource errors */
+    POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
+    POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exsti"),
+
+    /* section resource errors */
+    POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
+    POST_SECTION_CHAPTER_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "chapter do not exist"),
+    POST_SECTION_COURSE_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "course do not exist"),
     ;
 
     private final int code;
