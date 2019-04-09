@@ -28,30 +28,13 @@ public class ScoreResource {
     @AuthenticatedSession
     private SessionMessage sessionMessage;
 
-//    @GET
-//    @Secured({Role.Student})
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<ScoreMessage> getStudentScores(
-//            @QueryParam("username") String username
-//    ) throws ServiceException {
-//        return scoreLogic.getStudentScores(username);
-//    }
-
-//    @GET
-//    @Secured({Role.Teacher})
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<ScoreMessage> getCourseScores(
-//            @QueryParam("courseCourseId") int courseCourseId
-//    ) throws ServiceException {
-//        return scoreLogic.getCourseScores(courseCourseId);
-//    }
-
     @GET
     @Secured({Role.Teacher,Role.Student})
+    @Path("{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ScoreMessage> getScores(
             @QueryParam("courseCourseId") int courseCourseId,
-            @QueryParam("username") String username
+            @PathParam("username") String username
     ) throws ServiceException {
         if(sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())){
             return scoreLogic.getStudentScores(username);

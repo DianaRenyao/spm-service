@@ -1,6 +1,7 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceAssertionException;
+import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.CourseLogic;
@@ -108,4 +109,6 @@ public class CourseResource {
         else
             return applicationLogic.rejectApplication(courseId, studentUserId, sessionMessage);
     }
+
+
 }
