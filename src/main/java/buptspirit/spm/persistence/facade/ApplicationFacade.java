@@ -3,8 +3,7 @@ package buptspirit.spm.persistence.facade;
 import buptspirit.spm.persistence.entity.ApplicationEntity;
 
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import java.util.List;
+import java.util.stream.Stream;
 
 public class ApplicationFacade extends AbstractFacade<ApplicationEntity> {
 
@@ -12,20 +11,15 @@ public class ApplicationFacade extends AbstractFacade<ApplicationEntity> {
         super(ApplicationEntity.class);
     }
 
-    public ApplicationEntity findByCourseIdAndStudentId(EntityManager em, int courseId, int studentUserId){
-        try {
-            return em.createQuery("select a from ApplicationEntity a where a.courseId = :courseId and a.studentUserId = :studentUserId", ApplicationEntity.class)
-                    .setParameter("courseId", courseId)
-                    .setParameter("studentUserId", studentUserId)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
-    public List<ApplicationEntity> findByCourseId(EntityManager em, int courseId){
+    public Stream<ApplicationEntity> findByCourseId(EntityManager em, int courseId) {
         return em.createQuery("select a from ApplicationEntity a where a.courseId = :courseId ", ApplicationEntity.class)
                 .setParameter("courseId", courseId)
-                .getResultList();
+                .getResultStream();
+    }
+
+    public Stream<ApplicationEntity> findByStudentId(EntityManager em, int studentId) {
+        return em.createQuery("select a from ApplicationEntity a where a.studentUserId = :studentId ", ApplicationEntity.class)
+                .setParameter("studentId", studentId)
+                .getResultStream();
     }
 }

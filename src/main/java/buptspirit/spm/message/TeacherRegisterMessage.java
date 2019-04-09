@@ -11,6 +11,7 @@ public class TeacherRegisterMessage implements InputMessage {
     private String realName;
     private String email;
     private String phone;
+    private String introduction;
 
     @SuppressWarnings("Duplicates")
     @Override
@@ -20,6 +21,7 @@ public class TeacherRegisterMessage implements InputMessage {
         serviceAssert(realName != null && !realName.isEmpty());
         serviceAssert(email != null && !email.isEmpty());
         serviceAssert(phone != null && !phone.isEmpty());
+        serviceAssert(introduction != null && !introduction.isEmpty());
         serviceAssert(username.matches("^\\d{10}$"));
     }
 
@@ -63,4 +65,11 @@ public class TeacherRegisterMessage implements InputMessage {
         this.phone = phone;
     }
 
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 }

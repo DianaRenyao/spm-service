@@ -172,6 +172,7 @@ public class UserLogic {
         newUser.setEmail(registerMessage.getEmail());
         newUser.setPhone(registerMessage.getPhone());
         TeacherEntity newTeacher = new TeacherEntity();
+        newTeacher.setIntroduction(registerMessage.getIntroduction());
         transactional(
                 em -> {
                     userInfoFacade.create(em, newUser);
