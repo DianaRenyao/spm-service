@@ -1,6 +1,7 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceAssertionException;
+import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.ChapterLogic;
@@ -13,6 +14,7 @@ import buptspirit.spm.rest.filter.Secured;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Path("courses")
@@ -68,11 +70,24 @@ public class CourseResource {
     }
 
     @GET
-    @Secured({Role.Teacher, Role.Administrator})
+    @Secured({Role.Student, Role.Teacher, Role.Administrator})
     @Path("{id}/applications")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ApplicationMessage> getApplication(@PathParam("id") int courseId) throws ServiceException {
-        return applicationLogic.getCourseApplication(courseId, sessionMessage);
+    public Response getApplication(
+            @PathParam("id") int courseId,
+            @QueryParam("student") String studentUsername) throws ServiceException {
+        if (studentUsername != null) {
+            if (sessionMessage.getUserInfo().getRole().equals(Role.Student.getName()) &&
+                    !sessionMessage.getUserInfo().getUsername().equals(studentUsername)) {
+                throw ServiceError.FORBIDDEN.toException();
+            }
+            return Response.ok(applicationLogic.getStudentCourseApplication(studentUsername, courseId)).build();
+        } else {
+            if (sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())) {
+                throw ServiceError.FORBIDDEN.toException();
+            }
+            return Response.ok(applicationLogic.getCourseApplication(courseId, sessionMessage)).build();
+        }
     }
 
     @POST
