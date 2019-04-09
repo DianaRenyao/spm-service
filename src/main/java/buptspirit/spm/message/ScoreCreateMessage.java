@@ -13,8 +13,6 @@ public class ScoreCreateMessage {
     private BigDecimal avgOnlineScore;
     private BigDecimal midScore;
     private BigDecimal finalScore;
-    private Timestamp timeApproved;
-    private BigDecimal totolScore;
 
     public BigDecimal getAvgOnlineScore() {
         return avgOnlineScore;
@@ -40,19 +38,4 @@ public class ScoreCreateMessage {
         this.finalScore = finalScore;
     }
 
-    public Timestamp getTimeApproved() {
-        return timeApproved;
-    }
-
-    public void setTimeApproved(Timestamp timeApproved) {
-        this.timeApproved = timeApproved;
-    }
-
-    public BigDecimal getTotolScore() {
-        return totolScore;
-    }
-
-    public void setTotolScore(BigDecimal totolScore) {
-        this.totolScore = totolScore;
-    }
 }

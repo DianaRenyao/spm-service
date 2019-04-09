@@ -5,7 +5,7 @@ import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class ScoreMessage {
+public class SelectedCourseMessage {
 
     private int studentUserId;
     private int courseCourseId;
@@ -15,8 +15,8 @@ public class ScoreMessage {
     private BigDecimal finalScore;
     private BigDecimal totalScore;
 
-    public static ScoreMessage fromEntity(SelectedCourseEntity entity) {
-        ScoreMessage message=new ScoreMessage();
+    public static SelectedCourseMessage fromEntity(SelectedCourseEntity entity) {
+        SelectedCourseMessage message=new SelectedCourseMessage();
         message.studentUserId=entity.getStudentUserId();
         message.courseCourseId=entity.getCourseCourseId();
         message.timeApproved=entity.getTimeApproved();

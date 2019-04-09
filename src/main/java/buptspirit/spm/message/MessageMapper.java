@@ -12,9 +12,6 @@ import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
-import buptspirit.spm.persistence.facade.ScoreFacade;
-import buptspirit.spm.persistence.facade.StudentFacade;
-import buptspirit.spm.persistence.facade.CourseFacade;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -57,9 +54,9 @@ public class MessageMapper {
         return StudentMessage.fromEntity(entity, user);
     }
 
-    public ScoreMessage intoMessage(EntityManager em, SelectedCourseEntity entity) {
+    public SelectedCourseMessage intoScoreMessage(EntityManager em, SelectedCourseEntity entity) {
         int StudentId = entity.getStudentUserId();
-        return ScoreMessage.fromEntity(entity);
+        return SelectedCourseMessage.fromEntity(entity);
     }
 
     public CourseMessage intoCourseMessage(EntityManager em, CourseEntity entity) {
