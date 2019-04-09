@@ -4,27 +4,15 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
+import buptspirit.spm.logic.ChapterLogic;
 import buptspirit.spm.logic.CourseLogic;
-import buptspirit.spm.message.ApplicationCreationMessage;
-import buptspirit.spm.message.ApplicationMessage;
-import buptspirit.spm.message.CourseCreationMessage;
-import buptspirit.spm.message.CourseMessage;
-import buptspirit.spm.message.CourseSummaryMessage;
-import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.*;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -41,6 +29,9 @@ public class CourseResource {
 
     @Inject
     private ApplicationLogic applicationLogic;
+
+    @Inject
+    private ChapterLogic chapterLogic;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -122,5 +113,26 @@ public class CourseResource {
             return applicationLogic.passApplication(courseId, studentUserId, sessionMessage);
         else
             return applicationLogic.rejectApplication(courseId, studentUserId, sessionMessage);
+    }
+
+    @POST
+    @Path("{id}/chapters")
+    @Secured({Role.Teacher})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ChapterMessage insertChapter(
+            @PathParam("id") int courseId,
+            ChapterCreationMessage chapterCreationMessage
+    ) throws ServiceAssertionException, ServiceException {
+        return chapterLogic.insertChapter(courseId, chapterCreationMessage, sessionMessage);
+    }
+
+    @GET
+    @Path("{id}/chapters")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ChapterMessage> getCourseChapters(
+            @PathParam("id") int courseId) {
+        return chapterLogic.getCourseChapters(courseId);
+
     }
 }
