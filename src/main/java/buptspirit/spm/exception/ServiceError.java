@@ -63,6 +63,9 @@ public enum ServiceError {
 
     /* chapter resource errors */
     POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
+
+    /* section resource errors */
+    POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
     ;
 
     private final int code;

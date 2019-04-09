@@ -6,6 +6,7 @@ import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.ChapterLogic;
 import buptspirit.spm.logic.CourseLogic;
+import buptspirit.spm.logic.SectionLogic;
 import buptspirit.spm.message.*;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
@@ -32,6 +33,9 @@ public class CourseResource {
 
     @Inject
     private ChapterLogic chapterLogic;
+
+    @Inject
+    private SectionLogic sectionLogic;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -138,12 +142,23 @@ public class CourseResource {
 
     @POST
     @Path("{courseId}/chapters/{chapterId}/sections")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public SectionMessage insertSection(
             @PathParam("courseId") int courseId,
             @PathParam("chapterId") int chapterId,
             SectionCreationMessage sectionCreationMessage
+    ) throws ServiceAssertionException, ServiceException {
+        return sectionLogic.insertSection(courseId, chapterId, sectionCreationMessage, sessionMessage);
+    }
+
+    @GET
+    @Path("{courseId}/chapters/{chapterId}/sections")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SectionMessage> getChapterSections(
+            @PathParam("courseId") int courseId,
+            @PathParam("chapterId") int chapterId
     ) {
-        return
+        return sectionLogic.getChapterSections(courseId, chapterId);
     }
 }
