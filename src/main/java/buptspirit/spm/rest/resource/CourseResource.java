@@ -129,7 +129,6 @@ public class CourseResource {
 
     @GET
     @Path("{id}/chapters")
-    @Secured({Role.Teacher, Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
     public List<ChapterMessage> getCourseChapters(
             @PathParam("id") int courseId) {
