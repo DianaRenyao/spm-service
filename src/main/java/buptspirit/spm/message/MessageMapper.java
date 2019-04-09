@@ -70,4 +70,8 @@ public class MessageMapper {
     public ChapterMessage intoChapterMessage(EntityManager em, ChapterEntity entity) {
         return ChapterMessage.fromEntity(entity);
     }
+
+    public SectionMessage intoSectionMessage(EntityManager em, SectionEntity entity) {
+        return SectionMessage.fromEntity(entity);
+    }
 }
