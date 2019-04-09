@@ -76,7 +76,8 @@ public class StudentResource {
         if (courseId == null) {
             return Response.ok(applicationLogic.getStudentApplication(sessionMessage)).build();
         } else {
-            return Response.ok(applicationLogic.getStudentCourseApplication(sessionMessage, courseId)).build();
+            return Response.ok(applicationLogic.getStudentCourseApplication(
+                    sessionMessage.getUserInfo().getId(), courseId)).build();
         }
 
     }
