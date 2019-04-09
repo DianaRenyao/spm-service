@@ -6,6 +6,7 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.stream.Stream;
 
 public class MessageFacade extends AbstractFacade<MessageEntity> {
@@ -64,5 +65,24 @@ public class MessageFacade extends AbstractFacade<MessageEntity> {
                         (MessageEntity) results[0],
                         (UserInfoEntity) results[1]
                 ));
+    }
+
+    public Triplet<MessageEntity, UserInfoEntity, Pair<MessageEntity, UserInfoEntity>>
+    findWithAuthorAndReplied(EntityManager em, int messageId) {
+        try {
+            Object[] results = em.createNamedQuery("message.findWithAuthorAndReplied", Object[].class)
+                    .setParameter("messageId", messageId)
+                    .getSingleResult();
+            return new Triplet<>(
+                    (MessageEntity) results[0],
+                    (UserInfoEntity) results[1],
+                    new Pair<>(
+                            (MessageEntity) results[2],
+                            (UserInfoEntity) results[3]
+                    )
+            );
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
