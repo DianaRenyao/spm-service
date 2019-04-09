@@ -10,7 +10,7 @@ import buptspirit.spm.message.StudentRegisterMessage;
 import buptspirit.spm.message.TeacherMessage;
 import buptspirit.spm.message.TeacherRegisterMessage;
 import buptspirit.spm.message.UserInfoMessage;
-import buptspirit.spm.password.PasswordHash;
+import buptspirit.spm.utility.PasswordHash;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;

@@ -25,7 +25,7 @@ public enum ServiceError {
     // DELETE - 4
 
     /* session resource errors */
-    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20201, Response.Status.UNAUTHORIZED, "username or password provided is invalid"),
+    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20201, Response.Status.UNAUTHORIZED, "username or utility provided is invalid"),
 
     /* student resource errors */
     GET_STUDENT_NO_SUCH_STUDENT(30101, Response.Status.BAD_REQUEST, "no such user"),
@@ -63,6 +63,9 @@ public enum ServiceError {
 
     /* chapter resource errors */
     POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
+
+    POST_STATIC_FILE_FAILED_TO_STORE(100201, Response.Status.BAD_REQUEST, "failed to store file in server"),
+    POST_STATIC_FILE_FAILED_TO_INSERT_DB(100202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
     ;
 
     private final int code;
