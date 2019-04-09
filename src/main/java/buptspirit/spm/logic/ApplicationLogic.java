@@ -11,9 +11,11 @@ import buptspirit.spm.persistence.entity.ApplicationEntity;
 import buptspirit.spm.persistence.entity.ApplicationEntityPK;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.SelectedCourseEntity;
+import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.ApplicationFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.SelectedCourseFacade;
+import buptspirit.spm.persistence.facade.UserInfoFacade;
 import buptspirit.spm.rest.filter.Role;
 
 import javax.inject.Inject;
@@ -30,10 +32,13 @@ public class ApplicationLogic {
     private ApplicationFacade applicationFacade;
 
     @Inject
-    CourseFacade courseFacade;
+    private CourseFacade courseFacade;
 
     @Inject
-    SelectedCourseFacade selectedCourseFacade;
+    private SelectedCourseFacade selectedCourseFacade;
+
+    @Inject
+    private UserInfoFacade userInfoFacade;
 
     @Inject
     private MessageMapper messageMapper;
@@ -181,7 +186,17 @@ public class ApplicationLogic {
         );
     }
 
-    public ApplicationMessage getStudentCourseApplication(SessionMessage sessionMessage, Integer courseId) throws ServiceException {
+    public ApplicationMessage getStudentCourseApplication(String studentUsername, int courseId) throws ServiceException {
+        UserInfoEntity userInfoEntity = transactional(
+                em -> userInfoFacade.findByUsername(em, studentUsername),
+                "failed to find user"
+        );
+        if (userInfoEntity == null)
+            throw ServiceError.GET_APPLICATION_NO_SUCH_USER.toException();
+        return getStudentCourseApplication(userInfoEntity.getUserId(), courseId);
+    }
+
+    public ApplicationMessage getStudentCourseApplication(int userId, int courseId) throws ServiceException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
@@ -192,7 +207,7 @@ public class ApplicationLogic {
                 em -> {
                     ApplicationEntityPK pk = new ApplicationEntityPK();
                     pk.setCourseId(courseId);
-                    pk.setStudentUserId(sessionMessage.getUserInfo().getId());
+                    pk.setStudentUserId(userId);
                     return applicationFacade.find(em, pk);
                 },
                 "failed to find application"
