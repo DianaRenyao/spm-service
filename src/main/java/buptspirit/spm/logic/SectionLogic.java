@@ -7,7 +7,6 @@ import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.message.SectionCreationMessage;
 import buptspirit.spm.message.SectionMessage;
 import buptspirit.spm.message.SessionMessage;
-import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.SectionEntity;
 import buptspirit.spm.persistence.facade.ChapterFacade;
@@ -36,18 +35,22 @@ public class SectionLogic {
 
     public SectionMessage insertSection(int courseId, int chapterId, SectionCreationMessage sectionCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
         sectionCreationMessage.enforce();
-        ChapterEntity thisChapter = transactional(
-                em -> chapterFacade.find(em, chapterId),
+        boolean exits = transactional(
+                em -> chapterFacade.find(em, chapterId) != null,
                 "fail to find chapter");
+        if (!exits)
+            throw ServiceError.POST_STUDENT_USERNAME_ALREADY_EXISTS.toException();
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
         );
+        if (thisCourse == null)
+            throw ServiceError.POST_SECTION_COURSE_DO_NOT_EXISTS.toException();
         if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()) &&
                 thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
         List<SectionEntity> chapterSections = transactional(
-                em -> sectionFacade.findCourseChapterSections(em, courseId, chapterId),
+                em -> sectionFacade.findCourseChapterSections(em, chapterId),
                 "fail to find sections");
         byte sequence = sectionCreationMessage.getSequence();
         int size = chapterSections.size();
@@ -92,8 +95,12 @@ public class SectionLogic {
     }
 
     public List<SectionMessage> getChapterSections(int courseId, int chapterId) {
+        CourseEntity thisCourse = transactional(
+                em -> courseFacade.find(em, courseId),
+                "fail to find course"
+        );
         return transactional(
-                em -> sectionFacade.findCourseChapterSections(em, courseId, chapterId).stream().map(
+                em -> sectionFacade.findCourseChapterSections(em, chapterId).stream().map(
                         section -> messageMapper.intoSectionMessage(em, section)
                 ).collect(Collectors.toList()),
                 "fail to get course chapter section"

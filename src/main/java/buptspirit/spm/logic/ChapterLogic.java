@@ -35,6 +35,8 @@ public class ChapterLogic {
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
         );
+        if (thisCourse == null)
+            throw ServiceError.POST_CHAPTER_COURSE_DO_NOT_EXISTS.toException();
         if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()) &&
                 thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
