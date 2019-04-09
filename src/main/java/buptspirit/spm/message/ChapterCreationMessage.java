@@ -6,22 +6,22 @@ import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
 public class ChapterCreationMessage implements InputMessage {
 
-    private String courseName;
+    private String chapterName;
     private byte sequence;
 
     @Override
     public void enforce() throws ServiceAssertionException {
-        serviceAssert(courseName != null && !courseName.isEmpty());
-        serviceAssert(sequence!=0);
+        serviceAssert(chapterName != null && !chapterName.isEmpty());
+        serviceAssert(sequence >= 0);
     }
 
 
-    public String getCourseName() {
-        return courseName;
+    public String getChapterName() {
+        return chapterName;
     }
 
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setChapterName(String chapterName) {
+        this.chapterName = chapterName;
     }
 
     public byte getSequence() {

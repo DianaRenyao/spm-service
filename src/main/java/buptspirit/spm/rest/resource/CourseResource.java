@@ -123,8 +123,17 @@ public class CourseResource {
     public ChapterMessage insertChapter(
             @PathParam("id") int courseId,
             ChapterCreationMessage chapterCreationMessage
-    ) throws ServiceAssertionException {
-        return chapterLogic.insertChapter(courseId, chapterCreationMessage);
+    ) throws ServiceAssertionException, ServiceException {
+        return chapterLogic.insertChapter(courseId, chapterCreationMessage, sessionMessage);
     }
 
+    @GET
+    @Path("{id}/chapters")
+    @Secured({Role.Teacher, Role.Student})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ChapterMessage> getCourseChapters(
+            @PathParam("id") int courseId) {
+        return chapterLogic.getCourseChapters(courseId);
+
+    }
 }
