@@ -135,4 +135,15 @@ public class CourseResource {
         return chapterLogic.getCourseChapters(courseId);
 
     }
+
+    @POST
+    @Path("{courseId}/chapters/{chapterId}/sections")
+    @Produces(MediaType.APPLICATION_JSON)
+    public SectionMessage insertSection(
+            @PathParam("courseId") int courseId,
+            @PathParam("chapterId") int chapterId,
+            SectionCreationMessage sectionCreationMessage
+    ) {
+        return
+    }
 }
