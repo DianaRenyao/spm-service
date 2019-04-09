@@ -108,4 +108,12 @@ public class CourseResource {
         else
             return applicationLogic.rejectApplication(courseId, studentUserId, sessionMessage);
     }
+
+    @POST
+    @Path("{id}/chapters")
+    @Secured({Role.Teacher})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Chap
+
 }
