@@ -135,7 +135,7 @@ public class CourseResource {
     @Path("{id}/chapters")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ChapterMessage> getCourseChapters(
-            @PathParam("id") int courseId) {
+            @PathParam("id") int courseId) throws ServiceException {
         return chapterLogic.getCourseChapters(courseId);
 
     }
@@ -158,7 +158,7 @@ public class CourseResource {
     public List<SectionMessage> getChapterSections(
             @PathParam("courseId") int courseId,
             @PathParam("chapterId") int chapterId
-    ) {
+    ) throws ServiceException {
         return sectionLogic.getChapterSections(courseId, chapterId);
     }
 }

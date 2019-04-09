@@ -21,10 +21,10 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class ChapterLogic {
     @Inject
-    ChapterFacade chapterFacade;
+    private ChapterFacade chapterFacade;
 
     @Inject
-    CourseFacade courseFacade;
+    private CourseFacade courseFacade;
 
     @Inject
     private MessageMapper messageMapper;
@@ -48,45 +48,49 @@ public class ChapterLogic {
         int size = courseChapters.size();
         if (sequence > size || sequence < 0)
             throw ServiceError.POST_CHAPTER_CAN_NOT_BE_INSERTED.toException();
-        else if (sequence == size) {
+        else {
             ChapterEntity newChapter = new ChapterEntity();
             newChapter.setChapterName(chapterCreationMessage.getChapterName());
             newChapter.setCourseId(courseId);
             newChapter.setSequence(chapterCreationMessage.getSequence());
-            return transactional(
-                    em -> {
-                        chapterFacade.create(em, newChapter);
-                        return messageMapper.intoChapterMessage(em, newChapter);
-                    },
-                    "fail to create chapter"
-            );
-        } else {
-            ChapterEntity newChapter = new ChapterEntity();
-            newChapter.setChapterName(chapterCreationMessage.getChapterName());
-            newChapter.setCourseId(courseId);
-            newChapter.setSequence(chapterCreationMessage.getSequence());
-            for (int i = sequence; i < courseChapters.size(); i++) {
-                ChapterEntity entity = courseChapters.get(i);
-                entity.setSequence((byte) (entity.getSequence() + 1));
-                transactional(
+            if (sequence == size) {
+                return transactional(
                         em -> {
-                            chapterFacade.edit(em, entity);
-                            return null;
+                            chapterFacade.create(em, newChapter);
+                            return messageMapper.intoChapterMessage(em, newChapter);
                         },
-                        "fail to edit this chapter"
+                        "fail to create chapter"
+                );
+            } else {
+                for (int i = sequence; i < courseChapters.size(); i++) {
+                    ChapterEntity entity = courseChapters.get(i);
+                    entity.setSequence((byte) (entity.getSequence() + 1));
+                    transactional(
+                            em -> {
+                                chapterFacade.edit(em, entity);
+                                return null;
+                            },
+                            "fail to edit this chapter"
+                    );
+                }
+                return transactional(
+                        em -> {
+                            chapterFacade.create(em, newChapter);
+                            return messageMapper.intoChapterMessage(em, newChapter);
+                        },
+                        "fail to create chapter"
                 );
             }
-            return transactional(
-                    em -> {
-                        chapterFacade.create(em, newChapter);
-                        return messageMapper.intoChapterMessage(em, newChapter);
-                    },
-                    "fail to create chapter"
-            );
         }
     }
 
-    public List<ChapterMessage> getCourseChapters(int courseId) {
+    public List<ChapterMessage> getCourseChapters(int courseId) throws ServiceException {
+        boolean exists = transactional(
+                em -> courseFacade.find(em, courseId) != null,
+                "fail to find course"
+        );
+        if (!exists)
+            throw ServiceError.POST_CHAPTER_COURSE_DO_NOT_EXISTS.toException();
         return transactional(
                 em -> chapterFacade.findCourseChapters(em, courseId).stream().map(
                         chapter -> messageMapper.intoChapterMessage(em, chapter))

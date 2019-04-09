@@ -3,10 +3,10 @@ package buptspirit.spm.message;
 import buptspirit.spm.persistence.entity.FileSourceEntity;
 
 public class FileSourceMessage {
-    int fileSourceId;
-    String filename;
-    String identifier;
-    String fileType;
+    private int fileSourceId;
+    private String filename;
+    private String identifier;
+    private String fileType;
 
     public static FileSourceMessage fromEntity(FileSourceEntity entity) {
         FileSourceMessage fileSourceMessage = new FileSourceMessage();

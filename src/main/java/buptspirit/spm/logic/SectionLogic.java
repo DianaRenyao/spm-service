@@ -22,23 +22,23 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class SectionLogic {
     @Inject
-    ChapterFacade chapterFacade;
+    private ChapterFacade chapterFacade;
 
     @Inject
-    CourseFacade courseFacade;
+    private CourseFacade courseFacade;
 
     @Inject
-    SectionFacade sectionFacade;
+    private SectionFacade sectionFacade;
 
     @Inject
     private MessageMapper messageMapper;
 
     public SectionMessage insertSection(int courseId, int chapterId, SectionCreationMessage sectionCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
         sectionCreationMessage.enforce();
-        boolean exits = transactional(
+        boolean exists = transactional(
                 em -> chapterFacade.find(em, chapterId) != null,
                 "fail to find chapter");
-        if (!exits)
+        if (!exists)
             throw ServiceError.POST_STUDENT_USERNAME_ALREADY_EXISTS.toException();
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
@@ -56,49 +56,54 @@ public class SectionLogic {
         int size = chapterSections.size();
         if (sequence < 0 || sequence > size)
             throw ServiceError.POST_SECTION_CAN_NOT_BE_INSERTED.toException();
-        else if (sequence == size) {
+        else {
             SectionEntity newSection = new SectionEntity();
             newSection.setChapterId(chapterId);
             newSection.setSectionName(sectionCreationMessage.getSectionName());
             newSection.setSequence(sectionCreationMessage.getSequence());
-            return transactional(
-                    em -> {
-                        sectionFacade.create(em, newSection);
-                        return messageMapper.intoSectionMessage(em, newSection);
-                    },
-                    "fail to create section"
-            );
-        } else {
-            SectionEntity newSection = new SectionEntity();
-            newSection.setChapterId(chapterId);
-            newSection.setSectionName(sectionCreationMessage.getSectionName());
-            newSection.setSequence(sectionCreationMessage.getSequence());
-            for (int i = sequence; i < size; i++) {
-                SectionEntity entity = chapterSections.get(i);
-                entity.setSequence((byte) (entity.getSequence() + 1));
-                transactional(
+            if (sequence == size) {
+                return transactional(
                         em -> {
-                            sectionFacade.edit(em, entity);
-                            return null;
+                            sectionFacade.create(em, newSection);
+                            return messageMapper.intoSectionMessage(em, newSection);
                         },
-                        "fail to edit"
+                        "fail to create section"
+                );
+            } else {
+                for (int i = sequence; i < size; i++) {
+                    SectionEntity entity = chapterSections.get(i);
+                    entity.setSequence((byte) (entity.getSequence() + 1));
+                    transactional(
+                            em -> {
+                                sectionFacade.edit(em, entity);
+                                return null;
+                            },
+                            "fail to edit"
+                    );
+                }
+                return transactional(
+                        em -> {
+                            sectionFacade.create(em, newSection);
+                            return messageMapper.intoSectionMessage(em, newSection);
+                        },
+                        "fail to create section"
                 );
             }
-            return transactional(
-                    em -> {
-                        sectionFacade.create(em, newSection);
-                        return messageMapper.intoSectionMessage(em, newSection);
-                    },
-                    "fail to create section"
-            );
         }
     }
 
-    public List<SectionMessage> getChapterSections(int courseId, int chapterId) {
-        CourseEntity thisCourse = transactional(
-                em -> courseFacade.find(em, courseId),
+    public List<SectionMessage> getChapterSections(int courseId, int chapterId) throws ServiceException {
+        boolean exists = transactional(
+                em -> chapterFacade.find(em, chapterId) != null,
+                "fail to find chapter");
+        if (!exists)
+            throw ServiceError.POST_STUDENT_USERNAME_ALREADY_EXISTS.toException();
+        exists = transactional(
+                em -> courseFacade.find(em, courseId) != null,
                 "fail to find course"
         );
+        if (!exists)
+            throw ServiceError.POST_SECTION_COURSE_DO_NOT_EXISTS.toException();
         return transactional(
                 em -> sectionFacade.findCourseChapterSections(em, chapterId).stream().map(
                         section -> messageMapper.intoSectionMessage(em, section)
