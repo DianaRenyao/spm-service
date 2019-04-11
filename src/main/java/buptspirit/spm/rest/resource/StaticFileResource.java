@@ -62,7 +62,7 @@ public class StaticFileResource {
         try {
             identifierFile = fileManager.getFile(identifier);
         } catch (IOException e) {
-            logger.warn("failed to find identifer" + e);
+            logger.warn("failed to find identifier" + e);
             throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
         }
         Response.ResponseBuilder builder = Response.ok(identifierFile);

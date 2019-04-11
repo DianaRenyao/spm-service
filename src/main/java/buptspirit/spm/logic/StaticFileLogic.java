@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static buptspirit.spm.persistence.JpaUtility.transactional;
@@ -42,7 +43,7 @@ public class StaticFileLogic {
 
     public FileSourceMessage upload(InputStream inputStream,
                                     FileSourceMessage fileDetail) throws ServiceException {
-        MediaType fileType = suffixToMediaType(fileDetail.getFilename());
+        String fileType = suffixToMediaType(fileDetail.getFilename());
 
         String identifier = UUID.randomUUID().toString().replaceAll("-", "");
         try {
@@ -72,31 +73,27 @@ public class StaticFileLogic {
         return FileSourceMessage.fromEntity(entity);
     }
 
-    private FileSourceEntity fileDetailToEntity(String name, MediaType fileType, String identifier) {
+    private FileSourceEntity fileDetailToEntity(String name, String fileType, String identifier) {
         FileSourceEntity entity = new FileSourceEntity();
         entity.setFilename(name);
-        entity.setFileType(fileType.name());
+        entity.setFileType(fileType);
         entity.setIdentifier(identifier);
         return entity;
     }
 
-    private MediaType suffixToMediaType(String fileName) throws ServiceException {
+    private String suffixToMediaType(String fileName) throws ServiceException {
         String[] nameParts = fileName.split("\\.");
-        if (nameParts.length == 1)
-            throw ServiceError.POST_STATIC_FILE_ILLEGAL_FILE_NAME.toException();
-        try {
-            return MediaType.valueOf(nameParts[nameParts.length - 1]);
-        } catch (IllegalArgumentException e) {
+        if (nameParts.length == 1 || !fileSuffixToMIMEType.containsKey(nameParts[nameParts.length - 1]))
             throw ServiceError.POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE.toException();
-        }
+        return fileSuffixToMIMEType.get(nameParts[nameParts.length - 1]);
     }
 
-    private enum MediaType {
-        mp4,
-        jpg,
-        pdf,
-        mp3,
-        ppt
-    }
+    private static final HashMap<String, String> fileSuffixToMIMEType = new HashMap<String, String>() {
+        {
+            put("pdf", "application/pdf");
+            put("ppt", "application/vnd.ms-powerpoint");
+            put("mp4", "video/mp4");
+        }
+    };
 
 }

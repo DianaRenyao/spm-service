@@ -66,11 +66,11 @@ public enum ServiceError {
     POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exsti"),
 
     /*static file error*/
-    POST_STATIC_FILE_FAILED_TO_STORE(101201, Response.Status.BAD_REQUEST, "failed to store file in server"),
-    POST_STATIC_FILE_ILLEGAL_FILE_NAME(101204,Response.Status.BAD_REQUEST,"failed to upload file: bad file name"),
-    POST_STATIC_FILE_FAILED_TO_INSERT_DB(101202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
-    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(101203,Response.Status.BAD_REQUEST,"failed to upload file: file type is unacceptable"),
-    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(101101,Response.Status.BAD_REQUEST,"failed to find given identifier"),
+    POST_STATIC_FILE_FAILED_TO_STORE(11201, Response.Status.BAD_REQUEST, "failed to store file in server"),
+    //POST_STATIC_FILE_ILLEGAL_FILE_NAME(11204,Response.Status.BAD_REQUEST,"failed to upload file: bad file name"),
+    POST_STATIC_FILE_FAILED_TO_INSERT_DB(11202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
+    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(11203,Response.Status.BAD_REQUEST,"failed to upload file: file type is unacceptable"),
+    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(11101,Response.Status.BAD_REQUEST,"failed to find given identifier"),
 
     POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
     POST_SECTION_CHAPTER_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "chapter do not exist"),
