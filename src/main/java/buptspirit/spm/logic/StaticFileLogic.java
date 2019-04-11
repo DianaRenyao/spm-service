@@ -44,7 +44,6 @@ public class StaticFileLogic {
     public FileSourceMessage upload(InputStream inputStream,
                                     FileSourceMessage fileDetail) throws ServiceException {
         String fileType = suffixToMediaType(fileDetail.getFilename());
-
         String identifier = UUID.randomUUID().toString().replaceAll("-", "");
         try {
             fileManager.store(identifier, inputStream);
@@ -59,7 +58,7 @@ public class StaticFileLogic {
                         fileSourceFacade.create(em, entity);
                         return null;
                     },
-                    "fuck"
+                    "Failed to create meta data"
             );
         } catch (IllegalStateException e) {
             try {

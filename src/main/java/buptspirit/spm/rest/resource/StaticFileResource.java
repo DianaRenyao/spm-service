@@ -13,11 +13,12 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -49,28 +50,32 @@ public class StaticFileResource {
 
     private FileSourceMessage convert(FormDataContentDisposition fileDetail) {
         FileSourceMessage message = new FileSourceMessage();
-        message.setFilename(fileDetail.getFileName());
-        message.setFileType(fileDetail.getType());
-
+        message.setFilename(fileDetail.getFileName());// only file name is necessary
         return message;
     }
 
     @GET
-    @Path("{identifier}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response download(@PathParam("identifier") String identifier) throws ServiceException {
-        File identifierFile;
-        FileSourceMessage fileSourceMessage = fileLogic.download(identifier);
-        try {
-            identifierFile = fileManager.getFile(identifier);
-        } catch (IOException e) {
-            logger.warn("failed to find identifier" + e);
-            throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
+    public Response download(
+            @DefaultValue("false") @QueryParam("download") boolean download,
+            @QueryParam("identifier") String identifier) throws ServiceException {
+        if (download) {
+            File identifierFile;
+            try {
+                identifierFile = fileManager.getFile(identifier);
+            } catch (IOException e) {
+                logger.warn("failed to find identifier" + e);
+                throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
+            }
+            return Response.ok(identifierFile)
+                    .type(MediaType.APPLICATION_OCTET_STREAM)
+                    .build();
+        } else {
+            FileSourceMessage fileSourceMessage = fileLogic.download(identifier);
+            return Response.status(Response.Status.OK)
+                    .entity(fileSourceMessage)
+                    .build();
         }
-        Response.ResponseBuilder builder = Response.ok(identifierFile);
-        builder
-                .header("Content-Disposition", "attachment; filename=" + identifierFile.getName())
-                .type(fileSourceMessage.getFileType());
-        return builder.build();
+
+
     }
 }
