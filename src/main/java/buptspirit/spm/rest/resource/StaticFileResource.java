@@ -30,6 +30,13 @@ public class StaticFileResource {
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
-        return fileLogic.upload(inputStream, fileDetail);
+        return fileLogic.upload(inputStream, convert(fileDetail));
+    }
+    private FileSourceMessage convert(FormDataContentDisposition fileDetail){
+        FileSourceMessage message = new FileSourceMessage();
+        message.setFilename(fileDetail.getFileName());
+        message.setFileType(fileDetail.getType());
+
+        return  message;
     }
 }

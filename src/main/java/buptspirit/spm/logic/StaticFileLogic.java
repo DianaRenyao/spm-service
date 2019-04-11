@@ -7,7 +7,6 @@ import buptspirit.spm.persistence.entity.FileSourceEntity;
 import buptspirit.spm.persistence.facade.FileSourceFacade;
 import buptspirit.spm.utility.FileManager;
 import org.apache.logging.log4j.Logger;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,6 +15,7 @@ import java.io.InputStream;
 import java.util.UUID;
 
 import static buptspirit.spm.persistence.JpaUtility.transactional;
+
 
 @Singleton
 public class StaticFileLogic {
@@ -31,7 +31,7 @@ public class StaticFileLogic {
 
 
     public FileSourceMessage upload(InputStream inputStream,
-                                    FormDataContentDisposition fileDetail) throws ServiceException {
+                                    FileSourceMessage fileDetail) throws ServiceException {
         String identifier = UUID.randomUUID().toString().replaceAll("-", "");
         try {
             fileManager.store(identifier, inputStream);
@@ -60,10 +60,10 @@ public class StaticFileLogic {
         return FileSourceMessage.fromEntity(entity);
     }
 
-    private FileSourceEntity fileDetailToEntity(FormDataContentDisposition fileDetail, String identifier) {
+    private FileSourceEntity fileDetailToEntity(FileSourceMessage fileDetail, String identifier) {
         FileSourceEntity entity = new FileSourceEntity();
-        entity.setFilename(fileDetail.getFileName());
-        entity.setFileType(fileDetail.getType());
+        entity.setFilename(fileDetail.getFilename());
+        entity.setFileType(fileDetail.getFileType());
         entity.setIdentifier(identifier);
         return entity;
     }
