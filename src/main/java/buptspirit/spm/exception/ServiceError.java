@@ -63,9 +63,15 @@ public enum ServiceError {
 
     /* chapter resource errors */
     POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
+    POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exsti"),
 
-    POST_STATIC_FILE_FAILED_TO_STORE(100201, Response.Status.BAD_REQUEST, "failed to store file in server"),
-    POST_STATIC_FILE_FAILED_TO_INSERT_DB(100202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
+    /*static file error*/
+    POST_STATIC_FILE_FAILED_TO_STORE(101201, Response.Status.BAD_REQUEST, "failed to store file in server"),
+    POST_STATIC_FILE_FAILED_TO_INSERT_DB(101202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
+
+    POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
+    POST_SECTION_CHAPTER_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "chapter do not exist"),
+    POST_SECTION_COURSE_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "course do not exist"),
     ;
 
     private final int code;
