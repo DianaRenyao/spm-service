@@ -3,6 +3,7 @@ package buptspirit.spm.message;
 import buptspirit.spm.persistence.entity.CourseEntity;
 
 import java.sql.Date;
+import java.util.List;
 
 public class CourseMessage {
 
@@ -13,8 +14,9 @@ public class CourseMessage {
     private byte period;
     private Date startDate;
     private Date finishDate;
+    private List<ChapterMessage> chapters;
 
-    public static CourseMessage fromEntity(CourseEntity entity, TeacherMessage teacher) {
+    public static CourseMessage fromEntity(CourseEntity entity, TeacherMessage teacher, List<ChapterMessage> chapters) {
         CourseMessage courseMessage = new CourseMessage();
         courseMessage.setCourseId(entity.getCourseId());
         courseMessage.setStartDate(entity.getStartDate());
@@ -23,6 +25,7 @@ public class CourseMessage {
         courseMessage.setDescription(entity.getDescription());
         courseMessage.setPeriod(entity.getPeriod());
         courseMessage.setTeacher(teacher);
+        courseMessage.setChapters(chapters);
         return courseMessage;
     }
 
@@ -80,5 +83,13 @@ public class CourseMessage {
 
     public void setFinishDate(Date finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public List<ChapterMessage> getChapters() {
+        return chapters;
+    }
+
+    public void setChapters(List<ChapterMessage> chapters) {
+        this.chapters = chapters;
     }
 }
