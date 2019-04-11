@@ -25,7 +25,7 @@ public enum ServiceError {
     // DELETE - 4
 
     /* session resource errors */
-    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20201, Response.Status.UNAUTHORIZED, "username or utility provided is invalid"),
+    POST_SESSION_INVALID_USERNAME_OR_PASSWORD(20201, Response.Status.UNAUTHORIZED, "usernamem provided is invalid"),
 
     /* student resource errors */
     GET_STUDENT_NO_SUCH_STUDENT(30101, Response.Status.BAD_REQUEST, "no such user"),
@@ -65,16 +65,16 @@ public enum ServiceError {
     POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
     POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exsti"),
 
-    /*static file error*/
-    POST_STATIC_FILE_FAILED_TO_STORE(11201, Response.Status.BAD_REQUEST, "failed to store file in server"),
-    //POST_STATIC_FILE_ILLEGAL_FILE_NAME(11204,Response.Status.BAD_REQUEST,"failed to upload file: bad file name"),
-    POST_STATIC_FILE_FAILED_TO_INSERT_DB(11202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
-    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(11203,Response.Status.BAD_REQUEST,"failed to upload file: file type is unacceptable"),
-    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(11101,Response.Status.BAD_REQUEST,"failed to find given identifier"),
-
     POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
-    POST_SECTION_CHAPTER_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "chapter do not exist"),
-    POST_SECTION_COURSE_DO_NOT_EXISTS(10202, Response.Status.BAD_REQUEST, "course do not exist"),
+    POST_SECTION_CHAPTER_DO_NOT_EXISTS(100202, Response.Status.BAD_REQUEST, "chapter do not exist"),
+    POST_SECTION_COURSE_DO_NOT_EXISTS(100202, Response.Status.BAD_REQUEST, "course do not exist"),
+
+    /*static file error*/
+    POST_STATIC_FILE_FAILED_TO_STORE(110201, Response.Status.BAD_REQUEST, "failed to store file in server"),
+   POST_STATIC_FILE_FAILED_TO_INSERT_DB(110202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
+    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(110203,Response.Status.BAD_REQUEST,"failed to upload file: file type is unacceptable"),
+    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(110101,Response.Status.BAD_REQUEST,"failed to find given identifier"),
+
     ;
 
     private final int code;

@@ -4,6 +4,8 @@ import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.StaticFileLogic;
 import buptspirit.spm.message.FileSourceMessage;
+import buptspirit.spm.rest.filter.Role;
+import buptspirit.spm.rest.filter.Secured;
 import buptspirit.spm.utility.FileManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -35,7 +37,7 @@ public class StaticFileResource {
 
 
     @POST
-//    @Secured(Role.Teacher)
+    @Secured(Role.Teacher)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     public FileSourceMessage upload(
