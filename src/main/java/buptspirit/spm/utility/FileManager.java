@@ -15,7 +15,7 @@ import java.nio.file.Paths;
 @Singleton
 public class FileManager {
 
-    public static final String staticFileDic = "/staticFiles";
+    public static final String staticFileDic = "./";
 
     @Inject
     private Logger logger;

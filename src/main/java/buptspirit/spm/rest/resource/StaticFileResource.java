@@ -2,20 +2,18 @@ package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.StaticFileLogic;
-import buptspirit.spm.message.FileSourceMessage;
-import buptspirit.spm.rest.filter.Role;
-import buptspirit.spm.rest.filter.Secured;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.InputStream;
+
+import buptspirit.spm.message.FileSourceMessage;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("static-files")
 public class StaticFileResource {
@@ -24,13 +22,19 @@ public class StaticFileResource {
     private StaticFileLogic fileLogic;
 
     @POST
-    @Secured(Role.Teacher)
-    @Path("upload")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public FileSourceMessage upload(
             @FormDataParam("file") InputStream inputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail
-    ) throws ServiceException {
-        return fileLogic.upload(inputStream,fileDetail);
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws ServiceException
+    {
+        return fileLogic.upload(inputStream,this.convert(fileDetail));
+    }
+
+    private FileSourceMessage convert(FormDataContentDisposition fileDetail){
+            FileSourceMessage message = new FileSourceMessage();
+            message.setFilename(fileDetail.getFileName());
+            message.setFileType(fileDetail.getType());
+
+            return  message;
     }
 }
