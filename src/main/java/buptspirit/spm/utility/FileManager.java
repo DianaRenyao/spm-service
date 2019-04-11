@@ -29,12 +29,16 @@ public class FileManager {
     }
 
     public OutputStream read(String identifier) throws IOException {
+        File file = getFile(identifier);
+        return new FileOutputStream(file);
+    }
+
+    public File getFile(String identifier) throws IOException {
         File file = new File(generateFileName(identifier));
         if (!file.exists()) {
             throw new IOException("no such file:" + identifier);
         }
-        return new FileOutputStream(file);
-
+        return file;
     }
 
     public void delete(String identifier) throws IOException {

@@ -30,8 +30,20 @@ public class StaticFileLogic {
     private Logger logger;
 
 
+    public FileSourceMessage download(String identifier) throws ServiceException {
+        FileSourceEntity fileSourceEntity = transactional(
+                em -> fileSourceFacade.findByIdentifier(em, identifier),
+                "failed to find fileSource"
+        );
+        if (fileSourceEntity == null)
+            throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
+        return FileSourceMessage.fromEntity(fileSourceEntity);
+    }
+
     public FileSourceMessage upload(InputStream inputStream,
                                     FileSourceMessage fileDetail) throws ServiceException {
+        MediaType fileType = suffixToMediaType(fileDetail.getFilename());
+
         String identifier = UUID.randomUUID().toString().replaceAll("-", "");
         try {
             fileManager.store(identifier, inputStream);
@@ -39,7 +51,7 @@ public class StaticFileLogic {
             logger.warn(" Failed to  store file:" + e.getMessage());
             throw ServiceError.POST_STATIC_FILE_FAILED_TO_STORE.toException();
         }
-        FileSourceEntity entity = fileDetailToEntity(fileDetail, identifier);
+        FileSourceEntity entity = fileDetailToEntity(fileDetail.getFilename(), fileType, identifier);
         try {
             transactional(
                     em -> {
@@ -60,13 +72,31 @@ public class StaticFileLogic {
         return FileSourceMessage.fromEntity(entity);
     }
 
-    private FileSourceEntity fileDetailToEntity(FileSourceMessage fileDetail, String identifier) {
+    private FileSourceEntity fileDetailToEntity(String name, MediaType fileType, String identifier) {
         FileSourceEntity entity = new FileSourceEntity();
-        entity.setFilename(fileDetail.getFilename());
-        entity.setFileType(fileDetail.getFileType());
+        entity.setFilename(name);
+        entity.setFileType(fileType.name());
         entity.setIdentifier(identifier);
         return entity;
     }
 
+    private MediaType suffixToMediaType(String fileName) throws ServiceException {
+        String[] nameParts = fileName.split("\\.");
+        if (nameParts.length == 1)
+            throw ServiceError.POST_STATIC_FILE_ILLEGAL_FILE_NAME.toException();
+        try {
+            return MediaType.valueOf(nameParts[nameParts.length - 1]);
+        } catch (IllegalArgumentException e) {
+            throw ServiceError.POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE.toException();
+        }
+    }
+
+    private enum MediaType {
+        mp4,
+        jpg,
+        pdf,
+        mp3,
+        ppt
+    }
 
 }
