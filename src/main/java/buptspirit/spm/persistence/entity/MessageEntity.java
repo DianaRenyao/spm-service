@@ -15,6 +15,13 @@ import java.util.Objects;
 @Entity
 @Table(name = "message", schema = "spm")
 @NamedQueries({
+        @NamedQuery(name = "message.findWithAuthorAndReplied",
+                query = "SELECT m, u, r, ru FROM MessageEntity m " +
+                        "JOIN UserInfoEntity u ON m.author = u.id " +
+                        "LEFT OUTER JOIN MessageEntity r ON m.replyTo = r.id " +
+                        "LEFT OUTER JOIN UserInfoEntity ru ON r.author = ru.id " +
+                        "WHERE m.messageId = :messageId " +
+                        "ORDER BY m.messageId DESC"),
         @NamedQuery(name = "message.findAllWithAuthorAndReplied",
                 query = "SELECT m, u, r, ru FROM MessageEntity m " +
                         "JOIN UserInfoEntity u ON m.author = u.id " +
