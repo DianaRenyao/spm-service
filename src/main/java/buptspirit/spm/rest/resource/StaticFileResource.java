@@ -8,16 +8,19 @@ import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 import buptspirit.spm.utility.FileManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -44,21 +47,14 @@ public class StaticFileResource {
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
-        return fileLogic.upload(inputStream, convert(fileDetail));
-    }
-
-    private FileSourceMessage convert(FormDataContentDisposition fileDetail) {
-        FileSourceMessage message = new FileSourceMessage();
-        message.setFilename(fileDetail.getFileName());
-        message.setFileType(fileDetail.getType());
-
-        return message;
+        return fileLogic.upload(inputStream, fileDetail.getFileName());
     }
 
     @GET
     @Path("{identifier}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response download(@PathParam("identifier") String identifier) throws ServiceException {
+    public Response download(
+            @PathParam("identifier") String identifier,
+            @DefaultValue("false") @QueryParam("download") boolean download) throws ServiceException {
         File identifierFile;
         FileSourceMessage fileSourceMessage = fileLogic.download(identifier);
         try {
@@ -68,9 +64,14 @@ public class StaticFileResource {
             throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
         }
         Response.ResponseBuilder builder = Response.ok(identifierFile);
-        builder
-                .header("Content-Disposition", "attachment; filename=" + identifierFile.getName())
-                .type(fileSourceMessage.getFileType());
+        if (download) {
+            ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+                    .fileName(fileSourceMessage.getFilename()).build();
+            builder.header("Content-Disposition", contentDisposition)
+                    .type(MediaType.APPLICATION_OCTET_STREAM);
+        } else {
+            builder.type(fileSourceMessage.getFileType());
+        }
         return builder.build();
     }
 }
