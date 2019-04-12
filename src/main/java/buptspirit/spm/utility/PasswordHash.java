@@ -1,4 +1,4 @@
-package buptspirit.spm.password;
+package buptspirit.spm.utility;
 
 import javax.inject.Singleton;
 import java.security.MessageDigest;

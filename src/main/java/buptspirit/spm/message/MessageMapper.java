@@ -1,20 +1,12 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.*;
-import buptspirit.spm.persistence.entity.ApplicationEntity;
-import buptspirit.spm.persistence.entity.CourseEntity;
-import buptspirit.spm.persistence.entity.NoticeEntity;
-import buptspirit.spm.persistence.entity.StudentEntity;
-import buptspirit.spm.persistence.entity.TeacherEntity;
-import buptspirit.spm.persistence.entity.UserInfoEntity;
-import buptspirit.spm.persistence.facade.CourseFacade;
-import buptspirit.spm.persistence.facade.StudentFacade;
-import buptspirit.spm.persistence.facade.TeacherFacade;
-import buptspirit.spm.persistence.facade.UserInfoFacade;
-
+import buptspirit.spm.persistence.facade.*;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Singleton
 public class MessageMapper {
@@ -30,6 +22,12 @@ public class MessageMapper {
 
     @Inject
     private CourseFacade courseFacade;
+
+    @Inject
+    private SectionFacade sectionFacade;
+
+    @Inject
+    private ChapterFacade chapterFacade;
 
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
@@ -60,7 +58,10 @@ public class MessageMapper {
     public CourseMessage intoCourseMessage(EntityManager em, CourseEntity entity) {
         int userId = entity.getTeacherUserId();
         TeacherMessage teacher = intoTeacherMessage(em, teacherFacade.find(em, userId));
-        return CourseMessage.fromEntity(entity, teacher);
+        int courseId = entity.getCourseId();
+        List<ChapterMessage> chapters = chapterFacade.findCourseChapters(em, courseId).stream().map(
+                chapter -> intoChapterMessage(em, chapter)).collect(Collectors.toList());
+        return CourseMessage.fromEntity(entity, teacher, chapters);
     }
 
     public CourseSummaryMessage intoCourseSummaryMessage(EntityManager em, CourseEntity entity) {
@@ -78,7 +79,10 @@ public class MessageMapper {
     }
 
     public ChapterMessage intoChapterMessage(EntityManager em, ChapterEntity entity) {
-        return ChapterMessage.fromEntity(entity);
+        int chapterId = entity.getChapterId();
+        List<SectionMessage> sections = sectionFacade.findCourseChapterSections(em, chapterId).stream().map(
+                section -> intoSectionMessage(em, section)).collect(Collectors.toList());
+        return ChapterMessage.fromEntity(entity, sections);
     }
 
     public SectionMessage intoSectionMessage(EntityManager em, SectionEntity entity) {

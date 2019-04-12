@@ -135,7 +135,6 @@
             <artifactId>log4j-core</artifactId>
             <version>${version.log4j}</version>
         </dependency>
-
         <!-- for jersey -->
         <!--        <dependency>-->
         <!--            <groupId>org.glassfish.jersey.core</groupId>-->

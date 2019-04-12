@@ -2,18 +2,22 @@ package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.ChapterEntity;
 
+import java.util.List;
+
 public class ChapterMessage {
     private int chapterId;
     private int courseId;
     private byte sequence;
     private String chapterName;
+    private List<SectionMessage> sections;
 
-    public static ChapterMessage fromEntity(ChapterEntity chapterEntity) {
+    public static ChapterMessage fromEntity(ChapterEntity chapterEntity, List<SectionMessage> sections) {
         ChapterMessage chapterMessage = new ChapterMessage();
         chapterMessage.setChapterId(chapterEntity.getChapterId());
         chapterMessage.setSequence(chapterEntity.getSequence());
         chapterMessage.setChapterName(chapterEntity.getChapterName());
         chapterMessage.setCourseId(chapterEntity.getCourseId());
+        chapterMessage.setSections(sections);
         return chapterMessage;
     }
 
@@ -47,5 +51,13 @@ public class ChapterMessage {
 
     public void setChapterName(String chapterName) {
         this.chapterName = chapterName;
+    }
+
+    public List<SectionMessage> getSections() {
+        return sections;
+    }
+
+    public void setSections(List<SectionMessage> sections) {
+        this.sections = sections;
     }
 }
