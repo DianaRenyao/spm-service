@@ -31,6 +31,7 @@ public class ScoreResource {
     public List<SelectedCourseMessage> getCourseScore(
             @PathParam("courseId") int courseId
     ) throws ServiceException {
+        selectedCourseLogic.calculateTotalScore(courseId);
         return selectedCourseLogic.getCourseScores(courseId);
     }
 
@@ -48,15 +49,17 @@ public class ScoreResource {
     }
 
     @POST
+    @Path("{import}")
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public SelectedCourseMessage createScore(
             ScoreCreateMessage scoreCreateMessage,
-            @QueryParam("studentUserId") int studentUseId,
-            @QueryParam("courseCourseId") int courseCourseId
+            @QueryParam("studentUserId") String studentUseId,
+            @QueryParam("courseCourseId") String courseCourseId
     ) throws ServiceException, ServiceAssertionException {
-        return selectedCourseLogic.createScore(scoreCreateMessage, studentUseId, courseCourseId);
+        return selectedCourseLogic.createScore(scoreCreateMessage,Integer.parseInt(studentUseId),
+                Integer.parseInt(courseCourseId));
     }
 }
 

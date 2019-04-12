@@ -1,18 +1,42 @@
 package buptspirit.spm.message;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.persistence.entity.SelectedCourseEntity;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.math.BigDecimal;
 
-import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
-
 public class ScoreCreateMessage {
 
+    private int studentUserId;
     private BigDecimal avgOnlineScore;
     private BigDecimal midScore;
     private BigDecimal finalScore;
+    private BigDecimal totalScore;
+
+    public ScoreCreateMessage(){}
+    public ScoreCreateMessage(int studentUserId,BigDecimal avgOnlineScore,BigDecimal midScore,
+                       BigDecimal finalScore,BigDecimal totalScore){
+        this.avgOnlineScore=avgOnlineScore;
+        this.finalScore=finalScore;
+        this.midScore=midScore;
+        this.studentUserId=studentUserId;
+        this.totalScore=totalScore;
+    }
+    public int getStudentUserId() {
+        return studentUserId;
+    }
+
+    public void setStudentUserId(int studentUserId) {
+        this.studentUserId = studentUserId;
+    }
+
+    public BigDecimal getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(BigDecimal totalScore) {
+        this.totalScore = totalScore;
+    }
 
     public BigDecimal getAvgOnlineScore() {
         return avgOnlineScore;

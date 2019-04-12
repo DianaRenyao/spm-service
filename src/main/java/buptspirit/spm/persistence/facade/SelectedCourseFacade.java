@@ -36,6 +36,18 @@ public class SelectedCourseFacade extends AbstractFacade<SelectedCourseEntity>{
         }
     }
 
+    public SelectedCourseEntity findBystudentId(EntityManager em, int studentUseId) {
+        String query = "select s from SelectedCourseEntity s where s.studentUserId = :studentUseId";
+        try {
+            return em.createQuery(query, SelectedCourseEntity.class)
+                    .setParameter("studentUseId", studentUseId)
+                    .getSingleResult();
+
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public SelectedCourseEntity findBystudentUserIdAndCourseId(EntityManager em, int studentUserId, int courseCourseId) {
         String query = "select u from SelectedCourseEntity u " +
                 "where u.studentUserId = :studentUserId and u.courseCourseId=:courseCourseId";

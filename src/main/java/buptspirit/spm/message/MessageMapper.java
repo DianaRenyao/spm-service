@@ -54,7 +54,6 @@ public class MessageMapper {
     }
 
     public SelectedCourseMessage intoScoreMessage(EntityManager em, SelectedCourseEntity entity) {
-        int StudentId = entity.getStudentUserId();
         return SelectedCourseMessage.fromEntity(entity);
     }
 
