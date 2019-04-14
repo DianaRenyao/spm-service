@@ -63,9 +63,9 @@ public enum ServiceError {
 
     /* chapter resource errors */
     POST_CHAPTER_CAN_NOT_BE_INSERTED(90201, Response.Status.BAD_REQUEST, "chapter can not be inserted"),
-    POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exsti"),
-    PUT_CHAPTER_COURSE_DO_NOT_EXISTS(90301, Response.Status.BAD_REQUEST, "course do not exit"),
-    DELETE_CHAPTER_COURSE_DO_NOT_EXISTS(90401, Response.Status.BAD_REQUEST, "course do not exit"),
+    POST_CHAPTER_COURSE_DO_NOT_EXISTS(90202, Response.Status.BAD_REQUEST, "course do not exist"),
+    PUT_CHAPTER_NO_SUCH_CHAPTER(90301, Response.Status.BAD_REQUEST, "no such chapter"),
+    DELETE_CHAPTER_COURSE_DO_NOT_EXISTS(90401, Response.Status.BAD_REQUEST, "course do not exist"),
 
     POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
     POST_SECTION_CHAPTER_DO_NOT_EXISTS(100202, Response.Status.BAD_REQUEST, "chapter do not exist"),
