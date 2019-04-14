@@ -3,11 +3,7 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.ChapterCreationMessage;
-import buptspirit.spm.message.ChapterEditingMessage;
-import buptspirit.spm.message.ChapterMessage;
-import buptspirit.spm.message.MessageMapper;
-import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.*;
 import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.facade.ChapterFacade;
@@ -105,7 +101,7 @@ public class ChapterLogic {
         );
     }
 
-    public ChapterMessage editChapter(int courseId, int sequence, ChapterEditingMessage editingMessage, SessionMessage sessionMessage) throws ServiceException {
+    public ChapterMessage editChapter(int courseId, byte sequence, ChapterEditingMessage editingMessage, SessionMessage sessionMessage) throws ServiceException {
         ChapterEntity thisChapter = transactional(
                 em -> chapterFacade.findCourseChapterByCourseIdAndSequence(em, courseId, sequence),
                 "failed to find this chapter"
@@ -142,7 +138,7 @@ public class ChapterLogic {
                 em -> chapterFacade.findCourseChapters(em, courseId),
                 "fail to find any chapters"
         );
-        serviceAssert(sequence > 0 && sequence < courseChapters.size());
+        serviceAssert(sequence >= 0 && sequence < courseChapters.size());
         transactional(
                 em -> {
                     for (int i = sequence + 1; i < courseChapters.size(); ++i) {

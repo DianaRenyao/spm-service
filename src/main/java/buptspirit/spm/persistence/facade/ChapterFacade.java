@@ -17,7 +17,7 @@ public class ChapterFacade extends AbstractFacade<ChapterEntity> {
                 .getResultList();
     }
 
-    public ChapterEntity findCourseChapterByCourseIdAndSequence(EntityManager em, int courseId, int sequence) {
+    public ChapterEntity findCourseChapterByCourseIdAndSequence(EntityManager em, int courseId, byte sequence) {
         try {
             return em.createQuery("select c from ChapterEntity c where c.courseId = :courseId and c.sequence = :sequence", ChapterEntity.class)
                     .setParameter("courseId", courseId)

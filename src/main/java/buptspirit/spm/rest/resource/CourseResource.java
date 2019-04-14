@@ -147,7 +147,7 @@ public class CourseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ChapterMessage editChapter(
             @PathParam("id") int courseId,
-            @PathParam("sequence") int sequence,
+            @PathParam("sequence") byte sequence,
             ChapterEditingMessage editingMessage) throws ServiceException {
         return chapterLogic.editChapter(courseId, sequence, editingMessage, sessionMessage);
     }
@@ -164,24 +164,41 @@ public class CourseResource {
     }
 
     @POST
-    @Path("{courseId}/chapters/{chapterId}/sections")
+    @Path("{courseId}/chapters/{chapterSequence}/sections")
+    @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public SectionMessage insertSection(
             @PathParam("courseId") int courseId,
-            @PathParam("chapterId") int chapterId,
+            @PathParam("chapterSequence") byte chapterSequence,
             SectionCreationMessage sectionCreationMessage
     ) throws ServiceAssertionException, ServiceException {
-        return sectionLogic.insertSection(courseId, chapterId, sectionCreationMessage, sessionMessage);
+        return sectionLogic.insertSection(courseId, chapterSequence, sectionCreationMessage, sessionMessage);
     }
 
-    @GET
-    @Path("{courseId}/chapters/{chapterId}/sections")
+    @PUT
+    @Path("{courseId}/chapters/{chapterSequence}/sections/{sectionSequence}")
+    @Secured({Role.Teacher})
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public List<SectionMessage> getChapterSections(
+    public SectionMessage editSection(
             @PathParam("courseId") int courseId,
-            @PathParam("chapterId") int chapterId
+            @PathParam("chapterSequence") byte chapterSequence,
+            @PathParam("sectionSequence") byte sectionSequence,
+            SectionEditingMessage sectionEditingMessage
     ) throws ServiceException {
-        return sectionLogic.getChapterSections(courseId, chapterId);
+        return sectionLogic.eidtSection(courseId, chapterSequence, sectionSequence, sectionEditingMessage, sessionMessage);
+    }
+
+    @DELETE
+    @Path("{courseId}/chapters/{chapterId}/sections/{sequence}")
+    @Secured({Role.Teacher})
+    public Response deleteSection(
+            @PathParam("courseId") int courseId,
+            @PathParam("chapterId") int chapterId,
+            @PathParam("sequence") int sequence
+    ) throws ServiceException, ServiceAssertionException {
+        sectionLogic.deleteSection(courseId, chapterId, sequence, sessionMessage);
+        return Response.noContent().build();
     }
 }
