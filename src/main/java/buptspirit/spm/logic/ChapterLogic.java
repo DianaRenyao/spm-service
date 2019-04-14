@@ -118,65 +118,18 @@ public class ChapterLogic {
         if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()) &&
                 thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
-        List<ChapterEntity> courseChapters = transactional(
-                em -> chapterFacade.findCourseChapters(em, chapterMessage.getCourseId()),
-                "fail to find any chapters"
-        );
         ChapterEntity thisChapter = transactional(
                 em -> chapterFacade.find(em, chapterMessage.getChapterId()),
                 "fail to find this chapter"
         );
         thisChapter.setChapterName(chapterMessage.getChapterName());
-        if (chapterMessage.getSequence() == thisChapter.getSequence()) {
-            logger.debug("edit chapter name only");
-            return transactional(
-                    em -> {
-                        chapterFacade.edit(em, thisChapter);
-                        return messageMapper.intoChapterMessage(em, thisChapter);
-                    },
-                    "fail to edit this chapter"
-            );
-        } else {
-            logger.debug("edit chapter sequence at same time");
-            byte oldSequence = thisChapter.getSequence();
-            byte newSequence = chapterMessage.getSequence();
-            if (newSequence < oldSequence) {
-                logger.debug("<");
-                for (int i = oldSequence - 1; i >= newSequence; i--) {
-                    ChapterEntity chapter = courseChapters.get(i);
-                    chapter.setSequence((byte) (chapter.getSequence() + 1));
-                    transactional(
-                            em -> {
-                                chapterFacade.edit(em, chapter);
-                                return null;
-                            },
-                            "fail to edit this chapter"
-                    );
-                }
-
-            } else {
-                logger.debug(">");
-                for (int i = oldSequence + 1; i <= newSequence; i++) {
-                    ChapterEntity chapter = courseChapters.get(i);
-                    chapter.setSequence((byte) (chapter.getSequence() - 1));
-                    transactional(
-                            em -> {
-                                chapterFacade.edit(em, chapter);
-                                return null;
-                            },
-                            "fail to edit this chapter"
-                    );
-                }
-            }
-            thisChapter.setSequence(newSequence);
-            return transactional(
-                    em -> {
-                        chapterFacade.edit(em, thisChapter);
-                        return messageMapper.intoChapterMessage(em, thisChapter);
-                    },
-                    "fail to edit this chapter"
-            );
-        }
+        return transactional(
+                em -> {
+                    chapterFacade.edit(em, thisChapter);
+                    return messageMapper.intoChapterMessage(em, thisChapter);
+                },
+                "fail to edit this chapter"
+        );
     }
 
     public void deleteChapter(ChapterMessage chapterMessage, SessionMessage sessionMessage) throws ServiceException {
