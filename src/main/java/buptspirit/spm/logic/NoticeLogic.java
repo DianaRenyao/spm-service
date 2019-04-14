@@ -9,6 +9,7 @@ import buptspirit.spm.message.NoticeMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.NoticeEntity;
 import buptspirit.spm.persistence.facade.NoticeFacade;
+import buptspirit.spm.rest.filter.Role;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;
@@ -128,6 +129,17 @@ public class NoticeLogic {
                     return null;
                 },
                 "failed to remove notice"
+        );
+    }
+
+    public List<NoticeMessage> getTeacherNotices(SessionMessage sessionMessage) throws ServiceException {
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()))
+            throw ServiceError.FORBIDDEN.toException();
+        return transactional(
+                em -> noticeFacade.findByAuthorId(em, sessionMessage.getUserInfo().getId()).stream().map(
+                        notice -> messageMapper.intoNoticeMessage(em, notice)
+                ).collect(Collectors.toList()),
+                "failed to find teacher notices"
         );
     }
 }
