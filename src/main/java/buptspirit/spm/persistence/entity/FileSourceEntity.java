@@ -4,11 +4,13 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
 @Table(name = "file_source", schema = "spm")
+@NamedQuery(name = "FileSource.findByIdentifier",query = "SELECT f FROM FileSourceEntity f WHERE f.identifier=:identifier")
 public class FileSourceEntity {
     private int fileSourceId;
     private String filename;
