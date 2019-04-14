@@ -39,7 +39,7 @@ public class SectionLogic {
                 em -> chapterFacade.find(em, chapterId) != null,
                 "fail to find chapter");
         if (!exists)
-            throw ServiceError.POST_STUDENT_USERNAME_ALREADY_EXISTS.toException();
+            throw ServiceError.POST_SECTION_CHAPTER_DO_NOT_EXISTS.toException();
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
