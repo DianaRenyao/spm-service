@@ -140,7 +140,7 @@ public class SectionLogic {
         );
     }
 
-    public void deleteSection(int courseId, int chapterId, int sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
+    public void deleteSection(int courseId, byte chapterSequence, byte sectionSequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
@@ -150,18 +150,24 @@ public class SectionLogic {
         if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()) &&
                 thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
+        ChapterEntity thisChapter = transactional(
+                em -> chapterFacade.findCourseChapterByCourseIdAndSequence(em, courseId, chapterSequence),
+                "failed to find chapter"
+        );
+        if (thisChapter == null)
+            throw ServiceError.PUT_SECTION_NO_SUCH_CHAPTER.toException();
         List<SectionEntity> chapterSections = transactional(
-                em -> sectionFacade.findCourseChapterSections(em, chapterId),
+                em -> sectionFacade.findCourseChapterSections(em, thisChapter.getChapterId()),
                 "failed to find sections");
-        serviceAssert(sequence >= 0 && sequence < chapterSections.size());
+        serviceAssert(sectionSequence >= 0 && sectionSequence < chapterSections.size());
         transactional(
                 em -> {
-                    for (int i = sequence + 1; i < chapterSections.size(); i++) {
+                    for (int i = sectionSequence + 1; i < chapterSections.size(); i++) {
                         SectionEntity section = chapterSections.get(i);
                         section.setSequence((byte) (section.getSequence() - 1));
                         sectionFacade.edit(em, section);
                     }
-                    SectionEntity thisSection = chapterSections.get(sequence);
+                    SectionEntity thisSection = chapterSections.get(sectionSequence);
                     sectionFacade.remove(em, thisSection);
                     return null;
                 },

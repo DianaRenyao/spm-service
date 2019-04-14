@@ -124,7 +124,7 @@ public class ChapterLogic {
         );
     }
 
-    public void deleteChapter(int courseId, int sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
+    public void deleteChapter(int courseId, byte sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
