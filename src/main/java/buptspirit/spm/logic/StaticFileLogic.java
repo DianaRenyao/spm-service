@@ -42,16 +42,16 @@ public class StaticFileLogic {
     }
 
     public FileSourceMessage upload(InputStream inputStream,
-                                    FileSourceMessage fileDetail) throws ServiceException {
-        String fileType = suffixToMediaType(fileDetail.getFilename());
+                                    String filename) throws ServiceException {
+        String fileType = suffixToMediaType(filename);
         String identifier = UUID.randomUUID().toString().replaceAll("-", "");
         try {
             fileManager.store(identifier, inputStream);
         } catch (IOException e) {
-            logger.warn(" Failed to  store file:" + e.getMessage());
+            logger.warn(" Failed to store file", e);
             throw ServiceError.POST_STATIC_FILE_FAILED_TO_STORE.toException();
         }
-        FileSourceEntity entity = fileDetailToEntity(fileDetail.getFilename(), fileType, identifier);
+        FileSourceEntity entity = fileDetailToEntity(filename, fileType, identifier);
         try {
             transactional(
                     em -> {

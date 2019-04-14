@@ -20,22 +20,12 @@
         <version.weld-servlet>2.4.8.Final</version.weld-servlet>
         <version.cdi-api>2.0</version.cdi-api>
         <version.hibernate>5.4.2.Final</version.hibernate>
-        <!--        <version.hibernate-jpa>1.0.2.Final</version.hibernate-jpa>-->
         <version.mysql-connector-java>8.0.15</version.mysql-connector-java>
         <version.jboss.logging>3.3.2.Final</version.jboss.logging>
         <version.infinispan-core>9.4.11.Final</version.infinispan-core>
         <version.commons-lang3>3.8.1</version.commons-lang3>
         <version.java-jwt>3.8.0</version.java-jwt>
         <version.javatuples>1.2</version.javatuples>
-        <!--        <version.junit>4.12</version.junit>-->
-        <!--        <version.assertj-core>3.12.2</version.assertj-core>-->
-        <!--        <version.mockito-core>2.26.0</version.mockito-core>-->
-        <!--        <version.rest-assured>3.3.0</version.rest-assured>-->
-        <!--        <version.arquillian-junit-container>1.4.1.Final</version.arquillian-junit-container>-->
-        <!--        <version.arquillian-tomcat-embedded-8>1.1.0.Final</version.arquillian-tomcat-embedded-8>-->
-        <!--        <version.tomcat-embed>8.5.39</version.tomcat-embed>-->
-        <!--        <version.shrinkwrap-depchain>1.2.6</version.shrinkwrap-depchain>-->
-        <!--        <version.el-impl>2.2</version.el-impl>-->
 
         <version.plugin.surefire>3.0.0-M3</version.plugin.surefire>
         <version.plugin.failsafe>3.0.0-M3</version.plugin.failsafe>
@@ -58,49 +48,6 @@
                     <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
-
-            <!--            &lt;!&ndash; tell surefire not to run integration tests during 'test' phase (unit test phase) &ndash;&gt;-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <version>${version.plugin.surefire}</version>-->
-            <!--                <configuration>-->
-            <!--                    <excludes>-->
-            <!--                        <exclude>**/*IntegrationTest.java</exclude>-->
-            <!--                        <exclude>**/*ApplicationTest.java</exclude>-->
-            <!--                        <exclude>**/*ApiTest.java</exclude>-->
-            <!--                    </excludes>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
-            <!--            &lt;!&ndash; tell failsafe to specifically run integration tests during 'integration-test' phase (after the war has been generated) &ndash;&gt;-->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-            <!--                <version>${version.plugin.failsafe}</version>-->
-            <!--                <configuration>-->
-            <!--                    <encoding>UTF-8</encoding>-->
-            <!--                    <includes>-->
-            <!--                        <include>**/*IntegrationTest.java</include>-->
-            <!--                        <exclude>**/*ApplicationTest.java</exclude>-->
-            <!--                        <exclude>**/*ApiTest.java</exclude>-->
-            <!--                    </includes>-->
-            <!--                </configuration>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>integration-test</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>integration-test</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                    <execution>-->
-            <!--                        <id>verify</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>verify</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
         </plugins>
     </build>
 
@@ -136,21 +83,13 @@
             <version>${version.log4j}</version>
         </dependency>
         <!-- for jersey -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.jersey.core</groupId>-->
-        <!--            <artifactId>jersey-server</artifactId>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-binding</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.media</groupId>
-            <artifactId>jersey-media-json-processing</artifactId>
+            <artifactId>jersey-media-json-jackson</artifactId>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
@@ -226,71 +165,6 @@
             <artifactId>javatuples</artifactId>
             <version>${version.javatuples}</version>
         </dependency>
-
-        <!--        &lt;!&ndash; test &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>junit</groupId>-->
-        <!--            <artifactId>junit</artifactId>-->
-        <!--            <version>${version.junit}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.assertj</groupId>-->
-        <!--            <artifactId>assertj-core</artifactId>-->
-        <!--            <version>${version.assertj-core}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.mockito</groupId>-->
-        <!--            <artifactId>mockito-core</artifactId>-->
-        <!--            <version>${version.mockito-core}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>io.rest-assured</groupId>-->
-        <!--            <artifactId>rest-assured</artifactId>-->
-        <!--            <version>${version.rest-assured}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-
-        <!--        &lt;!&ndash; arquillian test &ndash;&gt;-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jboss.arquillian.junit</groupId>-->
-        <!--            <artifactId>arquillian-junit-container</artifactId>-->
-        <!--            <version>${version.arquillian-junit-container}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jboss.arquillian.container</groupId>-->
-        <!--            <artifactId>arquillian-tomcat-embedded-8</artifactId>-->
-        <!--            <version>${version.arquillian-tomcat-embedded-8}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat.embed</groupId>-->
-        <!--            <artifactId>tomcat-embed-core</artifactId>-->
-        <!--            <version>${version.tomcat-embed}</version>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tomcat</groupId>-->
-        <!--            <artifactId>tomcat-util</artifactId>-->
-        <!--            <version>${version.tomcat-embed}</version>-->
-        <!--            <scope>provided</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.jboss.shrinkwrap</groupId>-->
-        <!--            <artifactId>shrinkwrap-depchain</artifactId>-->
-        <!--            <version>${version.shrinkwrap-depchain}</version>-->
-        <!--            <type>pom</type>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
-        <!--        <dependency>-->
-        <!--            <groupId>org.glassfish.web</groupId>-->
-        <!--            <artifactId>el-impl</artifactId>-->
-        <!--            <version>${version.el-impl}</version>-->
-        <!--            <scope>test</scope>-->
-        <!--        </dependency>-->
     </dependencies>
 
 </project>

@@ -8,6 +8,7 @@ import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 import buptspirit.spm.utility.FileManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.jersey.media.multipart.ContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -17,6 +18,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -45,37 +47,31 @@ public class StaticFileResource {
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
-        return fileLogic.upload(inputStream, convert(fileDetail));
-    }
-
-    private FileSourceMessage convert(FormDataContentDisposition fileDetail) {
-        FileSourceMessage message = new FileSourceMessage();
-        message.setFilename(fileDetail.getFileName());// only file name is necessary
-        return message;
+        return fileLogic.upload(inputStream, fileDetail.getFileName());
     }
 
     @GET
+    @Path("{identifier}")
     public Response download(
-            @DefaultValue("false") @QueryParam("download") boolean download,
-            @QueryParam("identifier") String identifier) throws ServiceException {
-        if (download) {
-            File identifierFile;
-            try {
-                identifierFile = fileManager.getFile(identifier);
-            } catch (IOException e) {
-                logger.warn("failed to find identifier" + e);
-                throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
-            }
-            return Response.ok(identifierFile)
-                    .type(MediaType.APPLICATION_OCTET_STREAM)
-                    .build();
-        } else {
-            FileSourceMessage fileSourceMessage = fileLogic.download(identifier);
-            return Response.status(Response.Status.OK)
-                    .entity(fileSourceMessage)
-                    .build();
+            @PathParam("identifier") String identifier,
+            @DefaultValue("false") @QueryParam("download") boolean download) throws ServiceException {
+        File identifierFile;
+        FileSourceMessage fileSourceMessage = fileLogic.download(identifier);
+        try {
+            identifierFile = fileManager.getFile(identifier);
+        } catch (IOException e) {
+            logger.warn("failed to find identifier" + e);
+            throw ServiceError.GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE.toException();
         }
-
-
+        Response.ResponseBuilder builder = Response.ok(identifierFile);
+        if (download) {
+            ContentDisposition contentDisposition = ContentDisposition.type("attachment")
+                    .fileName(fileSourceMessage.getFilename()).build();
+            builder.header("Content-Disposition", contentDisposition)
+                    .type(MediaType.APPLICATION_OCTET_STREAM);
+        } else {
+            builder.type(fileSourceMessage.getFileType());
+        }
+        return builder.build();
     }
 }
