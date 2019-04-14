@@ -142,7 +142,7 @@ public class ChapterLogic {
                 em -> chapterFacade.findCourseChapters(em, courseId),
                 "fail to find any chapters"
         );
-        serviceAssert(sequence > 0 && sequence < courseChapters.size());
+        serviceAssert(sequence >= 0 && sequence < courseChapters.size());
         transactional(
                 em -> {
                     for (int i = sequence + 1; i < courseChapters.size(); ++i) {

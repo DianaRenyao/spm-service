@@ -70,6 +70,9 @@ public enum ServiceError {
     POST_SECTION_CAN_NOT_BE_INSERTED(100201, Response.Status.BAD_REQUEST, "section can not be inserted"),
     POST_SECTION_CHAPTER_DO_NOT_EXISTS(100202, Response.Status.BAD_REQUEST, "chapter do not exist"),
     POST_SECTION_COURSE_DO_NOT_EXISTS(100202, Response.Status.BAD_REQUEST, "course do not exist"),
+    PUT_SECTION_NO_SUCH_SECTION(100301, Response.Status.BAD_REQUEST, "no such section"),
+    PUT_SECTION_NO_SUCH_CHAPTER(100302, Response.Status.BAD_REQUEST, "no such chapter"),
+    DELETE_SECTION_COURSE_DO_NOT_EXISTS(100401, Response.Status.BAD_REQUEST, "section do not exist"),
 
     /*static file error*/
     POST_STATIC_FILE_FAILED_TO_STORE(110201, Response.Status.BAD_REQUEST, "failed to store file in server"),

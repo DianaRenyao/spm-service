@@ -17,6 +17,17 @@ public class SectionFacade extends AbstractFacade<SectionEntity> {
                 .getResultList();
     }
 
+    public SectionEntity findCourseChapterSectionByChapterIdAndSequence(EntityManager em, int chapterId, byte sequence) {
+        try {
+            return em.createQuery("select s from SectionEntity s where s.chapterId = :chapterId and s.sequence = :sequence", SectionEntity.class)
+                    .setParameter("chapterId", chapterId)
+                    .setParameter("sequence", sequence)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public SectionEntity findCourseChapterSection(EntityManager em, int courseId, byte chapterSequence, byte sectionSequence) {
         try {
             return em.createQuery("select s from CourseEntity c " +
