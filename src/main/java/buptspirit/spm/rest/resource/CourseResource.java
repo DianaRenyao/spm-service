@@ -141,19 +141,25 @@ public class CourseResource {
     }
 
     @PUT
-    @Path("{id}/chapters")
+    @Path("{id}/chapters/{sequence}")
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ChapterMessage editChapter(ChapterMessage chapterMessage) throws ServiceException {
-        return chapterLogic.editChapter(chapterMessage, sessionMessage);
+    public ChapterMessage editChapter(
+            @PathParam("id") int courseId,
+            @PathParam("sequence") int sequence,
+            ChapterEditingMessage editingMessage) throws ServiceException {
+        return chapterLogic.editChapter(courseId, sequence, editingMessage, sessionMessage);
     }
 
     @DELETE
-    @Path("{id}/chapters")
+    @Path("{id}/chapters/{sequence}")
     @Secured({Role.Teacher})
-    public Response deleteChapter(ChapterMessage chapterMessage) throws ServiceException {
-        chapterLogic.deleteChapter(chapterMessage, sessionMessage);
+    public Response deleteChapter(
+            @PathParam("id") int courseId,
+            @PathParam("sequence") int sequence
+    ) throws ServiceException, ServiceAssertionException {
+        chapterLogic.deleteChapter(courseId, sequence, sessionMessage);
         return Response.noContent().build();
     }
 

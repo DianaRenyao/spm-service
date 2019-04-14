@@ -4,15 +4,14 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.ChapterCreationMessage;
+import buptspirit.spm.message.ChapterEditingMessage;
 import buptspirit.spm.message.ChapterMessage;
 import buptspirit.spm.message.MessageMapper;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
-import buptspirit.spm.persistence.entity.SectionEntity;
 import buptspirit.spm.persistence.facade.ChapterFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
-import buptspirit.spm.persistence.facade.SectionFacade;
 import buptspirit.spm.rest.filter.Role;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +19,7 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class ChapterLogic {
@@ -31,9 +31,6 @@ public class ChapterLogic {
 
     @Inject
     private MessageMapper messageMapper;
-
-    @Inject
-    private SectionFacade sectionFacade;
 
     @Inject
     private Logger logger;
@@ -108,34 +105,33 @@ public class ChapterLogic {
         );
     }
 
-    public ChapterMessage editChapter(ChapterMessage chapterMessage, SessionMessage sessionMessage) throws ServiceException {
-        CourseEntity thisCourse = transactional(
-                em -> courseFacade.find(em, chapterMessage.getCourseId()),
-                "fail to find course"
-        );
-        if (thisCourse == null)
-            throw ServiceError.PUT_CHAPTER_COURSE_DO_NOT_EXISTS.toException();
-        if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()) &&
-                thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
-            throw ServiceError.FORBIDDEN.toException();
+    public ChapterMessage editChapter(int courseId, int sequence, ChapterEditingMessage editingMessage, SessionMessage sessionMessage) throws ServiceException {
         ChapterEntity thisChapter = transactional(
-                em -> chapterFacade.find(em, chapterMessage.getChapterId()),
-                "fail to find this chapter"
+                em -> chapterFacade.findCourseChapterByCourseIdAndSequence(em, courseId, sequence),
+                "failed to find this chapter"
         );
-        thisChapter.setChapterName(chapterMessage.getChapterName());
+        if (thisChapter == null)
+            throw ServiceError.PUT_CHAPTER_NO_SUCH_CHAPTER.toException();
+        CourseEntity courseEntity = transactional(
+                em -> courseFacade.find(em, courseId),
+                "failed to find course"
+        );
+        if (courseEntity.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+            throw ServiceError.FORBIDDEN.toException();
+        thisChapter.setChapterName(editingMessage.getChapterName());
         return transactional(
                 em -> {
                     chapterFacade.edit(em, thisChapter);
                     return messageMapper.intoChapterMessage(em, thisChapter);
                 },
-                "fail to edit this chapter"
+                "failed to edit the chapter"
         );
     }
 
-    public void deleteChapter(ChapterMessage chapterMessage, SessionMessage sessionMessage) throws ServiceException {
+    public void deleteChapter(int courseId, int sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
         CourseEntity thisCourse = transactional(
-                em -> courseFacade.find(em, chapterMessage.getCourseId()),
-                "fail to find course"
+                em -> courseFacade.find(em, courseId),
+                "failed to find course"
         );
         if (thisCourse == null)
             throw ServiceError.DELETE_CHAPTER_COURSE_DO_NOT_EXISTS.toException();
@@ -143,46 +139,23 @@ public class ChapterLogic {
                 thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
             throw ServiceError.FORBIDDEN.toException();
         List<ChapterEntity> courseChapters = transactional(
-                em -> chapterFacade.findCourseChapters(em, chapterMessage.getCourseId()),
+                em -> chapterFacade.findCourseChapters(em, courseId),
                 "fail to find any chapters"
         );
-        /* 将删除的chapter后面的chapter的sequence都-1 */
-        for (int i = chapterMessage.getSequence() + 1; i < courseChapters.size(); i++) {
-            ChapterEntity chapter = courseChapters.get(i);
-            chapter.setSequence((byte) (chapter.getSequence() - 1));
-            transactional(
-                    em -> {
-                        chapterFacade.edit(em, chapter);
-                        return null;
-                    },
-                    "fail to edit this chapter"
-            );
-        }
-        ChapterEntity thisChapter = transactional(
-                em -> chapterFacade.find(em, chapterMessage.getChapterId()),
-                "fail to find this chapter"
-        );
-        for (int i = 0; i < chapterMessage.getSections().size(); i++) {
-            int sectionId = chapterMessage.getSections().get(i).getSectionId();
-            SectionEntity section = transactional(
-                    em -> sectionFacade.find(em, sectionId)
-                    ,
-                    "fail to find section"
-            );
-            transactional(
-                    em -> {
-                        sectionFacade.remove(em, section);
-                        return null;
-                    },
-                    "fail to remove section"
-            );
-        }
+        serviceAssert(sequence > 0 && sequence < courseChapters.size());
         transactional(
                 em -> {
+                    for (int i = sequence + 1; i < courseChapters.size(); ++i) {
+                        ChapterEntity chapter = courseChapters.get(i);
+                        chapter.setSequence((byte) (i - 1));
+                        chapterFacade.edit(em, chapter);
+                    }
+                    ChapterEntity thisChapter = courseChapters.get(sequence);
                     chapterFacade.remove(em, thisChapter);
                     return null;
                 },
-                "fail to remove this chapter"
+                "failed to delete chapter"
         );
+
     }
 }
