@@ -210,14 +210,14 @@ public class CourseResource {
     }
 
     @DELETE
-    @Path("{courseId}/chapters/{chapterId}/sections/{sequence}")
+    @Path("{courseId}/chapters/{chapterSequence}/sections/{sectionSequence}")
     @Secured({Role.Teacher})
     public Response deleteSection(
             @PathParam("courseId") int courseId,
-            @PathParam("chapterId") int chapterId,
-            @PathParam("sequence") int sequence
+            @PathParam("chapterSequence") byte chapterSequence,
+            @PathParam("sectionSequence") byte sectionSequence
     ) throws ServiceException, ServiceAssertionException {
-        sectionLogic.deleteSection(courseId, chapterId, sequence, sessionMessage);
+        sectionLogic.deleteSection(courseId, chapterSequence, sectionSequence, sessionMessage);
         return Response.noContent().build();
     }
 
