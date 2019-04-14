@@ -1,7 +1,22 @@
 package buptspirit.spm.message;
-
-import buptspirit.spm.persistence.entity.*;
-import buptspirit.spm.persistence.facade.*;
+import buptspirit.spm.persistence.entity.ApplicationEntity;
+import buptspirit.spm.persistence.entity.ChapterEntity;
+import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.FileSourceEntity;
+import buptspirit.spm.persistence.entity.NoticeEntity;
+import buptspirit.spm.persistence.entity.SectionEntity;
+import buptspirit.spm.persistence.entity.StudentEntity;
+import buptspirit.spm.persistence.entity.TeacherEntity;
+import buptspirit.spm.persistence.entity.UserInfoEntity;
+import buptspirit.spm.persistence.entity.SelectedCourseEntity;
+import buptspirit.spm.persistence.facade.ChapterFacade;
+import buptspirit.spm.persistence.facade.CourseFacade;
+import buptspirit.spm.persistence.facade.FileSourceFacade;
+import buptspirit.spm.persistence.facade.SectionFacade;
+import buptspirit.spm.persistence.facade.StudentFacade;
+import buptspirit.spm.persistence.facade.TeacherFacade;
+import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.persistence.facade.SelectedCourseFacade;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
@@ -28,6 +43,9 @@ public class MessageMapper {
 
     @Inject
     private ChapterFacade chapterFacade;
+
+    @Inject
+    private FileSourceFacade fileSourceFacade;
 
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
@@ -86,6 +104,13 @@ public class MessageMapper {
     }
 
     public SectionMessage intoSectionMessage(EntityManager em, SectionEntity entity) {
-        return SectionMessage.fromEntity(entity);
+        int sectionId = entity.getSectionId();
+        List<FileSourceMessage> fileSources = fileSourceFacade.findSectionFile(em, sectionId)
+                .map(file -> intoFileSourceMessage(em, file)).collect(Collectors.toList());
+        return SectionMessage.fromEntity(entity, fileSources);
+    }
+
+    public FileSourceMessage intoFileSourceMessage(EntityManager em, FileSourceEntity entity) {
+        return FileSourceMessage.fromEntity(entity);
     }
 }

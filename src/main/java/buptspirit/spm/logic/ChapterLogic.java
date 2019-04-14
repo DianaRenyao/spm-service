@@ -105,7 +105,7 @@ public class ChapterLogic {
         );
     }
 
-    public ChapterMessage editChapter(int courseId, int sequence, ChapterEditingMessage editingMessage, SessionMessage sessionMessage) throws ServiceException {
+    public ChapterMessage editChapter(int courseId, byte sequence, ChapterEditingMessage editingMessage, SessionMessage sessionMessage) throws ServiceException {
         ChapterEntity thisChapter = transactional(
                 em -> chapterFacade.findCourseChapterByCourseIdAndSequence(em, courseId, sequence),
                 "failed to find this chapter"
@@ -128,7 +128,7 @@ public class ChapterLogic {
         );
     }
 
-    public void deleteChapter(int courseId, int sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
+    public void deleteChapter(int courseId, byte sequence, SessionMessage sessionMessage) throws ServiceException, ServiceAssertionException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "failed to find course"
@@ -142,7 +142,7 @@ public class ChapterLogic {
                 em -> chapterFacade.findCourseChapters(em, courseId),
                 "fail to find any chapters"
         );
-        serviceAssert(sequence > 0 && sequence < courseChapters.size());
+        serviceAssert(sequence >= 0 && sequence < courseChapters.size());
         transactional(
                 em -> {
                     for (int i = sequence + 1; i < courseChapters.size(); ++i) {
