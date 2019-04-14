@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response;
 public class MetaResource {
 
     private static final String DEFAULT_MOCK_PASSWORD = "bupt-spirit";
+
     @Inject
     UserLogic userLogic;
 
@@ -50,7 +51,6 @@ public class MetaResource {
     }
 
     @POST
-
     @Path("mock")
     @Secured({Role.Administrator})
     public Response createMockData() throws ServiceException, ServiceAssertionException {

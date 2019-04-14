@@ -8,10 +8,14 @@ import buptspirit.spm.message.SectionCreationMessage;
 import buptspirit.spm.message.SectionMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.FileSourceEntity;
 import buptspirit.spm.persistence.entity.SectionEntity;
+import buptspirit.spm.persistence.entity.SectionFileEntity;
 import buptspirit.spm.persistence.facade.ChapterFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
+import buptspirit.spm.persistence.facade.FileSourceFacade;
 import buptspirit.spm.persistence.facade.SectionFacade;
+import buptspirit.spm.persistence.facade.SectionFileFacade;
 import buptspirit.spm.rest.filter.Role;
 
 import javax.inject.Inject;
@@ -32,6 +36,12 @@ public class SectionLogic {
 
     @Inject
     private MessageMapper messageMapper;
+
+    @Inject
+    private FileSourceFacade fileSourceFacade;
+
+    @Inject
+    private SectionFileFacade sectionFileFacade;
 
     public SectionMessage insertSection(int courseId, int chapterId, SectionCreationMessage sectionCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
         sectionCreationMessage.enforce();
@@ -109,6 +119,70 @@ public class SectionLogic {
                         section -> messageMapper.intoSectionMessage(em, section)
                 ).collect(Collectors.toList()),
                 "fail to get course chapter section"
+        );
+    }
+
+    public void addFileToSection(int courseId, byte chapterSequence, byte sectionSequence, String fileIdentifier, SessionMessage sessionMessage) throws ServiceException {
+        CourseEntity courseEntity = transactional(
+                em -> courseFacade.find(em, courseId),
+                "failed to find course"
+        );
+        if (courseEntity == null)
+            throw ServiceError.PUT_SECTION_FILE_NO_SUCH_COURSE.toException();
+        if (courseEntity.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+            throw ServiceError.FORBIDDEN.toException();
+        SectionEntity sectionEntity = transactional(
+                em -> sectionFacade.findCourseChapterSection(em, courseId, chapterSequence, sectionSequence),
+                "failed to find section"
+        );
+        if (sectionEntity == null)
+            throw ServiceError.PUT_SECTION_FILE_NO_SUCH_SECTION.toException();
+        FileSourceEntity fileSourceEntity = transactional(
+                em -> fileSourceFacade.findByIdentifier(em, fileIdentifier),
+                "failed to find file source"
+        );
+        if (fileSourceEntity == null)
+            throw ServiceError.PUT_SECTION_FILE_NO_SUCH_FILE.toException();
+        transactional(
+                em -> {
+                    SectionFileEntity sectionFile = new SectionFileEntity();
+                    sectionFile.setFileSourceId(fileSourceEntity.getFileSourceId());
+                    sectionFile.setSectionId(sectionEntity.getSectionId());
+                    sectionFileFacade.create(em, sectionFile);
+                    return null;
+                },
+                "failed to insert section file"
+        );
+    }
+
+    public void deleteSectionFile(int courseId, byte chapterSequence, byte sectionSequence, String fileIdentifier, SessionMessage sessionMessage) throws ServiceException {
+        CourseEntity courseEntity = transactional(
+                em -> courseFacade.find(em, courseId),
+                "failed to find course"
+        );
+        if (courseEntity == null)
+            throw ServiceError.DELETE_SECTION_FILE_NO_SUCH_COURSE.toException();
+        if (courseEntity.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+            throw ServiceError.FORBIDDEN.toException();
+        SectionFileEntity sectionFileEntity = transactional(
+                em ->
+                        sectionFileFacade.findSectionFileBySequenceAndIdentifier(
+                                em,
+                                courseId,
+                                chapterSequence,
+                                sectionSequence,
+                                fileIdentifier
+                        ),
+                "failed to file section file"
+        );
+        if (sectionFileEntity == null)
+            throw ServiceError.DELETE_SECTION_FILE_NO_SUCH_FILE.toException();
+        transactional(
+                em -> {
+                    sectionFileFacade.remove(em, sectionFileEntity);
+                    return null;
+                },
+                "failed to remote section file"
         );
     }
 }

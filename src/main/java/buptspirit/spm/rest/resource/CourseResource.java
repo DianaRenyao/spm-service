@@ -7,13 +7,32 @@ import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.ChapterLogic;
 import buptspirit.spm.logic.CourseLogic;
 import buptspirit.spm.logic.SectionLogic;
-import buptspirit.spm.message.*;
+import buptspirit.spm.message.ApplicationCreationMessage;
+import buptspirit.spm.message.ApplicationMessage;
+import buptspirit.spm.message.ChapterCreationMessage;
+import buptspirit.spm.message.ChapterEditingMessage;
+import buptspirit.spm.message.ChapterMessage;
+import buptspirit.spm.message.CourseCreationMessage;
+import buptspirit.spm.message.CourseMessage;
+import buptspirit.spm.message.CourseSummaryMessage;
+import buptspirit.spm.message.SectionCreationMessage;
+import buptspirit.spm.message.SectionMessage;
+import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -137,7 +156,6 @@ public class CourseResource {
     public List<ChapterMessage> getCourseChapters(
             @PathParam("id") int courseId) throws ServiceException {
         return chapterLogic.getCourseChapters(courseId);
-
     }
 
     @PUT
@@ -147,7 +165,7 @@ public class CourseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public ChapterMessage editChapter(
             @PathParam("id") int courseId,
-            @PathParam("sequence") int sequence,
+            @PathParam("sequence") byte sequence,
             ChapterEditingMessage editingMessage) throws ServiceException {
         return chapterLogic.editChapter(courseId, sequence, editingMessage, sessionMessage);
     }
@@ -157,7 +175,7 @@ public class CourseResource {
     @Secured({Role.Teacher})
     public Response deleteChapter(
             @PathParam("id") int courseId,
-            @PathParam("sequence") int sequence
+            @PathParam("sequence") byte sequence
     ) throws ServiceException, ServiceAssertionException {
         chapterLogic.deleteChapter(courseId, sequence, sessionMessage);
         return Response.noContent().build();
@@ -183,5 +201,33 @@ public class CourseResource {
             @PathParam("chapterId") int chapterId
     ) throws ServiceException {
         return sectionLogic.getChapterSections(courseId, chapterId);
+    }
+
+    @PUT
+    @Secured({Role.Teacher})
+    @Path("{courseId}/chapters/{chapterSequence}/sections/{sectionSequence}/files/{fileIdentifier}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addFileToSection(
+            @PathParam("courseId") int courseId,
+            @PathParam("chapterSequence") byte chapterSequence,
+            @PathParam("sectionSequence") byte sectionSequence,
+            @PathParam("fileIdentifier") String fileIdentifier
+    ) throws ServiceException {
+        sectionLogic.addFileToSection(courseId, chapterSequence, sectionSequence, fileIdentifier, sessionMessage);
+        return Response.noContent().build();
+    }
+
+    @DELETE
+    @Secured({Role.Teacher})
+    @Path("{courseId}/chapters/{chapterSequence}/sections/{sectionSequence}/files/{fileIdentifier}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteSectionFile(
+            @PathParam("courseId") int courseId,
+            @PathParam("chapterSequence") byte chapterSequence,
+            @PathParam("sectionSequence") byte sectionSequence,
+            @PathParam("fileIdentifier") String fileIdentifier
+    ) throws ServiceException {
+        sectionLogic.deleteSectionFile(courseId, chapterSequence, sectionSequence, fileIdentifier, sessionMessage);
+        return Response.noContent().build();
     }
 }

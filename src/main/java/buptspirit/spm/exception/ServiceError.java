@@ -73,10 +73,16 @@ public enum ServiceError {
 
     /*static file error*/
     POST_STATIC_FILE_FAILED_TO_STORE(110201, Response.Status.BAD_REQUEST, "failed to store file in server"),
-   POST_STATIC_FILE_FAILED_TO_INSERT_DB(110202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
-    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(110203,Response.Status.BAD_REQUEST,"failed to upload file: file type is unacceptable"),
-    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(110101,Response.Status.BAD_REQUEST,"failed to find given identifier"),
+    POST_STATIC_FILE_FAILED_TO_INSERT_DB(110202, Response.Status.BAD_REQUEST, "failed to insert mate data to database"),
+    POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE(110203, Response.Status.BAD_REQUEST, "failed to upload file: file type is unacceptable"),
+    GET_STATIC_FILE_FAILED_TO_DOWNLOAD_FILE(110101, Response.Status.BAD_REQUEST, "failed to find given identifier"),
 
+    /* section file error */
+    PUT_SECTION_FILE_NO_SUCH_COURSE(120301, Response.Status.BAD_REQUEST, "no such course"),
+    PUT_SECTION_FILE_NO_SUCH_SECTION(120302, Response.Status.BAD_REQUEST, "no such section"),
+    PUT_SECTION_FILE_NO_SUCH_FILE(120303, Response.Status.BAD_REQUEST, "no such file"),
+    DELETE_SECTION_FILE_NO_SUCH_COURSE(120401, Response.Status.BAD_REQUEST, "no such course"),
+    DELETE_SECTION_FILE_NO_SUCH_FILE(120402, Response.Status.BAD_REQUEST, "no such file"),
     ;
 
     private final int code;
