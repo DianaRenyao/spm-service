@@ -76,7 +76,7 @@ public class TeacherResource {
     }
 
     @GET
-    @Path("{username}/selectedCourses/{courseId}")
+    @Path("{username}/courses/{courseId}/students")
     @Secured({Role.Teacher})
     @Produces(MediaType.APPLICATION_JSON)
     public List<SelectedCourseMessage> getTeacherSelectedCourses(
