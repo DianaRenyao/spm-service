@@ -26,10 +26,11 @@
         <class>buptspirit.spm.persistence.entity.FileSourceEntity</class>
         <class>buptspirit.spm.persistence.entity.QuestionOptionEntity</class>
         <class>buptspirit.spm.persistence.entity.TokenSecretEntity</class>
+        <class>buptspirit.spm.persistence.entity.ExamScoreEntity</class>
         <properties>
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url"
-                      value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
+                      value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
             <property name="hibernate.connection.username" value="root"/>
             <property name="hibernate.connection.password" value="bupt-spirit"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
