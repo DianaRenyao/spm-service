@@ -8,17 +8,17 @@ import java.sql.Timestamp;
 public class SelectedCourseMessage {
 
     private StudentMessage student;
-    private int courseCourseId;
+    private CourseSummaryMessage course;
     private Timestamp timeApproved;
     private BigDecimal avgOnlineScore;
     private BigDecimal midScore;
     private BigDecimal finalScore;
     private BigDecimal totalScore;
 
-    public static SelectedCourseMessage fromEntity(SelectedCourseEntity entity, StudentMessage student) {
+    public static SelectedCourseMessage fromEntity(SelectedCourseEntity entity, StudentMessage student, CourseSummaryMessage course) {
         SelectedCourseMessage message = new SelectedCourseMessage();
         message.setStudent(student);
-        message.setCourseCourseId(entity.getCourseCourseId());
+        message.setCourse(course);
         message.setApproveTime(entity.getTimeApproved());
         message.setAvgOnlineScore(entity.getAvgOnlineScore());
         message.setMidScore(entity.getMidScore());
@@ -43,12 +43,12 @@ public class SelectedCourseMessage {
         this.timeApproved = timeApproved;
     }
 
-    public int getCourseCourseId() {
-        return courseCourseId;
+    public CourseSummaryMessage getCourse() {
+        return course;
     }
 
-    public void setCourseCourseId(int courseCourseId) {
-        this.courseCourseId = courseCourseId;
+    public void setCourse(CourseSummaryMessage course) {
+        this.course = course;
     }
 
     public Timestamp getApproveTime() {
