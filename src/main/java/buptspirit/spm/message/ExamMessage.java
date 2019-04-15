@@ -5,9 +5,9 @@ import buptspirit.spm.persistence.entity.ExamEntity;
 import java.util.List;
 
 public class ExamMessage {
-    int chapterId;
-    int examId;
-    List<QuestionMessage> questionMessages;
+    private int chapterId;
+    private int examId;
+    private List<QuestionMessage> questionMessages;
 
     public static ExamMessage fromEntity(ExamEntity entity, List<QuestionMessage> questionMessages) {
         ExamMessage examMessage = new ExamMessage();

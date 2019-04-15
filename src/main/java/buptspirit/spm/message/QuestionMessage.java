@@ -5,11 +5,11 @@ import buptspirit.spm.persistence.entity.QuestionEntity;
 import java.util.List;
 
 public class QuestionMessage {
-    int examId;
-    int questionId;
-    String questionDetail;
-    int answerId;
-    List<QuestionOptionMessage> questionOptionMessages;
+    private int examId;
+    private int questionId;
+    private String questionDetail;
+    private int answerId;
+    private List<QuestionOptionMessage> questionOptionMessages;
 
     public static QuestionMessage fromEntity(QuestionEntity entity, List<QuestionOptionMessage> questionOptionMessages) {
         QuestionMessage questionMessage = new QuestionMessage();

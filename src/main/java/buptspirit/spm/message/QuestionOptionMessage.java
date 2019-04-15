@@ -3,9 +3,9 @@ package buptspirit.spm.message;
 import buptspirit.spm.persistence.entity.QuestionOptionEntity;
 
 public class QuestionOptionMessage {
-    int questionId;
-    int questionOptionId;
-    String questionOptionDetail;
+    private int questionId;
+    private int questionOptionId;
+    private String questionOptionDetail;
 
     public static QuestionOptionMessage fromEntitiy(QuestionOptionEntity questionOptionEntity) {
         QuestionOptionMessage questionOptionMessage = new QuestionOptionMessage();

@@ -8,11 +8,11 @@ import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
 public class QuestionCreationMessage implements InputMessage {
 
-    int examId;
-    String detail;
-    List<QuestionOptionCreationMessage> questionOptionCreationMessages;
-    int answerIndex;
-    int answerId;
+    private int examId;
+    private String detail;
+    private List<QuestionOptionCreationMessage> questionOptionCreationMessages;
+    private int answerIndex;
+    private int answerId;
 
     @Override
     public void enforce() throws ServiceAssertionException {

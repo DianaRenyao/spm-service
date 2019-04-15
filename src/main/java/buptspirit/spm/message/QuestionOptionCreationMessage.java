@@ -5,8 +5,8 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
 public class QuestionOptionCreationMessage implements InputMessage {
-    int questionId;
-    String questionOptionDetail;
+    private int questionId;
+    private String questionOptionDetail;
 
     @Override
     public void enforce() throws ServiceAssertionException {
