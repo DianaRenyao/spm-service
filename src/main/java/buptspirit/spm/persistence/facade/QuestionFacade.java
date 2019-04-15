@@ -15,4 +15,6 @@ public class QuestionFacade extends AbstractFacade<QuestionEntity> {
                 .setParameter("exam", exam)
                 .getResultList();
     }
+
+
 }

@@ -1,20 +1,7 @@
 package buptspirit.spm.message;
 
 
-import buptspirit.spm.persistence.entity.ApplicationEntity;
-import buptspirit.spm.persistence.entity.ChapterEntity;
-import buptspirit.spm.persistence.entity.CourseEntity;
-import buptspirit.spm.persistence.entity.ExamEntity;
-import buptspirit.spm.persistence.entity.ExperimentEntity;
-import buptspirit.spm.persistence.entity.FileSourceEntity;
-import buptspirit.spm.persistence.entity.NoticeEntity;
-import buptspirit.spm.persistence.entity.QuestionEntity;
-import buptspirit.spm.persistence.entity.QuestionOptionEntity;
-import buptspirit.spm.persistence.entity.SectionEntity;
-import buptspirit.spm.persistence.entity.SelectedCourseEntity;
-import buptspirit.spm.persistence.entity.StudentEntity;
-import buptspirit.spm.persistence.entity.TeacherEntity;
-import buptspirit.spm.persistence.entity.UserInfoEntity;
+import buptspirit.spm.persistence.entity.*;
 import buptspirit.spm.persistence.facade.ChapterFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.ExperimentFacade;
@@ -179,5 +166,9 @@ public class MessageMapper {
         List<QuestionEntity> questionEntities = questionFacade.findByExamId(em, examId);
         int questionNum = questionEntities.size();
         return TeacherExamSummaryMessage.fromEntity(entity,chapterSummaryMessage,questionNum);
+    }
+
+    public ExamScoreMessage intoExamScoreMessage(EntityManager em, ExamScoreEntity examScoreEntity){
+        return ExamScoreMessage.fromEntity(examScoreEntity);
     }
 }

@@ -34,6 +34,9 @@ public class ExamLogic {
     @Inject
     private QuestionOptionFacade questionOptionFacade;
 
+    @Inject
+    private ExamScoreFacade examScoreFacade;
+
 
     public ExamMessage createExam(int courseId, byte chapterSequence, SessionMessage sessionMessage, ExamCreationMessage examCreationMessage) throws ServiceAssertionException, ServiceException {
         examCreationMessage.enforce();
@@ -104,16 +107,68 @@ public class ExamLogic {
         );
     }
 
-    public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
-        CourseEntity thisCourse = transactional(
-                em -> courseFacade.find(em, courseId),
-                "fail to find course"
-        );
-        if (thisCourse == null)
-            throw ServiceError.POST_EXAM_COURSE_DO_NOT_EXISTS.toException();
-        boolean applied = transactional(
-                em->
-        )
+//    public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
+//        CourseEntity thisCourse = transactional(
+//                em -> courseFacade.find(em, courseId),
+//                "fail to find course"
+//        );
+//        if (thisCourse == null)
+//            throw ServiceError.POST_EXAM_COURSE_DO_NOT_EXISTS.toException();
+//        boolean applied = transactional(
+//                em ->
+//        )
+//
+//    }
 
+    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) {
+        int examId = examAnswerMessage.getExamId();
+
+        ChapterEntity chapterEntity = transactional(
+                em -> chapterFacade.findByExamId(em, examId),
+                "failed to find chapter"
+        );
+        boolean applied = transactional(
+                em->{
+                    SelectedCourseEntityPK pk = new SelectedCourseEntityPK();
+                    pk.setCourseCourseId(chapterEntity.getCourseId());
+                    pk.setStudentUserId(sessionMessage.getUserInfo().getId());
+                    return null ;
+                }
+        )
+        List<QuestionEntity> questionEntities = transactional(
+                em -> questionFacade.findByExamId(em, examId),
+                "failed to find questions"
+        );
+        int questionsAmount = questionEntities.size();
+        int correctAnswerAmount = 0;
+        for (int i = 0; i < questionsAmount; i++) {
+            int questionId = questionEntities.get(i).getQuestionId();
+            QuestionEntity questionEntity = transactional(
+                    em -> questionFacade
+                            .find(em, questionId),
+                    "failed to find question"
+            );
+            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswerMessageList().get(i);
+
+            if (questionAnswerMessage.getQuesitionOptionId() == questionEntity.getAnswer()) {
+                correctAnswerAmount++;
+            }
+            int totalScore = (correctAnswerAmount / questionsAmount) * 100;
+
+
+            ExamScoreEntity examScoreEntity = new ExamScoreEntity();
+            examScoreEntity.setExamId(examId);
+            examScoreEntity.setExamScore(totalScore);
+            examScoreEntity.setSelectedCourseCourseCourseId(chapterEntity.getCourseId());
+            examScoreEntity.setSelectedCourseStudentUserId(sessionMessage.getUserInfo().getId());
+            return transactional(
+                    em -> {
+                        examScoreFacade.create(em, examScoreEntity);
+                        return messageMapper.intoExamScoreMessage(em,examScoreEntity);
+                    },
+                    "failed to create exam score"
+            );
+        }
+        return null;
     }
 }
