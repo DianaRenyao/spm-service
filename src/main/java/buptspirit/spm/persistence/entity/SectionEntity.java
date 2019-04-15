@@ -1,10 +1,6 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -16,6 +12,7 @@ public class SectionEntity {
     private String sectionName;
 
     @Id
+    @GeneratedValue
     @Column(name = "section_id", nullable = false)
     public int getSectionId() {
         return sectionId;

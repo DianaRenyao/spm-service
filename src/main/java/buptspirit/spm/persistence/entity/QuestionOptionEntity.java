@@ -1,10 +1,6 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -15,6 +11,7 @@ public class QuestionOptionEntity {
     private int questionId;
 
     @Id
+    @GeneratedValue
     @Column(name = "question_option_id", nullable = false)
     public int getQuestionOptionId() {
         return questionOptionId;
