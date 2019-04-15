@@ -41,6 +41,29 @@ public class StaticFileLogic {
         return FileSourceMessage.fromEntity(fileSourceEntity);
     }
 
+    // TODO better handling delete and its resource
+    void delete(String identifier) throws ServiceException {
+        FileSourceEntity fileSourceEntity = transactional(
+                em -> fileSourceFacade.findByIdentifier(em, identifier),
+                "failed to find fileSource"
+        );
+        if (fileSourceEntity == null)
+            throw ServiceError.DELETE_STATIC_FILE_NO_SUCH_FILE.toException();
+        try {
+            fileManager.delete(fileSourceEntity.getIdentifier());
+        } catch (IOException e) {
+            logger.error("io exception when deleting file", e);
+            throw ServiceError.DELETE_STATIC_FILE_FAILED_DELETE.toException();
+        }
+        transactional(
+                em -> {
+                    fileSourceFacade.remove(em, fileSourceEntity);
+                    return null;
+                },
+                "failed to remove file source entity"
+        );
+    }
+
     public FileSourceMessage upload(InputStream inputStream,
                                     String filename) throws ServiceException {
         String fileType = suffixToMediaType(filename);
