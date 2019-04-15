@@ -1,12 +1,17 @@
 package buptspirit.spm.message;
 
+
 import buptspirit.spm.persistence.entity.ApplicationEntity;
 import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.ExamEntity;
 import buptspirit.spm.persistence.entity.ExperimentEntity;
 import buptspirit.spm.persistence.entity.FileSourceEntity;
 import buptspirit.spm.persistence.entity.NoticeEntity;
+import buptspirit.spm.persistence.entity.QuestionEntity;
+import buptspirit.spm.persistence.entity.QuestionOptionEntity;
 import buptspirit.spm.persistence.entity.SectionEntity;
+import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
@@ -14,10 +19,13 @@ import buptspirit.spm.persistence.facade.ChapterFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.ExperimentFacade;
 import buptspirit.spm.persistence.facade.FileSourceFacade;
+import buptspirit.spm.persistence.facade.QuestionFacade;
+import buptspirit.spm.persistence.facade.QuestionOptionFacade;
 import buptspirit.spm.persistence.facade.SectionFacade;
 import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
+
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -52,6 +60,12 @@ public class MessageMapper {
     @Inject
     private ExperimentFacade experimentFacade;
 
+    @Inject
+    private QuestionOptionFacade questionOptionFacade;
+
+    @Inject
+    private QuestionFacade questionFacade;
+
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
         TeacherMessage teacher = intoTeacherMessage(em, teacherFacade.find(em, authorId));
@@ -72,6 +86,13 @@ public class MessageMapper {
         int userId = entity.getUserId();
         UserInfoMessage user = intoUserInfoMessage(em, userInfoFacade.find(em, userId));
         return StudentMessage.fromEntity(entity, user);
+    }
+
+    public SelectedCourseMessage intoScoreMessage(EntityManager em, SelectedCourseEntity entity) {
+        int studentId = entity.getStudentUserId();
+        StudentEntity student = studentFacade.find(em, studentId);
+        StudentMessage studentMessage = intoStudentMessage(em, student);
+        return SelectedCourseMessage.fromEntity(entity, studentMessage);
     }
 
     public CourseMessage intoCourseMessage(EntityManager em, CourseEntity entity) {
@@ -115,12 +136,31 @@ public class MessageMapper {
         return FileSourceMessage.fromEntity(entity);
     }
 
+
     public ExperimentMessage intoExperimentMessage(EntityManager em, ExperimentCreationMessage experimentCreationMessage) {
         ExperimentEntity experimentEntity = experimentFacade.findByName(em, experimentCreationMessage.getExperimentName());
         return ExperimentMessage.fromEntity(experimentEntity);
     }
 
-    public ExperimentMessage intoExperimentMessage(EntityManager em, ExperimentEntity experiment){
+    public ExperimentMessage intoExperimentMessage(EntityManager em, ExperimentEntity experiment) {
         return ExperimentMessage.fromEntity(experiment);
+    }
+
+    public QuestionOptionMessage intoQuestionOptionMessage(EntityManager em, QuestionOptionEntity entity) {
+        return QuestionOptionMessage.fromEntitiy(entity);
+    }
+
+    public QuestionMessage intoQuestionMessage(EntityManager em, QuestionEntity entity) {
+        int questionId = entity.getQuestionId();
+        List<QuestionOptionMessage> questionOptionMessages = questionOptionFacade.findByQuestionId(em, questionId)
+                .stream().map(questionOption -> intoQuestionOptionMessage(em, questionOption)).collect(Collectors.toList());
+        return QuestionMessage.fromEntity(entity, questionOptionMessages);
+    }
+
+    public ExamMessage intoExamMessage(EntityManager em, ExamEntity entity) {
+        int examId = entity.getExamId();
+        List<QuestionMessage> questionMessages = questionFacade.findByExamId(em, examId)
+                .stream().map(question -> intoQuestionMessage(em, question)).collect(Collectors.toList());
+        return ExamMessage.fromEntity(entity, questionMessages);
     }
 }
