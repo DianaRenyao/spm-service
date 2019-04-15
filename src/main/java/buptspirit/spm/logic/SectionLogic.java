@@ -45,6 +45,9 @@ public class SectionLogic {
     @Inject
     private SectionFileFacade sectionFileFacade;
 
+    @Inject
+    private StaticFileLogic staticFileLogic;
+
     public SectionMessage insertSection(int courseId, byte chapterSequence, SectionCreationMessage sectionCreationMessage, SessionMessage sessionMessage) throws ServiceAssertionException, ServiceException {
         sectionCreationMessage.enforce();
         CourseEntity thisCourse = transactional(
@@ -224,5 +227,6 @@ public class SectionLogic {
                 },
                 "failed to remote section file"
         );
+        staticFileLogic.delete(fileIdentifier);
     }
 }
