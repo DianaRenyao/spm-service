@@ -3,6 +3,7 @@ package buptspirit.spm.persistence.facade;
 import buptspirit.spm.persistence.entity.CourseEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,19 @@ public class CourseFacade extends AbstractFacade<CourseEntity> {
                 .setParameter("teacherUserId", teacherId)
                 .setParameter("currentDate", currentDate)
                 .getResultList();
+    }
+
+    public CourseEntity findByCourseIdAndTercherId(EntityManager em, int courseId, int teacherId) {
+        try {
+            return em.createQuery("select c from CourseEntity c " +
+                            "where c.id=:courseId and c.teacherUserId=:teacherId",
+                    CourseEntity.class)
+                    .setParameter("courseId", courseId)
+                    .setParameter("teacherId", teacherId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
 

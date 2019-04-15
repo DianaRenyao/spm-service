@@ -3,11 +3,25 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.*;
-import buptspirit.spm.persistence.facade.CourseFacade;
+
+import buptspirit.spm.message.CourseCreationMessage;
+import buptspirit.spm.message.CourseMessage;
+import buptspirit.spm.message.CourseSummaryMessage;
+import buptspirit.spm.message.ExperimentCreationMessage;
+import buptspirit.spm.message.ExperimentMessage;
+import buptspirit.spm.message.MessageMapper;
+import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.UserInfoMessage;
+
+
 import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.ExperimentEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
+
+import buptspirit.spm.persistence.facade.ExperimentFacade;
+import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
+import buptspirit.spm.rest.filter.AuthenticatedSession;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -21,10 +35,18 @@ public class CourseLogic {
     private CourseFacade courseFacade;
 
     @Inject
+    private ExperimentFacade experimentFacade;
+
+    @Inject
     private UserInfoFacade userInfoFacade;
 
     @Inject
     private MessageMapper messageMapper;
+
+    @Inject
+    @AuthenticatedSession
+    private SessionMessage sessionMessage;
+
 
     public CourseMessage createCourse(SessionMessage sessionMessage, CourseCreationMessage courseCreationMessage) throws ServiceAssertionException {
         courseCreationMessage.enforce();
@@ -101,5 +123,41 @@ public class CourseLogic {
         );
     }
 
+    public ExperimentMessage createExperiment(int courseId, ExperimentCreationMessage experimentCreationMessage) throws ServiceException {
+        UserInfoMessage teacherInfo = sessionMessage.getUserInfo();
+        CourseEntity targetCourse = transactional(
+                em -> courseFacade.findByCourseIdAndTercherId(em, courseId, teacherInfo.getId()),
+                "failed to search course"
+        );
+        if (targetCourse == null) {
+            throw ServiceError.POST_EXPERIMENT_NO_SUCH_COURSE.toException();
+        }
+        ExperimentEntity experimentEntity = new ExperimentEntity();
+        experimentEntity.setCourseId(courseId);
+        experimentEntity.setDescription(experimentCreationMessage.getDescription());
+        experimentEntity.setExperimentName(experimentCreationMessage.getExperimentName());
+        experimentEntity.setStartDate(experimentCreationMessage.getStartDate());
+        experimentEntity.setFinishDate(experimentCreationMessage.getFinishDate());
 
+        return transactional(
+                em -> {
+                    experimentFacade.create(em, experimentEntity);
+                    return messageMapper.intoExperimentMessage(em, experimentEntity);
+                },
+                "failed to create "
+        );
+    }
+
+    public List<ExperimentMessage> getExperiments(int courseId){
+        return transactional(
+                em -> {
+
+                    List<ExperimentEntity> experiments = experimentFacade.findByCourseId(em,courseId);
+                    return experiments.stream().map(
+                            experiment -> messageMapper.intoExperimentMessage(em, experiment)
+                    ).collect(Collectors.toList());
+                },
+                "failed to find experiments"
+        );
+    }
 }
