@@ -92,7 +92,10 @@ public class MessageMapper {
         int studentId = entity.getStudentUserId();
         StudentEntity student = studentFacade.find(em, studentId);
         StudentMessage studentMessage = intoStudentMessage(em, student);
-        return SelectedCourseMessage.fromEntity(entity, studentMessage);
+        int courseId = entity.getCourseCourseId();
+        CourseEntity course = courseFacade.find(em, courseId);
+        CourseSummaryMessage courseMessage= intoCourseSummaryMessage(em, course);
+        return SelectedCourseMessage.fromEntity(entity, studentMessage, courseMessage);
     }
 
     public CourseMessage intoCourseMessage(EntityManager em, CourseEntity entity) {
