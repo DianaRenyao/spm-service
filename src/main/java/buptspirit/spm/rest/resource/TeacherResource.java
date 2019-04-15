@@ -93,10 +93,10 @@ public class TeacherResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SelectedCourseMessage createSelectedCourse(
             SelectedCourseCreationMessage selectedCourseCreationMessage,
-            @QueryParam("studentUserId") String studentUserId,
+            @QueryParam("studentUserId") int studentUserId,
             @PathParam("courseId") int courseId,
             @PathParam("username") String username
     ) throws ServiceException {
-        return selectedCourseLogic.editSelectedCourse(selectedCourseCreationMessage, Integer.parseInt(studentUserId), courseId, sessionMessage, username);
+        return selectedCourseLogic.editSelectedCourse(selectedCourseCreationMessage, studentUserId, courseId, sessionMessage, username);
     }
 }
