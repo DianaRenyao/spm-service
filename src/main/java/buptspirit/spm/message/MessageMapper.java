@@ -3,6 +3,7 @@ package buptspirit.spm.message;
 import buptspirit.spm.persistence.entity.ApplicationEntity;
 import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.ExperimentEntity;
 import buptspirit.spm.persistence.entity.FileSourceEntity;
 import buptspirit.spm.persistence.entity.NoticeEntity;
 import buptspirit.spm.persistence.entity.SectionEntity;
@@ -11,6 +12,7 @@ import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.ChapterFacade;
 import buptspirit.spm.persistence.facade.CourseFacade;
+import buptspirit.spm.persistence.facade.ExperimentFacade;
 import buptspirit.spm.persistence.facade.FileSourceFacade;
 import buptspirit.spm.persistence.facade.SectionFacade;
 import buptspirit.spm.persistence.facade.StudentFacade;
@@ -46,6 +48,9 @@ public class MessageMapper {
 
     @Inject
     private FileSourceFacade fileSourceFacade;
+
+    @Inject
+    private ExperimentFacade experimentFacade;
 
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
@@ -108,5 +113,10 @@ public class MessageMapper {
 
     public FileSourceMessage intoFileSourceMessage(EntityManager em, FileSourceEntity entity) {
         return FileSourceMessage.fromEntity(entity);
+    }
+
+    public ExperimentMessage intoExperimentMessage(EntityManager em, ExperimentCreationMessage experimentCreationMessage) {
+        ExperimentEntity experimentEntity = experimentFacade.findByName(em, experimentCreationMessage.getExperimentName());
+        return ExperimentMessage.fromEntity(experimentEntity);
     }
 }

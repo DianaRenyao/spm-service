@@ -42,6 +42,7 @@ public enum ServiceError {
 
     /* course resource errors*/
     GET_COURSE_NO_SUCH_COURSE(60101, Response.Status.BAD_REQUEST, "no such course"),
+    POST_EXPERIMENT_NO_SUCH_COURSE(60201, Response.Status.BAD_REQUEST, "no such course"),
     //POST_COURSE_ALREADY_EXISTS(60201, Response.Status.BAD_REQUEST, "course already exists"), // course never already exists
 
     /* message resource error */
@@ -92,7 +93,7 @@ public enum ServiceError {
     /* exam error*/
     POST_EXAM_COURSE_DO_NOT_EXISTS(130301, Response.Status.BAD_REQUEST, "no such course"),
     POST_EXAM_CHAPTER_DO_NOT_EXISTS(130302, Response.Status.BAD_REQUEST, "no such chapter"),
-    ;
+;
 
 
     private final int code;
