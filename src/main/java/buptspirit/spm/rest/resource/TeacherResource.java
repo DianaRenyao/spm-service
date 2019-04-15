@@ -1,8 +1,11 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.exception.ServiceAssertionException;
+import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
+import buptspirit.spm.logic.NoticeLogic;
 import buptspirit.spm.logic.UserLogic;
+import buptspirit.spm.message.NoticeMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.TeacherMessage;
 import buptspirit.spm.message.TeacherRegisterMessage;
@@ -25,6 +28,9 @@ public class TeacherResource {
 
     @Inject
     private UserLogic userLogic;
+
+    @Inject
+    private NoticeLogic noticeLogic;
 
     @Inject
     @AuthenticatedSession
@@ -57,5 +63,19 @@ public class TeacherResource {
     @Produces(MediaType.APPLICATION_JSON)
     public TeacherMessage register(TeacherRegisterMessage registerMessage) throws ServiceException, ServiceAssertionException {
         return userLogic.createTeacher(registerMessage);
+    }
+
+
+    @GET
+    @Path("/{username}/notices")
+    @Secured({Role.Teacher})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<NoticeMessage> getTeacherNotice(
+            @PathParam("username") String username
+    ) throws ServiceException {
+        if (!username.equals(sessionMessage.getUserInfo().getUsername())) {
+            throw ServiceError.FORBIDDEN.toException();
+        }
+        return noticeLogic.getTeacherNotices(username, sessionMessage);
     }
 }
