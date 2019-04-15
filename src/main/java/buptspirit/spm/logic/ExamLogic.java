@@ -90,7 +90,7 @@ public class ExamLogic {
         );
     }
 
-    public List<TeacherExamSummaryMessage> getTeacherExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
+    public List<TeacherExamSummaryMessage> getTeacherExamSummaries(int courseId, String username, SessionMessage sessionMessage) throws ServiceException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
@@ -98,7 +98,8 @@ public class ExamLogic {
         if (thisCourse == null)
             throw ServiceError.GET_EXAM_COURSE_DO_NOT_EXISTS.toException();
         if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName())
-                || thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+                || thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId()
+                || !username.equals(sessionMessage.getUserInfo().getUsername()))
             throw ServiceError.FORBIDDEN.toException();
         return transactional(
                 em -> examFacade.findByCourseId(em, courseId).stream().map(
@@ -108,13 +109,15 @@ public class ExamLogic {
         );
     }
 
-    public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
+    public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, String username, SessionMessage sessionMessage) throws ServiceException {
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
         );
         if (thisCourse == null)
             throw ServiceError.POST_EXAM_COURSE_DO_NOT_EXISTS.toException();
+        if (!username.equals(sessionMessage.getUserInfo().getUsername()))
+            throw ServiceError.FORBIDDEN.toException();
         boolean applied = transactional(
                 em -> {
                     SelectedCourseEntityPK pk = new SelectedCourseEntityPK();

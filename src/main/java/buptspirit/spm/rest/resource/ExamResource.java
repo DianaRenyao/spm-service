@@ -39,23 +39,25 @@ public class ExamResource {
     }
 
     @GET
-    @Path("teacher/courses/{courseId}/")
+    @Path("teacher/{username}courses/{courseId}/")
     @Secured({Role.Teacher})
     @Produces(MediaType.APPLICATION_JSON)
     public List<TeacherExamSummaryMessage> getTeacherExamSummaries(
-            @PathParam("courseId") int courseId
+            @PathParam("courseId") int courseId,
+            @PathParam("username") String username
     ) throws ServiceException {
-        return examLogic.getTeacherExamSummaries(courseId, sessionMessage);
+        return examLogic.getTeacherExamSummaries(courseId, username, sessionMessage);
     }
 
     @GET
-    @Path("student/courses/{courseId}/")
+    @Path("student/{username}/courses/{courseId}/")
     @Secured({Role.Student})
     @Produces(MediaType.APPLICATION_JSON)
     public List<StudentExamSummaryMessage> getStudentExamSummaries(
-            @PathParam("courseId") int courseId
+            @PathParam("courseId") int courseId,
+            @PathParam("username") String username
     ) throws ServiceException {
-        return examLogic.getStudentExamSummaries(courseId, sessionMessage);
+        return examLogic.getStudentExamSummaries(courseId, username, sessionMessage);
     }
 
 }
