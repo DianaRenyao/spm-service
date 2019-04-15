@@ -119,4 +119,8 @@ public class MessageMapper {
         ExperimentEntity experimentEntity = experimentFacade.findByName(em, experimentCreationMessage.getExperimentName());
         return ExperimentMessage.fromEntity(experimentEntity);
     }
+
+    public ExperimentMessage intoExperimentMessage(EntityManager em, ExperimentEntity experiment){
+        return ExperimentMessage.fromEntity(experiment);
+    }
 }

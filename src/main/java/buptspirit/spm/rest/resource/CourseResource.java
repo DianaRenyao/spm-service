@@ -261,4 +261,12 @@ public class CourseResource {
             ExperimentCreationMessage experimentCreationMessage) throws ServiceException {
         return courseLogic.createExperiment(courseId, experimentCreationMessage);
     }
+
+    @GET
+    @Path("{id}/experiments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getExperiments(@PathParam("id") int courseId){
+        List<ExperimentMessage> results = courseLogic.getExperiments(courseId);
+        return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
+    }
 }

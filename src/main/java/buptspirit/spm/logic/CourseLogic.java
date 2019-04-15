@@ -138,9 +138,22 @@ public class CourseLogic {
         return transactional(
                 em -> {
                     experimentFacade.create(em, experimentEntity);
-                    return messageMapper.intoExperimentMessage(em, experimentCreationMessage);
+                    return messageMapper.intoExperimentMessage(em, experimentEntity);
                 },
                 "failed to create "
+        );
+    }
+
+    public List<ExperimentMessage> getExperiments(int courseId){
+        return transactional(
+                em -> {
+
+                    List<ExperimentEntity> experiments = experimentFacade.findByCourseId(em,courseId);
+                    return experiments.stream().map(
+                            experiment -> messageMapper.intoExperimentMessage(em, experiment)
+                    ).collect(Collectors.toList());
+                },
+                "failed to find experiments"
         );
     }
 }
