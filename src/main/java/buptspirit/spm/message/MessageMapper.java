@@ -166,4 +166,18 @@ public class MessageMapper {
                 .stream().map(question -> intoQuestionMessage(em, question)).collect(Collectors.toList());
         return ExamMessage.fromEntity(entity, questionMessages);
     }
+
+    public ChapterSummaryMessage intoChapterSummaryMessage(EntityManager em, ChapterEntity entity){
+        return ChapterSummaryMessage.fromEntity(entity);
+    }
+
+    public TeacherExamSummaryMessage intoTeacherExamSummaryMessage(EntityManager em, ExamEntity entity){
+        int chapterId = entity.getChapterId();
+        ChapterEntity chapter = chapterFacade.find(em,chapterId);
+        ChapterSummaryMessage chapterSummaryMessage = intoChapterSummaryMessage(em,chapter);
+        int examId = entity.getExamId();
+        List<QuestionEntity> questionEntities = questionFacade.findByExamId(em, examId);
+        int questionNum = questionEntities.size();
+        return TeacherExamSummaryMessage.fromEntity(entity,chapterSummaryMessage,questionNum);
+    }
 }
