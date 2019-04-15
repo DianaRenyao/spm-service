@@ -24,7 +24,6 @@ public class SelectedCourseMessage {
         message.midScore=entity.getMidScore();
         message.finalScore=entity.getFinalScore();
         message.totalScore=entity.getTotalScore();
-
         return message;
     }
 
@@ -48,7 +47,7 @@ public class SelectedCourseMessage {
         return timeApproved;
     }
 
-    public void setApproveTime(Timestamp approveTime) {
+    public void setApproveTime(Timestamp timeApproved) {
         this.timeApproved = timeApproved;
     }
 
