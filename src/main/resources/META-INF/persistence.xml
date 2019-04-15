@@ -4,9 +4,10 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
                                  http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <!-- TODO using tomcat built in connection pool instead of hibernate -->
     <persistence-unit name="buptspirit.spm.persistence" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <non-jta-data-source>java:comp/env/jdbc/spm</non-jta-data-source>
+
         <class>buptspirit.spm.persistence.entity.ChapterEntity</class>
         <class>buptspirit.spm.persistence.entity.CourseEntity</class>
         <class>buptspirit.spm.persistence.entity.ExamEntity</class>
@@ -27,12 +28,9 @@
         <class>buptspirit.spm.persistence.entity.QuestionOptionEntity</class>
         <class>buptspirit.spm.persistence.entity.TokenSecretEntity</class>
         <class>buptspirit.spm.persistence.entity.ExamScoreEntity</class>
+
         <properties>
-            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.connection.url"
-                      value="jdbc:mysql://localhost:3306/spm?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="bupt-spirit"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
