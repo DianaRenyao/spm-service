@@ -21,7 +21,7 @@ public class ExamResource {
     @Secured({Role.Teacher,Role.Student,Role.Administrator})
     @Produces(MediaType.APPLICATION_JSON)
     public ExamResource getExam(){
-
+        return null;
     }
 
 }
