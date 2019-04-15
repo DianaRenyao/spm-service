@@ -1,11 +1,13 @@
 package buptspirit.spm.rest.resource;
 
 import buptspirit.spm.logic.ExamLogic;
+import buptspirit.spm.message.ExamAnswerMessage;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -23,5 +25,13 @@ public class ExamResource {
     public ExamResource getExam(){
         return null;
     }
+
+    @GET
+    @Path("answers")
+    @Secured({Role.Student})
+    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage){
+
+    }
+
 
 }

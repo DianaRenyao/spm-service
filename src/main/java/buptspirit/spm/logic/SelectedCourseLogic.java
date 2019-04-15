@@ -87,7 +87,7 @@ public class SelectedCourseLogic {
                 em -> selectedCourseFacade.findByStudentUserIdAndCourseId(em, studentUserId, courseId),
                 "failed to find selected courses"
         );
-
+        logger.debug(selectedCourseCreationMessage.getAvgOnlineScore());
         /* 计算总成绩并存入数据库 */
         selectedCourseEntity.setAvgOnlineScore(selectedCourseCreationMessage.getAvgOnlineScore());
         selectedCourseEntity.setMidScore(selectedCourseCreationMessage.getMidScore());
