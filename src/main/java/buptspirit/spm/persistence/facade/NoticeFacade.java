@@ -55,4 +55,10 @@ public class NoticeFacade extends AbstractFacade<NoticeEntity> {
                 .setParameter("startDate", startDate)
                 .setParameter("endDate", endDate).getResultList();
     }
+
+    public List<NoticeEntity> findByAuthorId(EntityManager em, int authorId) {
+        return em.createQuery("select n from NoticeEntity n where n.author = :authorId order by n.timeCreated", NoticeEntity.class)
+                .setParameter("authorId", authorId)
+                .getResultList();
+    }
 }
