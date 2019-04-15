@@ -94,7 +94,7 @@ public class TeacherResource {
     public SelectedCourseMessage createSelectedCourse(
             SelectedCourseCreationMessage selectedCourseCreationMessage,
             @QueryParam("studentUserId") int studentUserId,
-            @QueryParam("courseCourseId") int courseId,
+            @PathParam("courseId") int courseId,
             @PathParam("username") String username
     ) throws ServiceException {
         return selectedCourseLogic.editSelectedCourse(selectedCourseCreationMessage, studentUserId, courseId, sessionMessage, username);
