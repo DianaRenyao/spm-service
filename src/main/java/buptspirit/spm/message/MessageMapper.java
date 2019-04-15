@@ -1,31 +1,8 @@
 package buptspirit.spm.message;
 
 
-import buptspirit.spm.persistence.entity.ApplicationEntity;
-import buptspirit.spm.persistence.entity.ChapterEntity;
-import buptspirit.spm.persistence.entity.CourseEntity;
-import buptspirit.spm.persistence.entity.ExamEntity;
-import buptspirit.spm.persistence.entity.ExperimentEntity;
-import buptspirit.spm.persistence.entity.FileSourceEntity;
-import buptspirit.spm.persistence.entity.NoticeEntity;
-import buptspirit.spm.persistence.entity.QuestionEntity;
-import buptspirit.spm.persistence.entity.QuestionOptionEntity;
-import buptspirit.spm.persistence.entity.SectionEntity;
-import buptspirit.spm.persistence.entity.SelectedCourseEntity;
-import buptspirit.spm.persistence.entity.StudentEntity;
-import buptspirit.spm.persistence.entity.TeacherEntity;
-import buptspirit.spm.persistence.entity.UserInfoEntity;
-import buptspirit.spm.persistence.facade.ChapterFacade;
-import buptspirit.spm.persistence.facade.CourseFacade;
-import buptspirit.spm.persistence.facade.ExperimentFacade;
-import buptspirit.spm.persistence.facade.FileSourceFacade;
-import buptspirit.spm.persistence.facade.QuestionFacade;
-import buptspirit.spm.persistence.facade.QuestionOptionFacade;
-import buptspirit.spm.persistence.facade.SectionFacade;
-import buptspirit.spm.persistence.facade.StudentFacade;
-import buptspirit.spm.persistence.facade.TeacherFacade;
-import buptspirit.spm.persistence.facade.UserInfoFacade;
-
+import buptspirit.spm.persistence.entity.*;
+import buptspirit.spm.persistence.facade.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -66,6 +43,9 @@ public class MessageMapper {
     @Inject
     private QuestionFacade questionFacade;
 
+    @Inject
+    private ExamScoreFacade examScoreFacade;
+
     public NoticeMessage intoNoticeMessage(EntityManager em, NoticeEntity entity) {
         int authorId = entity.getAuthor();
         TeacherMessage teacher = intoTeacherMessage(em, teacherFacade.find(em, authorId));
@@ -94,7 +74,7 @@ public class MessageMapper {
         StudentMessage studentMessage = intoStudentMessage(em, student);
         int courseId = entity.getCourseCourseId();
         CourseEntity course = courseFacade.find(em, courseId);
-        CourseSummaryMessage courseMessage= intoCourseSummaryMessage(em, course);
+        CourseSummaryMessage courseMessage = intoCourseSummaryMessage(em, course);
         return SelectedCourseMessage.fromEntity(entity, studentMessage, courseMessage);
     }
 
@@ -153,31 +133,60 @@ public class MessageMapper {
         return QuestionOptionMessage.fromEntitiy(entity);
     }
 
-    public QuestionMessage intoQuestionMessage(EntityManager em, QuestionEntity entity) {
+    public QuestionMessage intoQuestionMessage(EntityManager em, QuestionEntity entity, boolean withAnswer) {
         int questionId = entity.getQuestionId();
         List<QuestionOptionMessage> questionOptionMessages = questionOptionFacade.findByQuestionId(em, questionId)
                 .stream().map(questionOption -> intoQuestionOptionMessage(em, questionOption)).collect(Collectors.toList());
-        return QuestionMessage.fromEntity(entity, questionOptionMessages);
+        return QuestionMessage.fromEntity(entity, questionOptionMessages, withAnswer);
     }
 
-    public ExamMessage intoExamMessage(EntityManager em, ExamEntity entity) {
+    public ExamMessage intoExamMessage(EntityManager em, ExamEntity entity, boolean withAnswer) {
         int examId = entity.getExamId();
         List<QuestionMessage> questionMessages = questionFacade.findByExamId(em, examId)
-                .stream().map(question -> intoQuestionMessage(em, question)).collect(Collectors.toList());
+                .stream().map(question -> intoQuestionMessage(em, question, withAnswer)).collect(Collectors.toList());
         return ExamMessage.fromEntity(entity, questionMessages);
     }
 
-    public ChapterSummaryMessage intoChapterSummaryMessage(EntityManager em, ChapterEntity entity){
+    public ChapterSummaryMessage intoChapterSummaryMessage(EntityManager em, ChapterEntity entity) {
         return ChapterSummaryMessage.fromEntity(entity);
     }
 
-    public TeacherExamSummaryMessage intoTeacherExamSummaryMessage(EntityManager em, ExamEntity entity){
+    public TeacherExamSummaryMessage intoTeacherExamSummaryMessage(EntityManager em, ExamEntity entity) {
         int chapterId = entity.getChapterId();
-        ChapterEntity chapter = chapterFacade.find(em,chapterId);
-        ChapterSummaryMessage chapterSummaryMessage = intoChapterSummaryMessage(em,chapter);
+        ChapterEntity chapter = chapterFacade.find(em, chapterId);
+        ChapterSummaryMessage chapterSummaryMessage = intoChapterSummaryMessage(em, chapter);
         int examId = entity.getExamId();
         List<QuestionEntity> questionEntities = questionFacade.findByExamId(em, examId);
         int questionNum = questionEntities.size();
-        return TeacherExamSummaryMessage.fromEntity(entity,chapterSummaryMessage,questionNum);
+        return TeacherExamSummaryMessage.fromEntity(entity, chapterSummaryMessage, questionNum);
+    }
+
+    public ExamScoreMessage intoExamScoreMessage(EntityManager em, ExamScoreEntity entity) {
+        return ExamScoreMessage.fromEntity(entity);
+    }
+
+    public StudentExamSummaryMessage intoStudentExamSummaryMessage(EntityManager em, ExamEntity entity, int studentId) {
+        int chapterId = entity.getChapterId();
+        ChapterEntity chapter = chapterFacade.find(em, chapterId);
+        ChapterSummaryMessage chapterSummaryMessage = intoChapterSummaryMessage(em, chapter);
+        int examId = entity.getExamId();
+        List<QuestionEntity> questionEntities = questionFacade.findByExamId(em, examId);
+        int questionNum = questionEntities.size();
+
+        /* get student current score*/
+        ExamScoreEntityPK pk = new ExamScoreEntityPK();
+        pk.setExamId(entity.getExamId());
+        pk.setSelectedCourseCourseCourseId(chapter.getCourseId());
+        pk.setSelectedCourseStudentUserId(studentId);
+        ExamScoreEntity examScoreEntity = examScoreFacade.find(em, pk);
+        ExamScoreMessage examScoreMessage = new ExamScoreMessage();
+        if (examScoreEntity == null) {
+            examScoreMessage.setExamScore(0);
+            examScoreEntity.setExamId(entity.getExamId());
+            examScoreMessage.setStudentId(studentId);
+        } else
+            examScoreMessage = intoExamScoreMessage(em, examScoreEntity);
+
+        return StudentExamSummaryMessage.fromEntity(entity, chapterSummaryMessage, questionNum, examScoreMessage);
     }
 }
