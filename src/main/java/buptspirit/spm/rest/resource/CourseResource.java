@@ -15,6 +15,8 @@ import buptspirit.spm.message.ChapterMessage;
 import buptspirit.spm.message.CourseCreationMessage;
 import buptspirit.spm.message.CourseMessage;
 import buptspirit.spm.message.CourseSummaryMessage;
+import buptspirit.spm.message.ExperimentCreationMessage;
+import buptspirit.spm.message.ExperimentMessage;
 import buptspirit.spm.message.SectionCreationMessage;
 import buptspirit.spm.message.SectionEditingMessage;
 import buptspirit.spm.message.SectionMessage;
@@ -247,5 +249,16 @@ public class CourseResource {
     ) throws ServiceException {
         sectionLogic.deleteSectionFile(courseId, chapterSequence, sectionSequence, fileIdentifier, sessionMessage);
         return Response.noContent().build();
+    }
+
+    @POST
+    @Secured({Role.Teacher})
+    @Path("{id}/experiments")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ExperimentMessage addExperiment(
+            @PathParam("id") int courseId,
+            ExperimentCreationMessage experimentCreationMessage) throws ServiceException {
+        return courseLogic.createExperiment(courseId, experimentCreationMessage);
     }
 }

@@ -42,6 +42,7 @@ public enum ServiceError {
 
     /* course resource errors*/
     GET_COURSE_NO_SUCH_COURSE(60101, Response.Status.BAD_REQUEST, "no such course"),
+    POST_EXPERIMENT_NO_SUCH_COURSE(60201,Response.Status.BAD_REQUEST,"no such course"),
     //POST_COURSE_ALREADY_EXISTS(60201, Response.Status.BAD_REQUEST, "course already exists"), // course never already exists
 
     /* message resource error */
@@ -86,6 +87,8 @@ public enum ServiceError {
     PUT_SECTION_FILE_NO_SUCH_FILE(120303, Response.Status.BAD_REQUEST, "no such file"),
     DELETE_SECTION_FILE_NO_SUCH_COURSE(120401, Response.Status.BAD_REQUEST, "no such course"),
     DELETE_SECTION_FILE_NO_SUCH_FILE(120402, Response.Status.BAD_REQUEST, "no such file"),
+
+
     ;
 
     private final int code;

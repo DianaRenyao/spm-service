@@ -3,6 +3,7 @@ package buptspirit.spm.persistence.entity;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.sql.Date;
@@ -11,6 +12,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "experiment", schema = "spm")
 public class ExperimentEntity {
+
     private int experimentId;
     private String experimentName;
     private String description;
@@ -20,6 +22,7 @@ public class ExperimentEntity {
 
     @Id
     @Column(name = "experiment_id", nullable = false)
+    @GeneratedValue
     public int getExperimentId() {
         return experimentId;
     }
