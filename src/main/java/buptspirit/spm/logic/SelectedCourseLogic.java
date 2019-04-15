@@ -26,19 +26,10 @@ public class SelectedCourseLogic {
     @Inject
     private Logger logger;
 
-    public List<SelectedCourseMessage> getAllScores() {
-        return transactional(
-                em -> selectedCourseFacade.findAll(em).stream().map(
-                        score -> messageMapper.intoScoreMessage(em, score)
-                ).collect(Collectors.toList()),
-                "failed to find scores"
-        );
-    }
-
     public SelectedCourseMessage getScore(int studentId, int courseId) {
         SelectedCourseEntity selectedCourseEntity = transactional(
                 em -> selectedCourseFacade.findBystudentUserIdAndCourseId(em, studentId, courseId),
-                "failed to find score"
+                "failed to find selected course"
         );
         return transactional(
                 em -> messageMapper.intoScoreMessage(em, selectedCourseEntity),
@@ -46,97 +37,72 @@ public class SelectedCourseLogic {
         );
     }
 
-
-    public List<SelectedCourseMessage> getStudentScores(String username) {
+    public List<SelectedCourseMessage> getStudentSelectedCourses(String username) {
         return transactional(
                 em -> selectedCourseFacade.findBystudentUserName(em, username).stream().map(
                         score -> messageMapper.intoScoreMessage(em, score)
                 ).collect(Collectors.toList()),
-                "failed to find scores"
+                "failed to find selected courses"
         );
     }
 
-    public List<SelectedCourseMessage> getCourseScores(int id) {
+    public List<SelectedCourseMessage> getTeacherSelectedCourses(int id) {
         return transactional(
                 em -> selectedCourseFacade.findBycourseCourseId(em, id).stream().map(
                         score -> messageMapper.intoScoreMessage(em, score)
                 ).collect(Collectors.toList()),
-                "failed to find scores"
+                "failed to find selected courses"
         );
     }
 
-
-    public SelectedCourseMessage createScore(ScoreCreateMessage scoreCreateMessage, int studentUserId, int courseCourseId) throws ServiceException, ServiceAssertionException {
+    public SelectedCourseMessage createSelectedCourse(SelectedCourseCreationMessage selectedCourseCreationMessage,
+                                                      int studentUserId,
+                                                      int courseCourseId) throws ServiceException, ServiceAssertionException {
 
         SelectedCourseEntity selectedCourseEntity = transactional(
                 em -> selectedCourseFacade.findBystudentUserIdAndCourseId(em, studentUserId, courseCourseId),
-                "failed to find notice"
+                "failed to find selected courses"
         );
 
-        selectedCourseEntity.setAvgOnlineScore(scoreCreateMessage.getAvgOnlineScore());
-        selectedCourseEntity.setMidScore(scoreCreateMessage.getMidScore());
-        selectedCourseEntity.setFinalScore(scoreCreateMessage.getFinalScore());
-        selectedCourseEntity.setTotalScore(scoreCreateMessage.getTotalScore());
+        selectedCourseEntity.setAvgOnlineScore(selectedCourseCreationMessage.getAvgOnlineScore());
+        selectedCourseEntity.setMidScore(selectedCourseCreationMessage.getMidScore());
+        selectedCourseEntity.setFinalScore(selectedCourseCreationMessage.getFinalScore());
+
+        // selectedCourseEntity.setTotalScore(selectedCourseCreationMessage.getTotalScore());
+        // TODO 验证
         return transactional(
                 em -> {
                     selectedCourseFacade.edit(em, selectedCourseEntity);
                     return messageMapper.intoScoreMessage(em, selectedCourseEntity);
                 },
-                "failed to add score"
+                "failed to add selected course"
         );
     }
 
-    public void calculateTotalScore(int courseId) {
-        List<SelectedCourseMessage> toCalculateList = this.getCourseScores(courseId);
-        for (int i = 0; i < toCalculateList.size(); i++) {
-
-            int studentId = toCalculateList.get(i).getStudentUserId();
+    // TODO delete
+    public boolean addTotalScore(SelectedCourseCreationMessage selectedCourseCreationMessage,
+                                               int studentUserId,
+                                               int courseId) {
 
             SelectedCourseEntity selectedCourseEntity = transactional(
-                    em -> selectedCourseFacade.findBystudentId(em, studentId),
-                    "failed to find notice"
+                    em -> selectedCourseFacade.findBystudentUserIdAndCourseId(em, studentUserId,courseId),
+                    "failed to find selected course"
             );
             BigDecimal tempAvgOnlineScore = selectedCourseEntity.getAvgOnlineScore().multiply(new BigDecimal(0.3));
             BigDecimal tempMidScore = selectedCourseEntity.getMidScore().multiply(new BigDecimal(0.1));
             BigDecimal tempFinalScore = selectedCourseEntity.getFinalScore().multiply(new BigDecimal(0.6));
-            BigDecimal totalScore = tempFinalScore.add(tempAvgOnlineScore.add(tempMidScore));
-
-            selectedCourseEntity.setTotalScore(totalScore);
-
-            transactional(
-                    em -> {
-                        selectedCourseFacade.edit(em, selectedCourseEntity);
-                        return messageMapper.intoScoreMessage(em, selectedCourseEntity);
-                    },
-                    "failed to add score"
-            );
-        }
+            BigDecimal totalScore = tempFinalScore.add(tempAvgOnlineScore.add(tempMidScore)).setScale(1,BigDecimal.ROUND_HALF_DOWN);
+            if(totalScore.equals(selectedCourseCreationMessage.getTotalScore())){
+                selectedCourseEntity.setTotalScore(totalScore);
+                transactional(
+                        em -> {
+                            selectedCourseFacade.edit(em, selectedCourseEntity);
+                            return messageMapper.intoScoreMessage(em, selectedCourseEntity);
+                        },
+                        "failed to add score"
+                );
+                return true;
+            }
+            else return false;
     }
-
-//    public SelectedCourseMessage[] addTotalScore(ScoreCreateMessage scoreCreateMessageList[], int courseCourseId) {
-//
-//        // save entity findbystudentUserIdAndCourseId
-//        //SelectedCourseEntity[] selectedCourseEntityList = new SelectedCourseEntity[scoreCreateMessageList.length];
-//
-//        for (int i = 0; i < scoreCreateMessageList.length; i = i + 1) {
-//            ScoreCreateMessage scm=scoreCreateMessageList[i];
-//            SelectedCourseEntity selectedCourseEntity = transactional(
-//                    em -> selectedCourseFacade.findBystudentUserIdAndCourseId(em, scm.getStudentUserId(), courseCourseId),
-//                    "failed to find notice"
-//            );
-//
-//            selectedCourseEntity.setTotalScore(scm.getTotalScore());
-//
-//            transactional(
-//                    em -> {
-//                        selectedCourseFacade.edit(em, selectedCourseEntity);
-//                        return messageMapper.intoScoreMessage(em, selectedCourseEntity);
-//                    },
-//                    "failed to add score"
-//            );
-//        }
-//        return null;
-//    }
-
-
 }

@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.math.BigDecimal;
 
-public class ScoreCreateMessage {
+public class SelectedCourseCreationMessage {
 
     private int studentUserId;
     private BigDecimal avgOnlineScore;
@@ -13,15 +13,16 @@ public class ScoreCreateMessage {
     private BigDecimal finalScore;
     private BigDecimal totalScore;
 
-    public ScoreCreateMessage(){}
-    public ScoreCreateMessage(int studentUserId,BigDecimal avgOnlineScore,BigDecimal midScore,
-                       BigDecimal finalScore,BigDecimal totalScore){
+    public SelectedCourseCreationMessage(){}
+    public SelectedCourseCreationMessage(int studentUserId, BigDecimal avgOnlineScore, BigDecimal midScore,
+                                         BigDecimal finalScore, BigDecimal totalScore){
         this.avgOnlineScore=avgOnlineScore;
         this.finalScore=finalScore;
         this.midScore=midScore;
         this.studentUserId=studentUserId;
         this.totalScore=totalScore;
     }
+
     public int getStudentUserId() {
         return studentUserId;
     }
