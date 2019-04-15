@@ -180,11 +180,11 @@ public class CourseLogic {
             int courseId, int experimentId,
             String fileName, InputStream inputStream) throws ServiceException {
         if (!isCourseTeacher(courseId)) {
-            throw ServiceError.POST_EXPERIMENT_NO_SUCH_COURSE.toException();
+            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT.toException();
         }
         ExperimentEntity experimentEntity = transactional(
                 em -> experimentFacade.find(em, experimentId),
-                "failed to find expriment"
+                "failed to find experiment"
         );
         if (experimentEntity == null || experimentEntity.getCourseId() != courseId) {
             throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT.toException();
@@ -194,7 +194,6 @@ public class CourseLogic {
         ExperimentFileEntity experimentFileEntity = new ExperimentFileEntity();
         experimentFileEntity.setExperimentId(experimentId);
         experimentFileEntity.setFileSourceId(fileSourceMessage.getFileSourceId());
-        logger.debug(fileSourceMessage.getFilename() + fileSourceMessage.getFileSourceId());
         transactional(
                 em -> {
                     experimentFileFacade.create(em, experimentFileEntity);

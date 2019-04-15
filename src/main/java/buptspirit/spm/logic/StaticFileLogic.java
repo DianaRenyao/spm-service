@@ -77,15 +77,14 @@ public class StaticFileLogic {
         FileSourceEntity entity = fileDetailToEntity(filename, fileType, identifier);
 
         try {
-            FileSourceEntity result = transactional(
+            transactional(
                     em -> {
                         fileSourceFacade.create(em, entity);
-                        // need get fileSourceId
-                        return fileSourceFacade.findByIdentifier(em, entity.getIdentifier());
+                        return null;
                     },
                     "Failed to create meta data"
             );
-            return FileSourceMessage.fromEntity(result);
+            return FileSourceMessage.fromEntity(entity);
         } catch (IllegalStateException e) {
             try {
                 fileManager.delete(identifier);
