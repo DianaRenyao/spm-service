@@ -89,10 +89,12 @@ public class NoticeResource {
     }
 
     @GET
-    @Path("teacherNotices")
+    @Path("/{username}/notices")
     @Secured({Role.Teacher})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<NoticeMessage> getTeacherNotice() throws ServiceException {
-        return noticeLogic.getTeacherNotices(sessionMessage);
+    public List<NoticeMessage> getTeacherNotice(
+            @PathParam("username") String username
+    ) throws ServiceException {
+        return noticeLogic.getTeacherNotices(username, sessionMessage);
     }
 }

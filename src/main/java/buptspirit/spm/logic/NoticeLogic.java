@@ -132,8 +132,9 @@ public class NoticeLogic {
         );
     }
 
-    public List<NoticeMessage> getTeacherNotices(SessionMessage sessionMessage) throws ServiceException {
-        if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName()))
+    public List<NoticeMessage> getTeacherNotices(String username, SessionMessage sessionMessage) throws ServiceException {
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Teacher.getName())
+                || !username.equals(sessionMessage.getUserInfo().getUsername()))
             throw ServiceError.FORBIDDEN.toException();
         return transactional(
                 em -> noticeFacade.findByAuthorId(em, sessionMessage.getUserInfo().getId()).stream().map(
