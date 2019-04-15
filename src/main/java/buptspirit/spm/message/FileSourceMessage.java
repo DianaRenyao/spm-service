@@ -10,6 +10,7 @@ public class FileSourceMessage {
 
     public static FileSourceMessage fromEntity(FileSourceEntity entity){
         FileSourceMessage fileSourceMessage = new FileSourceMessage();
+        //fileSourceMessage.setFileSourceId(entity.getFileSourceId());
         fileSourceMessage.setFilename(entity.getFilename());
         fileSourceMessage.setFileSourceId(entity.getFileSourceId());
         fileSourceMessage.setFileType(entity.getFileType());
