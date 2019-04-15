@@ -87,7 +87,7 @@ public class TeacherResource {
     }
 
     @POST
-    @Path("{username}/selectedCourses/{courseId}")
+    @Path("{username}/courses/{courseId}/students")
     @Secured({Role.Teacher})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
