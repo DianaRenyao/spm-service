@@ -8,7 +8,7 @@ import java.util.Objects;
 public class QuestionEntity {
     private int questionId;
     private int exam;
-    private int answer;
+    private Integer answer;
     private String detail;
 
     @Id
@@ -33,12 +33,12 @@ public class QuestionEntity {
     }
 
     @Basic
-    @Column(name = "answer", nullable = false)
-    public int getAnswer() {
+    @Column(name = "answer", nullable = true)
+    public Integer getAnswer() {
         return answer;
     }
 
-    public void setAnswer(int answer) {
+    public void setAnswer(Integer answer) {
         this.answer = answer;
     }
 

@@ -16,8 +16,8 @@ public class QuestionCreationMessage implements InputMessage {
 
     @Override
     public void enforce() throws ServiceAssertionException {
-        serviceAssert(examId != 0);
         serviceAssert(detail != null && !detail.isEmpty());
+        serviceAssert(questionOptionCreationMessages != null && !questionOptionCreationMessages.isEmpty());
     }
 
     public int getExamId() {

@@ -10,6 +10,7 @@ public class ExamEntity {
     private int chapterId;
 
     @Id
+    @GeneratedValue
     @Column(name = "exam_id", nullable = false)
     public int getExamId() {
         return examId;

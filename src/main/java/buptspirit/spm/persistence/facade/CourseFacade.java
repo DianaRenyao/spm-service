@@ -34,3 +34,4 @@ public class CourseFacade extends AbstractFacade<CourseEntity> {
                 .getResultList();
     }
 }
+

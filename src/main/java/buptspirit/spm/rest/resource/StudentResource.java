@@ -4,7 +4,9 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
+import buptspirit.spm.logic.SelectedCourseLogic;
 import buptspirit.spm.logic.UserLogic;
+import buptspirit.spm.message.SelectedCourseMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.message.StudentMessage;
 import buptspirit.spm.message.StudentRegisterMessage;
@@ -13,15 +15,10 @@ import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Path("students")
 public class StudentResource {
@@ -31,6 +28,9 @@ public class StudentResource {
 
     @Inject
     private ApplicationLogic applicationLogic;
+
+    @Inject
+    SelectedCourseLogic selectedCourseLogic;
 
     @Inject
     @AuthenticatedSession
@@ -79,6 +79,15 @@ public class StudentResource {
             return Response.ok(applicationLogic.getStudentCourseApplication(
                     sessionMessage.getUserInfo().getId(), courseId)).build();
         }
+    }
 
+    @GET
+    @Secured({Role.Student})
+    @Path("{username}/selectedCourses")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SelectedCourseMessage> getStudentSelectedCourses(
+            @PathParam("username") String username
+    ) throws ServiceException {
+        return selectedCourseLogic.getStudentSelectedCourses(username, sessionMessage);
     }
 }
