@@ -3,8 +3,29 @@ package buptspirit.spm.rest.resource;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.logic.*;
-import buptspirit.spm.message.*;
+
+import buptspirit.spm.logic.ApplicationLogic;
+import buptspirit.spm.logic.ChapterLogic;
+import buptspirit.spm.logic.CourseLogic;
+import buptspirit.spm.logic.ExamLogic;
+import buptspirit.spm.logic.SectionLogic;
+import buptspirit.spm.message.ApplicationCreationMessage;
+import buptspirit.spm.message.ApplicationMessage;
+import buptspirit.spm.message.ChapterCreationMessage;
+import buptspirit.spm.message.ChapterEditingMessage;
+import buptspirit.spm.message.ChapterMessage;
+import buptspirit.spm.message.CourseCreationMessage;
+import buptspirit.spm.message.CourseMessage;
+import buptspirit.spm.message.CourseSummaryMessage;
+import buptspirit.spm.message.ExamCreationMessage;
+import buptspirit.spm.message.ExamMessage;
+import buptspirit.spm.message.ExperimentCreationMessage;
+import buptspirit.spm.message.ExperimentMessage;
+import buptspirit.spm.message.SectionCreationMessage;
+import buptspirit.spm.message.SectionEditingMessage;
+import buptspirit.spm.message.SectionMessage;
+import buptspirit.spm.message.SessionMessage;
+
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
@@ -227,6 +248,25 @@ public class CourseResource {
     ) throws ServiceException {
         sectionLogic.deleteSectionFile(courseId, chapterSequence, sectionSequence, fileIdentifier, sessionMessage);
         return Response.noContent().build();
+    }
+
+    @POST
+    @Secured({Role.Teacher})
+    @Path("{id}/experiments")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ExperimentMessage addExperiment(
+            @PathParam("id") int courseId,
+            ExperimentCreationMessage experimentCreationMessage) throws ServiceException {
+        return courseLogic.createExperiment(courseId, experimentCreationMessage);
+    }
+
+    @GET
+    @Path("{id}/experiments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getExperiments(@PathParam("id") int courseId) {
+        List<ExperimentMessage> results = courseLogic.getExperiments(courseId);
+        return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
     }
 
     @POST
