@@ -10,6 +10,9 @@ import buptspirit.spm.rest.filter.Role;
 
 import javax.inject.Inject;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static buptspirit.spm.persistence.JpaUtility.transactional;
 
 public class ExamLogic {
@@ -81,5 +84,36 @@ public class ExamLogic {
                 },
                 "failed to create exam"
         );
+    }
+
+    public List<TeacherExamSummaryMessage> getTeacherExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
+        CourseEntity thisCourse = transactional(
+                em -> courseFacade.find(em, courseId),
+                "fail to find course"
+        );
+        if (thisCourse == null)
+            throw ServiceError.GET_EXAM_COURSE_DO_NOT_EXISTS.toException();
+        if (!sessionMessage.getUserInfo().getRole().equals(Role.Student.getName())
+                || thisCourse.getTeacherUserId() != sessionMessage.getUserInfo().getId())
+            throw ServiceError.FORBIDDEN.toException();
+        return transactional(
+                em -> examFacade.findByCourseId(em, courseId).stream().map(
+                        exam -> messageMapper.intoTeacherExamSummaryMessage(em, exam)
+                ).collect(Collectors.toList()),
+                "failed to find exams"
+        );
+    }
+
+    public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, SessionMessage sessionMessage) throws ServiceException {
+        CourseEntity thisCourse = transactional(
+                em -> courseFacade.find(em, courseId),
+                "fail to find course"
+        );
+        if (thisCourse == null)
+            throw ServiceError.POST_EXAM_COURSE_DO_NOT_EXISTS.toException();
+        boolean applied = transactional(
+                em->
+        )
+
     }
 }
