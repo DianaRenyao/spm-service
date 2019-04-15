@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 
 public class SelectedCourseMessage {
 
-    private int studentUserId;
+    private StudentMessage student;
     private int courseCourseId;
     private Timestamp timeApproved;
     private BigDecimal avgOnlineScore;
@@ -15,24 +15,32 @@ public class SelectedCourseMessage {
     private BigDecimal finalScore;
     private BigDecimal totalScore;
 
-    public static SelectedCourseMessage fromEntity(SelectedCourseEntity entity) {
-        SelectedCourseMessage message=new SelectedCourseMessage();
-        message.studentUserId=entity.getStudentUserId();
-        message.courseCourseId=entity.getCourseCourseId();
-        message.timeApproved=entity.getTimeApproved();
-        message.avgOnlineScore=entity.getAvgOnlineScore();
-        message.midScore=entity.getMidScore();
-        message.finalScore=entity.getFinalScore();
-        message.totalScore=entity.getTotalScore();
+    public static SelectedCourseMessage fromEntity(SelectedCourseEntity entity, StudentMessage student) {
+        SelectedCourseMessage message = new SelectedCourseMessage();
+        message.setStudent(student);
+        message.setCourseCourseId(entity.getCourseCourseId());
+        message.setApproveTime(entity.getTimeApproved());
+        message.setAvgOnlineScore(entity.getAvgOnlineScore());
+        message.setMidScore(entity.getMidScore());
+        message.setFinalScore(entity.getFinalScore());
+        message.setTotalScore(entity.getTotalScore());
         return message;
     }
 
-    public int getStudentUserId() {
-        return studentUserId;
+    public StudentMessage getStudent() {
+        return student;
     }
 
-    public void setStudentUserId(int studentUserId) {
-        this.studentUserId = studentUserId;
+    public void setStudent(StudentMessage student) {
+        this.student = student;
+    }
+
+    public Timestamp getTimeApproved() {
+        return timeApproved;
+    }
+
+    public void setTimeApproved(Timestamp timeApproved) {
+        this.timeApproved = timeApproved;
     }
 
     public int getCourseCourseId() {
