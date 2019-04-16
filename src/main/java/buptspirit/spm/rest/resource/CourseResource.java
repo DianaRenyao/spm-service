@@ -3,7 +3,6 @@ package buptspirit.spm.rest.resource;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-
 import buptspirit.spm.logic.ApplicationLogic;
 import buptspirit.spm.logic.ChapterLogic;
 import buptspirit.spm.logic.CourseLogic;
@@ -21,19 +20,31 @@ import buptspirit.spm.message.ExamCreationMessage;
 import buptspirit.spm.message.ExamMessage;
 import buptspirit.spm.message.ExperimentCreationMessage;
 import buptspirit.spm.message.ExperimentMessage;
+import buptspirit.spm.message.FileSourceMessage;
 import buptspirit.spm.message.SectionCreationMessage;
 import buptspirit.spm.message.SectionEditingMessage;
 import buptspirit.spm.message.SectionMessage;
 import buptspirit.spm.message.SessionMessage;
-
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.InputStream;
 import java.util.List;
 
 @Path("courses")
@@ -251,7 +262,7 @@ public class CourseResource {
     }
 
     @POST
-    @Secured({Role.Teacher})
+    //@Secured({Role.Teacher})
     @Path("{id}/experiments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -267,6 +278,20 @@ public class CourseResource {
     public Response getExperiments(@PathParam("id") int courseId) {
         List<ExperimentMessage> results = courseLogic.getExperiments(courseId);
         return Response.ok(results).header("X-Total-Count", Integer.toString(results.size())).build();
+    }
+
+    @POST
+    @Secured({Role.Teacher})
+    @Path("{courseId}/experiments/{experimentId}/files")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
+    public FileSourceMessage uploadExperimentFile(
+            @PathParam("courseId") int courseId,
+            @PathParam("experimentId") int experimentId,
+            @FormDataParam("file") InputStream inputStream,
+            @FormDataParam("file") FormDataContentDisposition fileDetail
+    ) throws ServiceException {
+        return courseLogic.uploadExperimentFile(courseId, experimentId, fileDetail.getFileName(), inputStream);
     }
 
     @POST
