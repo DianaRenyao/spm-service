@@ -180,7 +180,7 @@ public class MessageMapper {
         ExamScoreEntity examScoreEntity = examScoreFacade.find(em, pk);
         ExamScoreMessage examScoreMessage = new ExamScoreMessage();
         if (examScoreEntity == null) {
-            examScoreMessage.setExamScore(0);
+            examScoreMessage.setExamScore(null);
             examScoreMessage.setExamId(entity.getExamId());
             examScoreMessage.setStudentId(studentId);
         } else

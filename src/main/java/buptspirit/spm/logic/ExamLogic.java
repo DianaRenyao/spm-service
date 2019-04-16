@@ -10,8 +10,8 @@ import buptspirit.spm.rest.filter.Role;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
+import javax.xml.ws.Service;
 import java.util.List;
-import org.apache.logging.log4j.Logger;
 import java.util.stream.Collectors;
 
 import static buptspirit.spm.persistence.JpaUtility.transactional;
@@ -117,13 +117,13 @@ public class ExamLogic {
 
     public ExamScoreMessage verifyAnswers(int id, ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) throws ServiceException {
         int examId = examAnswerMessage.getExamId();
-        if(examId != id)
+        if (examId != id)
             throw ServiceError.POST_EXAM_ID_WRONG.toException();
         ChapterEntity chapterEntity = transactional(
                 em -> chapterFacade.findByExamId(em, examId),
                 "failed to find chapter"
         );
-        if(chapterEntity == null)
+        if (chapterEntity == null)
             throw ServiceError.POST_EXAM_CHAPTER_DO_NOT_EXISTS.toException();
         boolean applied = transactional(
                 em -> {
@@ -141,21 +141,30 @@ public class ExamLogic {
         );
         double questionsAmount = questionEntities.size();
         double correctAnswersAmount = 0.0;
-        for (int j = 0; j < questionsAmount;j++) {
+        for (int j = 0; j < questionsAmount; j++) {
             int questionId = questionEntities.get(j).getQuestionId();
             QuestionEntity questionEntity = transactional(
                     em -> questionFacade.find(em, questionId),
                     "failed to find question"
             );
-            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswerMessageList().get(j);
+            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswers().get(j);
             if (questionAnswerMessage.getQuestionOptionId() == questionEntity.getAnswer()) {
                 correctAnswersAmount++;
             }
         }
-        double tempTotalScore=correctAnswersAmount / questionsAmount;
+        double tempTotalScore = correctAnswersAmount / questionsAmount;
         logger.debug(tempTotalScore);
-        int totalScore = (int)(tempTotalScore * 100);
+        int totalScore = (int) (tempTotalScore * 100);
         logger.debug(totalScore);
+        boolean taked = transactional(
+                em -> {
+                    ExamScoreEntityPK pk = new ExamScoreEntityPK();
+                    return examScoreFacade.find(em, pk) != null;
+                },
+                "failed to find ExamScore"
+        );
+        if(taked)
+            throw ServiceError.POST_EXAM_SCORE_ALREADY_EXISTS.toException();
         ExamScoreEntity examScoreEntity = new ExamScoreEntity();
         examScoreEntity.setExamId(examId);
         examScoreEntity.setExamScore(totalScore);
