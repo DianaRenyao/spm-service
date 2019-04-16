@@ -75,6 +75,7 @@ public class StaticFileLogic {
             throw ServiceError.POST_STATIC_FILE_FAILED_TO_STORE.toException();
         }
         FileSourceEntity entity = fileDetailToEntity(filename, fileType, identifier);
+
         try {
             transactional(
                     em -> {
@@ -83,6 +84,7 @@ public class StaticFileLogic {
                     },
                     "Failed to create meta data"
             );
+            return FileSourceMessage.fromEntity(entity);
         } catch (IllegalStateException e) {
             try {
                 fileManager.delete(identifier);
@@ -92,7 +94,7 @@ public class StaticFileLogic {
             logger.warn("failed to insert file mate data to db");
             throw ServiceError.POST_STATIC_FILE_FAILED_TO_INSERT_DB.toException();
         }
-        return FileSourceMessage.fromEntity(entity);
+
     }
 
     private FileSourceEntity fileDetailToEntity(String name, String fileType, String identifier) {

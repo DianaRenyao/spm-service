@@ -1,21 +1,17 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.exception.ServiceAssertionException;
-import buptspirit.spm.persistence.entity.SelectedCourseEntity;
 
-import java.sql.Timestamp;
-import java.util.Date;
 import java.math.BigDecimal;
 
 import static buptspirit.spm.exception.ServiceAssertionUtility.serviceAssert;
 
-public class SelectedCourseCreationMessage implements InputMessage {
+public class SelectedCourseEditingMessage implements InputMessage {
 
     private int studentUserId;
     private BigDecimal avgOnlineScore;
     private BigDecimal midScore;
     private BigDecimal finalScore;
-    private BigDecimal totalScore;
 
     @Override
     public void enforce() throws ServiceAssertionException {
@@ -30,14 +26,6 @@ public class SelectedCourseCreationMessage implements InputMessage {
 
     public void setStudentUserId(int studentUserId) {
         this.studentUserId = studentUserId;
-    }
-
-    public BigDecimal getTotalScore() {
-        return totalScore;
-    }
-
-    public void setTotalScore(BigDecimal totalScore) {
-        this.totalScore = totalScore;
     }
 
     public BigDecimal getAvgOnlineScore() {

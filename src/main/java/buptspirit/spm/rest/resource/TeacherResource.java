@@ -6,13 +6,24 @@ import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.NoticeLogic;
 import buptspirit.spm.logic.SelectedCourseLogic;
 import buptspirit.spm.logic.UserLogic;
-import buptspirit.spm.message.*;
+import buptspirit.spm.message.NoticeMessage;
+import buptspirit.spm.message.SelectedCourseEditingMessage;
+import buptspirit.spm.message.SelectedCourseMessage;
+import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.TeacherMessage;
+import buptspirit.spm.message.TeacherRegisterMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -92,11 +103,11 @@ public class TeacherResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public SelectedCourseMessage createSelectedCourse(
-            SelectedCourseCreationMessage selectedCourseCreationMessage,
+            SelectedCourseEditingMessage selectedCourseEditingMessage,
             @QueryParam("studentUserId") int studentUserId,
             @PathParam("courseId") int courseId,
             @PathParam("username") String username
     ) throws ServiceException {
-        return selectedCourseLogic.editSelectedCourse(selectedCourseCreationMessage, studentUserId, courseId, sessionMessage, username);
+        return selectedCourseLogic.editSelectedCourse(selectedCourseEditingMessage, studentUserId, courseId, sessionMessage, username);
     }
 }

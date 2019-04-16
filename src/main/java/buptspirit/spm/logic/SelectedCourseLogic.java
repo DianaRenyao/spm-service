@@ -3,7 +3,7 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.message.MessageMapper;
-import buptspirit.spm.message.SelectedCourseCreationMessage;
+import buptspirit.spm.message.SelectedCourseEditingMessage;
 import buptspirit.spm.message.SelectedCourseMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.persistence.entity.SelectedCourseEntity;
@@ -72,7 +72,7 @@ public class SelectedCourseLogic {
         );
     }
 
-    public SelectedCourseMessage editSelectedCourse(SelectedCourseCreationMessage selectedCourseCreationMessage,
+    public SelectedCourseMessage editSelectedCourse(SelectedCourseEditingMessage selectedCourseEditingMessage,
                                                     int studentUserId, int courseId,
                                                     SessionMessage sessionMessage, String username) throws ServiceException {
         /* 验证是否是有权限录入成绩的老师 */
@@ -89,9 +89,9 @@ public class SelectedCourseLogic {
         );
 
         /* 计算总成绩并存入数据库 */
-        selectedCourseEntity.setAvgOnlineScore(selectedCourseCreationMessage.getAvgOnlineScore());
-        selectedCourseEntity.setMidScore(selectedCourseCreationMessage.getMidScore());
-        selectedCourseEntity.setFinalScore(selectedCourseCreationMessage.getFinalScore());
+        selectedCourseEntity.setAvgOnlineScore(selectedCourseEditingMessage.getAvgOnlineScore());
+        selectedCourseEntity.setMidScore(selectedCourseEditingMessage.getMidScore());
+        selectedCourseEntity.setFinalScore(selectedCourseEditingMessage.getFinalScore());
         BigDecimal tempAvgOnlineScore = selectedCourseEntity.getAvgOnlineScore().multiply(new BigDecimal(0.3));
         BigDecimal tempMidScore = selectedCourseEntity.getMidScore().multiply(new BigDecimal(0.1));
         BigDecimal tempFinalScore = selectedCourseEntity.getFinalScore().multiply(new BigDecimal(0.6));

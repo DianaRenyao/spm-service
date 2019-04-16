@@ -98,6 +98,7 @@ public enum ServiceError {
 
     /*experiment error*/
     POST_EXPERIMENT_NO_SUCH_COURSE(140201, Response.Status.BAD_REQUEST, "no such course"),
+    POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT(140202, Response.Status.BAD_REQUEST, "no such experiment"),
     ;
 
 
