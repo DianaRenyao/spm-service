@@ -39,7 +39,7 @@ public class ExamResource {
     }
 
     @GET
-    @Path("teacher/{username}courses/{courseId}/")
+    @Path("teacher/{username}/courses/{courseId}/")
     @Secured({Role.Teacher})
     @Produces(MediaType.APPLICATION_JSON)
     public List<TeacherExamSummaryMessage> getTeacherExamSummaries(
