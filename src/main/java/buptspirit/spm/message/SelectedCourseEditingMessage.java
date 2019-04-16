@@ -15,9 +15,9 @@ public class SelectedCourseEditingMessage implements InputMessage {
 
     @Override
     public void enforce() throws ServiceAssertionException {
-        serviceAssert(avgOnlineScore != null );
-        serviceAssert(midScore != null );
-        serviceAssert(finalScore != null );
+        serviceAssert(avgOnlineScore != null);
+        serviceAssert(midScore != null);
+        serviceAssert(finalScore != null);
     }
 
     public int getStudentUserId() {

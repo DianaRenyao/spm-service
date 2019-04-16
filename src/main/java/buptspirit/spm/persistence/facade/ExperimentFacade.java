@@ -23,10 +23,10 @@ public class ExperimentFacade extends AbstractFacade<ExperimentEntity> {
     }
 
 
-    public List<ExperimentEntity> findByCourseId(EntityManager em, int courseId){
-        return em.createQuery("select e from ExperimentEntity e "+
+    public List<ExperimentEntity> findByCourseId(EntityManager em, int courseId) {
+        return em.createQuery("select e from ExperimentEntity e " +
                         "where e.courseId =: courseId",
-                ExperimentEntity.class).setParameter("courseId",courseId).getResultList();
+                ExperimentEntity.class).setParameter("courseId", courseId).getResultList();
 
     }
 

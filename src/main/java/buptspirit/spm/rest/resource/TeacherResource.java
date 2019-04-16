@@ -7,13 +7,25 @@ import buptspirit.spm.logic.ExamLogic;
 import buptspirit.spm.logic.NoticeLogic;
 import buptspirit.spm.logic.SelectedCourseLogic;
 import buptspirit.spm.logic.UserLogic;
-import buptspirit.spm.message.*;
+import buptspirit.spm.message.NoticeMessage;
+import buptspirit.spm.message.SelectedCourseEditingMessage;
+import buptspirit.spm.message.SelectedCourseMessage;
+import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.TeacherExamSummaryMessage;
+import buptspirit.spm.message.TeacherMessage;
+import buptspirit.spm.message.TeacherRegisterMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -22,19 +34,15 @@ public class TeacherResource {
 
     @Inject
     ExamLogic examLogic;
-
+    @Inject
+    SelectedCourseLogic selectedCourseLogic;
     @Inject
     private UserLogic userLogic;
-
     @Inject
     private NoticeLogic noticeLogic;
-
     @Inject
     @AuthenticatedSession
     private SessionMessage sessionMessage;
-
-    @Inject
-    SelectedCourseLogic selectedCourseLogic;
 
     @GET
     @Path("{username}")

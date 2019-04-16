@@ -21,15 +21,19 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 @Singleton
 public class StaticFileLogic {
 
+    private static final HashMap<String, String> fileSuffixToMIMEType = new HashMap<String, String>() {
+        {
+            put("pdf", "application/pdf");
+            put("ppt", "application/vnd.ms-powerpoint");
+            put("mp4", "video/mp4");
+        }
+    };
     @Inject
     private FileManager fileManager;
-
     @Inject
     private FileSourceFacade fileSourceFacade;
-
     @Inject
     private Logger logger;
-
 
     public FileSourceMessage download(String identifier) throws ServiceException {
         FileSourceEntity fileSourceEntity = transactional(
@@ -111,13 +115,5 @@ public class StaticFileLogic {
             throw ServiceError.POST_STATIC_FILE_UNACCEPTABLE_FILE_TYPE.toException();
         return fileSuffixToMIMEType.get(nameParts[nameParts.length - 1]);
     }
-
-    private static final HashMap<String, String> fileSuffixToMIMEType = new HashMap<String, String>() {
-        {
-            put("pdf", "application/pdf");
-            put("ppt", "application/vnd.ms-powerpoint");
-            put("mp4", "video/mp4");
-        }
-    };
 
 }

@@ -1,6 +1,11 @@
 package buptspirit.spm.persistence.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @Entity
@@ -59,7 +64,7 @@ public class QuestionEntity {
         QuestionEntity that = (QuestionEntity) o;
         return questionId == that.questionId &&
                 exam == that.exam &&
-                answer == that.answer &&
+                answer.equals(that.answer) &&
                 Objects.equals(detail, that.detail);
     }
 

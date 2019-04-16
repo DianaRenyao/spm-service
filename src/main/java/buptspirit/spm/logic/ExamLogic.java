@@ -3,14 +3,36 @@ package buptspirit.spm.logic;
 import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
-import buptspirit.spm.message.*;
-import buptspirit.spm.persistence.entity.*;
-import buptspirit.spm.persistence.facade.*;
+import buptspirit.spm.message.ExamAnswerMessage;
+import buptspirit.spm.message.ExamCreationMessage;
+import buptspirit.spm.message.ExamMessage;
+import buptspirit.spm.message.ExamScoreMessage;
+import buptspirit.spm.message.MessageMapper;
+import buptspirit.spm.message.QuestionAnswerMessage;
+import buptspirit.spm.message.QuestionCreationMessage;
+import buptspirit.spm.message.QuestionOptionCreationMessage;
+import buptspirit.spm.message.SessionMessage;
+import buptspirit.spm.message.StudentExamSummaryMessage;
+import buptspirit.spm.message.TeacherExamSummaryMessage;
+import buptspirit.spm.persistence.entity.ChapterEntity;
+import buptspirit.spm.persistence.entity.CourseEntity;
+import buptspirit.spm.persistence.entity.ExamEntity;
+import buptspirit.spm.persistence.entity.ExamScoreEntity;
+import buptspirit.spm.persistence.entity.ExamScoreEntityPK;
+import buptspirit.spm.persistence.entity.QuestionEntity;
+import buptspirit.spm.persistence.entity.QuestionOptionEntity;
+import buptspirit.spm.persistence.entity.SelectedCourseEntityPK;
+import buptspirit.spm.persistence.facade.ChapterFacade;
+import buptspirit.spm.persistence.facade.CourseFacade;
+import buptspirit.spm.persistence.facade.ExamFacade;
+import buptspirit.spm.persistence.facade.ExamScoreFacade;
+import buptspirit.spm.persistence.facade.QuestionFacade;
+import buptspirit.spm.persistence.facade.QuestionOptionFacade;
+import buptspirit.spm.persistence.facade.SelectedCourseFacade;
 import buptspirit.spm.rest.filter.Role;
 import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
-import javax.xml.ws.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,7 +65,6 @@ public class ExamLogic {
 
     @Inject
     private SelectedCourseFacade selectedCourseFacade;
-
 
     public ExamMessage createExam(int courseId, byte chapterSequence, SessionMessage sessionMessage, ExamCreationMessage examCreationMessage) throws ServiceAssertionException, ServiceException {
         examCreationMessage.enforce();
@@ -163,7 +184,7 @@ public class ExamLogic {
                 },
                 "failed to find ExamScore"
         );
-        if(taked)
+        if (taked)
             throw ServiceError.POST_EXAM_SCORE_ALREADY_EXISTS.toException();
         ExamScoreEntity examScoreEntity = new ExamScoreEntity();
         examScoreEntity.setExamId(examId);

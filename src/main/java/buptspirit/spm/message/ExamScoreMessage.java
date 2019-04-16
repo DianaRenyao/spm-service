@@ -7,7 +7,7 @@ public class ExamScoreMessage {
     private int examId;
     private Integer examScore;
 
-    public static ExamScoreMessage fromEntity(ExamScoreEntity entity){
+    public static ExamScoreMessage fromEntity(ExamScoreEntity entity) {
         ExamScoreMessage examScoreMessage = new ExamScoreMessage();
         examScoreMessage.setExamId(entity.getExamId());
         examScoreMessage.setStudentId(entity.getSelectedCourseStudentUserId());

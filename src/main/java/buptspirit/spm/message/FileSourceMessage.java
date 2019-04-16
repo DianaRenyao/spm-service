@@ -8,7 +8,7 @@ public class FileSourceMessage {
     private String identifier;
     private String fileType;
 
-    public static FileSourceMessage fromEntity(FileSourceEntity entity){
+    public static FileSourceMessage fromEntity(FileSourceEntity entity) {
         FileSourceMessage fileSourceMessage = new FileSourceMessage();
         //fileSourceMessage.setFileSourceId(entity.getFileSourceId());
         fileSourceMessage.setFilename(entity.getFilename());

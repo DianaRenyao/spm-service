@@ -1,6 +1,6 @@
 package buptspirit.spm.message;
 
-public class ApplicationCreationMessage implements InputMessage{
+public class ApplicationCreationMessage implements InputMessage {
     private String comment;
 
     @Override

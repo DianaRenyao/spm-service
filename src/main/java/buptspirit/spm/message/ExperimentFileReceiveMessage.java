@@ -1,7 +1,5 @@
 package buptspirit.spm.message;
 
-import buptspirit.spm.persistence.entity.ExperimentFileEntity;
-
 public class ExperimentFileReceiveMessage {
     private int experimentId;
     private String fileIdentifier;
