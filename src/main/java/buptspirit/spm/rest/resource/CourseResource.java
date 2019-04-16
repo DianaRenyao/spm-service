@@ -296,7 +296,7 @@ public class CourseResource {
     }
 
     @POST
-    //@Secured(Role.Teacher)
+    @Secured(Role.Teacher)
     @Path("experiments/fileIdentifiers")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addExperimentFileIdentifier(ExperimentFileReceiveMessage experimentFileReceiveMessage) throws ServiceException {
