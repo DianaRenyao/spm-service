@@ -18,6 +18,7 @@ import buptspirit.spm.persistence.entity.ChapterEntity;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.ExamEntity;
 import buptspirit.spm.persistence.entity.ExamScoreEntity;
+import buptspirit.spm.persistence.entity.ExamScoreEntityPK;
 import buptspirit.spm.persistence.entity.QuestionEntity;
 import buptspirit.spm.persistence.entity.QuestionOptionEntity;
 import buptspirit.spm.persistence.entity.SelectedCourseEntityPK;
@@ -167,7 +168,7 @@ public class ExamLogic {
                     em -> questionFacade.find(em, questionId),
                     "failed to find question"
             );
-            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswerMessageList().get(j);
+            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswers().get(j);
             if (questionAnswerMessage.getQuestionOptionId() == questionEntity.getAnswer()) {
                 correctAnswersAmount++;
             }
@@ -176,6 +177,15 @@ public class ExamLogic {
         logger.debug(tempTotalScore);
         int totalScore = (int) (tempTotalScore * 100);
         logger.debug(totalScore);
+        boolean taked = transactional(
+                em -> {
+                    ExamScoreEntityPK pk = new ExamScoreEntityPK();
+                    return examScoreFacade.find(em, pk) != null;
+                },
+                "failed to find ExamScore"
+        );
+        if (taked)
+            throw ServiceError.POST_EXAM_SCORE_ALREADY_EXISTS.toException();
         ExamScoreEntity examScoreEntity = new ExamScoreEntity();
         examScoreEntity.setExamId(examId);
         examScoreEntity.setExamScore(totalScore);

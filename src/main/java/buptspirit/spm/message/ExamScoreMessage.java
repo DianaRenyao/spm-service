@@ -5,7 +5,7 @@ import buptspirit.spm.persistence.entity.ExamScoreEntity;
 public class ExamScoreMessage {
     private int studentId;
     private int examId;
-    private int examScore;
+    private Integer examScore;
 
     public static ExamScoreMessage fromEntity(ExamScoreEntity entity) {
         ExamScoreMessage examScoreMessage = new ExamScoreMessage();
@@ -31,11 +31,11 @@ public class ExamScoreMessage {
         this.examId = examId;
     }
 
-    public int getExamScore() {
+    public Integer getExamScore() {
         return examScore;
     }
 
-    public void setExamScore(int examScore) {
+    public void setExamScore(Integer examScore) {
         this.examScore = examScore;
     }
 }
