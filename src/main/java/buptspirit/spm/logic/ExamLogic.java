@@ -10,6 +10,7 @@ import buptspirit.spm.rest.filter.Role;
 
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
 import java.util.stream.Collectors;
 
 import static buptspirit.spm.persistence.JpaUtility.transactional;
@@ -38,6 +39,9 @@ public class ExamLogic {
 
     @Inject
     private SelectedCourseFacade selectedCourseFacade;
+
+    @Inject
+    Logger logger;
 
     public ExamMessage createExam(int courseId, byte chapterSequence, SessionMessage sessionMessage, ExamCreationMessage examCreationMessage) throws ServiceAssertionException, ServiceException {
         examCreationMessage.enforce();
@@ -109,7 +113,7 @@ public class ExamLogic {
         );
     }
 
-    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) {
+    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) throws ServiceException {
         int examId = examAnswerMessage.getExamId();
         ChapterEntity chapterEntity = transactional(
                 em -> chapterFacade.findByExamId(em, examId),
@@ -121,41 +125,45 @@ public class ExamLogic {
                     pk.setCourseCourseId(chapterEntity.getCourseId());
                     pk.setStudentUserId(sessionMessage.getUserInfo().getId());
                     return selectedCourseFacade.find(em, pk) != null;
-                },"failed to create exam score"
+                }, "failed to create exam score"
         );
-
+        if (!applied)
+            throw ServiceError.GET_EXAM_STUDENT_NOT_ALLOW.toException();
         List<QuestionEntity> questionEntities = transactional(
                 em -> questionFacade.findByExamId(em, examId),
                 "failed to find questions"
         );
-        int questionsAmount = questionEntities.size();
-        int correctAnswerAmount = 0;
-        for (int i = 0; i < questionsAmount; i++) {
-            int questionId = questionEntities.get(i).getQuestionId();
+        double questionsAmount = questionEntities.size();
+        double correctAnswersAmount = 0.0;
+        for (int j = 0; j < questionsAmount;j++) {
+            int questionId = questionEntities.get(j).getQuestionId();
             QuestionEntity questionEntity = transactional(
                     em -> questionFacade.find(em, questionId),
                     "failed to find question"
             );
-            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswerMessageList().get(i);
-            if (questionAnswerMessage.getQuesitionOptionId() == questionEntity.getAnswer()) {
-                correctAnswerAmount++;
+            QuestionAnswerMessage questionAnswerMessage = examAnswerMessage.getQuestionAnswerMessageList().get(j);
+            if (questionAnswerMessage.getQuestionOptionId() == questionEntity.getAnswer()) {
+                correctAnswersAmount++;
             }
-            int totalScore = (correctAnswerAmount / questionsAmount) * 100;
-
-            ExamScoreEntity examScoreEntity = new ExamScoreEntity();
-            examScoreEntity.setExamId(examId);
-            examScoreEntity.setExamScore(totalScore);
-            examScoreEntity.setSelectedCourseCourseCourseId(chapterEntity.getCourseId());
-            examScoreEntity.setSelectedCourseStudentUserId(sessionMessage.getUserInfo().getId());
-            return transactional(
-                    em -> {
-                        examScoreFacade.create(em, examScoreEntity);
-                        return messageMapper.intoExamScoreMessage(em, examScoreEntity);
-                    },
-                    "failed to create exam score"
-            );
         }
-        return null;
+        logger.debug(correctAnswersAmount);
+        logger.debug(questionsAmount);
+        double tempTotalScore=correctAnswersAmount / questionsAmount;
+        logger.debug(tempTotalScore);
+        int totalScore = (int)(tempTotalScore * 100);
+        logger.debug(totalScore);
+        ExamScoreEntity examScoreEntity = new ExamScoreEntity();
+        examScoreEntity.setExamId(examId);
+        examScoreEntity.setExamScore(totalScore);
+        examScoreEntity.setSelectedCourseCourseCourseId(chapterEntity.getCourseId());
+        examScoreEntity.setSelectedCourseStudentUserId(sessionMessage.getUserInfo().getId());
+        return transactional(
+                em -> {
+                    examScoreFacade.create(em, examScoreEntity);
+                    return messageMapper.intoExamScoreMessage(em, examScoreEntity);
+                },
+                "failed to create exam score"
+        );
     }
 
     public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, String username, SessionMessage sessionMessage) throws ServiceException {

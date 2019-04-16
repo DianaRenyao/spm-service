@@ -2,7 +2,7 @@ package buptspirit.spm.message;
 
 public class QuestionAnswerMessage {
     private int questionId;
-    private int quesitionOptionId;
+    private int questionOptionId;
 
     public int getQuestionId() {
         return questionId;
@@ -12,11 +12,11 @@ public class QuestionAnswerMessage {
         this.questionId = questionId;
     }
 
-    public int getQuesitionOptionId() {
-        return quesitionOptionId;
+    public int getQuestionOptionId() {
+        return questionOptionId;
     }
 
-    public void setQuesitionOptionId(int quesitionOptionId) {
-        this.quesitionOptionId = quesitionOptionId;
+    public void setQuestionOptionId(int questionOptionId) {
+        this.questionOptionId = questionOptionId;
     }
 }

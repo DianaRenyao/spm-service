@@ -48,10 +48,9 @@ public class ExamResource {
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ExamScoreMessage verifyAnswers(
-            ExamAnswerMessage examAnswerMessage)
-    throws ServiceException{
-        return examLogic.verifyAnswers(examAnswerMessage,sessionMessage);
+    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage)
+            throws ServiceException {
+        return examLogic.verifyAnswers(examAnswerMessage, sessionMessage);
     }
 
     @GET

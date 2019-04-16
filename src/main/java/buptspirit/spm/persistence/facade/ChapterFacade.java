@@ -30,16 +30,13 @@ public class ChapterFacade extends AbstractFacade<ChapterEntity> {
 
     public ChapterEntity findByExamId(EntityManager em, int examId) {
         try {
-            return em.createQuery("select c from ChapterEntity c" +
-                    "join ExamEntity e on e.examId=:examId" +
-                    "join ChapterEntity c on c.chapterId=e.chapterId" +
-                    "where e.examId=:examId"+
-                    "and c.chapterId=e.chapterId",ChapterEntity.class)
-                    .setParameter("examId",examId)
+            return em.createQuery("select c from ChapterEntity c join ExamEntity e on e.chapterId=c.chapterId " +
+                    "where e.examId=:examId and c.chapterId=e.chapterId", ChapterEntity.class)
+                    .setParameter("examId", examId)
                     .getSingleResult();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             return null;
+        }
     }
-}
 
 }
