@@ -6,7 +6,7 @@ public class ChapterSummaryMessage {
     byte sequence;
     String chapterName;
 
-    public static ChapterSummaryMessage fromEntity(ChapterEntity entity){
+    public static ChapterSummaryMessage fromEntity(ChapterEntity entity) {
         ChapterSummaryMessage chapter = new ChapterSummaryMessage();
         chapter.setSequence(entity.getSequence());
         chapter.setChapterName(entity.getChapterName());

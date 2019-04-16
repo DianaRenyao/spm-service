@@ -7,12 +7,12 @@ public class StudentExamSummaryMessage {
     private ChapterSummaryMessage chapter;
     private int questionNum;
     private int examId;
-    private ExamScoreMessage examScoreMessage ;
+    private ExamScoreMessage examScoreMessage;
 
     public static StudentExamSummaryMessage fromEntity(ExamEntity entity,
                                                        ChapterSummaryMessage chapter,
                                                        int questionNum,
-                                                       ExamScoreMessage examScoreMessage){
+                                                       ExamScoreMessage examScoreMessage) {
         StudentExamSummaryMessage studentExamSummaryMessage = new StudentExamSummaryMessage();
         studentExamSummaryMessage.setChapter(chapter);
         studentExamSummaryMessage.setQuestionNum(questionNum);

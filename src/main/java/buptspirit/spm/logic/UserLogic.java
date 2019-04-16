@@ -10,7 +10,6 @@ import buptspirit.spm.message.StudentRegisterMessage;
 import buptspirit.spm.message.TeacherMessage;
 import buptspirit.spm.message.TeacherRegisterMessage;
 import buptspirit.spm.message.UserInfoMessage;
-import buptspirit.spm.utility.PasswordHash;
 import buptspirit.spm.persistence.entity.StudentEntity;
 import buptspirit.spm.persistence.entity.TeacherEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
@@ -18,6 +17,7 @@ import buptspirit.spm.persistence.facade.StudentFacade;
 import buptspirit.spm.persistence.facade.TeacherFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
 import buptspirit.spm.rest.filter.Role;
+import buptspirit.spm.utility.PasswordHash;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.PostConstruct;

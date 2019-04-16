@@ -15,7 +15,7 @@ public class ExamFacade extends AbstractFacade<ExamEntity> {
                 "join ChapterEntity ch on ch.chapterId = e.chapterId " +
                 "join CourseEntity c on c.courseId = ch.courseId " +
                 "where c.courseId = :courseId", ExamEntity.class)
-                .setParameter("courseId",courseId)
+                .setParameter("courseId", courseId)
                 .getResultList();
     }
 }

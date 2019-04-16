@@ -303,7 +303,7 @@ public class CourseResource {
             @PathParam("experimentId") int experimentId,
             @PathParam("fileIdentifier") String fileIdentifier) throws ServiceException {
         Response.Status status =
-                courseLogic.addExperimentFile(courseId,experimentId, fileIdentifier) ? Response.Status.OK : Response.Status.BAD_REQUEST;
+                courseLogic.addExperimentFile(courseId, experimentId, fileIdentifier) ? Response.Status.OK : Response.Status.BAD_REQUEST;
         return Response.noContent().status(status).build();
     }
 

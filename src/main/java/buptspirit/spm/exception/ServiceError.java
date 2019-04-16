@@ -95,7 +95,7 @@ public enum ServiceError {
     GET_EXAM_COURSE_DO_NOT_EXISTS(130103, Response.Status.BAD_REQUEST, "course do not exist"),
     POST_EXAM_COURSE_DO_NOT_EXISTS(130301, Response.Status.BAD_REQUEST, "no such course"),
     POST_EXAM_CHAPTER_DO_NOT_EXISTS(130302, Response.Status.BAD_REQUEST, "no such chapter"),
-    POST_EXAM_ID_WRONG(130303,Response.Status.BAD_REQUEST,"examId and path examId do not equal"),
+    POST_EXAM_ID_WRONG(130303, Response.Status.BAD_REQUEST, "examId and path examId do not equal"),
 
     /*experiment error*/
     POST_EXPERIMENT_NO_SUCH_COURSE(140201, Response.Status.BAD_REQUEST, "no such course"),

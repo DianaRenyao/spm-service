@@ -7,7 +7,7 @@ public class TeacherExamSummaryMessage {
     private int questionNum;
     private int examId;
 
-    public static TeacherExamSummaryMessage fromEntity(ExamEntity entity, ChapterSummaryMessage chapter, int questionNum){
+    public static TeacherExamSummaryMessage fromEntity(ExamEntity entity, ChapterSummaryMessage chapter, int questionNum) {
         TeacherExamSummaryMessage teacherExamSummaryMessage = new TeacherExamSummaryMessage();
         teacherExamSummaryMessage.setChapter(chapter);
         teacherExamSummaryMessage.setExamId(entity.getExamId());
