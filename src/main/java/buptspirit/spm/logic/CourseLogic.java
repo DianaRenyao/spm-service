@@ -7,7 +7,6 @@ import buptspirit.spm.message.CourseCreationMessage;
 import buptspirit.spm.message.CourseMessage;
 import buptspirit.spm.message.CourseSummaryMessage;
 import buptspirit.spm.message.ExperimentCreationMessage;
-import buptspirit.spm.message.ExperimentFileReceiveMessage;
 import buptspirit.spm.message.ExperimentMessage;
 import buptspirit.spm.message.FileSourceMessage;
 import buptspirit.spm.message.MessageMapper;
@@ -183,16 +182,15 @@ public class CourseLogic {
         );
     }
 
-    public boolean addExperimentFile(ExperimentFileReceiveMessage fileReceiveMessage) throws ServiceException {
+    public boolean addExperimentFile(int experimentId, String identifier) throws ServiceException {
         FileSourceEntity fileSourceEntity = transactional(
-                em -> fileSourceFacade.findByIdentifier(em, fileReceiveMessage.getFileIdentifier()),
-                "failed to find file source information"
-        );
+                em -> fileSourceFacade.findByIdentifier(em, identifier),
+                "failed to find file source information");
         if (fileSourceEntity == null)
-            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT.toException();
+            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_FILE.toException();
         ExperimentFileEntity experimentFileEntity = new ExperimentFileEntity();
         experimentFileEntity.setFileSourceId(fileSourceEntity.getFileSourceId());
-        experimentFileEntity.setExperimentId(fileReceiveMessage.getExperimentId());
+        experimentFileEntity.setExperimentId(experimentId);
 
         try {
             transactional(
@@ -204,11 +202,10 @@ public class CourseLogic {
             );
             return true;
         } catch (IllegalStateException e) {
-            logger.warn("Add record failed,experimentId:" + fileReceiveMessage.getExperimentId() +
-                    ",fileIdentifier:" + fileReceiveMessage.getFileIdentifier());
+            logger.warn("Add record failed,experimentId:" + experimentId +
+                    ",fileIdentifier:" + identifier);
             return false;
         }
-
     }
 
     public FileSourceMessage uploadExperimentFile(
