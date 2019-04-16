@@ -7,6 +7,7 @@ import buptspirit.spm.message.*;
 import buptspirit.spm.persistence.entity.*;
 import buptspirit.spm.persistence.facade.*;
 import buptspirit.spm.rest.filter.Role;
+import org.apache.logging.log4j.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -36,6 +37,9 @@ public class ExamLogic {
 
     @Inject
     private ExamScoreFacade examScoreFacade;
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private SelectedCourseFacade selectedCourseFacade;
@@ -169,14 +173,17 @@ public class ExamLogic {
     }
 
     public List<StudentExamSummaryMessage> getStudentExamSummaries(int courseId, String username, SessionMessage sessionMessage) throws ServiceException {
+        logger.debug(username);
         CourseEntity thisCourse = transactional(
                 em -> courseFacade.find(em, courseId),
                 "fail to find course"
         );
+        logger.debug(sessionMessage.getUserInfo().getUsername());
         if (thisCourse == null)
             throw ServiceError.POST_EXAM_COURSE_DO_NOT_EXISTS.toException();
         if (!username.equals(sessionMessage.getUserInfo().getUsername()))
             throw ServiceError.FORBIDDEN.toException();
+        logger.debug(sessionMessage.getUserInfo().getUsername());
         boolean applied = transactional(
                 em -> {
                     SelectedCourseEntityPK pk = new SelectedCourseEntityPK();
