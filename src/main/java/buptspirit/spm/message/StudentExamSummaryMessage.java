@@ -1,12 +1,12 @@
 package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.ExamEntity;
-import buptspirit.spm.persistence.entity.ExamScoreEntity;
 
 public class StudentExamSummaryMessage {
 
     private ChapterSummaryMessage chapter;
     private int questionNum;
+    private int examId;
     private ExamScoreMessage examScoreMessage ;
 
     public static StudentExamSummaryMessage fromEntity(ExamEntity entity,
@@ -17,6 +17,7 @@ public class StudentExamSummaryMessage {
         studentExamSummaryMessage.setChapter(chapter);
         studentExamSummaryMessage.setQuestionNum(questionNum);
         studentExamSummaryMessage.setExamScoreMessage(examScoreMessage);
+        studentExamSummaryMessage.setExamId(entity.getExamId());
         return studentExamSummaryMessage;
     }
 
@@ -42,5 +43,13 @@ public class StudentExamSummaryMessage {
 
     public void setExamScoreMessage(ExamScoreMessage examScoreMessage) {
         this.examScoreMessage = examScoreMessage;
+    }
+
+    public int getExamId() {
+        return examId;
+    }
+
+    public void setExamId(int examId) {
+        this.examId = examId;
     }
 }
