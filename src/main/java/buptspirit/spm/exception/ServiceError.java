@@ -91,6 +91,8 @@ public enum ServiceError {
     DELETE_SECTION_FILE_NO_SUCH_FILE(120402, Response.Status.BAD_REQUEST, "no such file"),
 
     /* exam error*/
+    GET_EXAM_STUDENT_NOT_ALLOW(130102, Response.Status.BAD_REQUEST, "this student didnot apply to this course"),
+    GET_EXAM_COURSE_DO_NOT_EXISTS(130103, Response.Status.BAD_REQUEST, "course do not exist"),
     POST_EXAM_COURSE_DO_NOT_EXISTS(130301, Response.Status.BAD_REQUEST, "no such course"),
     POST_EXAM_CHAPTER_DO_NOT_EXISTS(130302, Response.Status.BAD_REQUEST, "no such chapter"),
 

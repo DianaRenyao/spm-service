@@ -11,12 +11,15 @@ public class QuestionMessage {
     private int answerId;
     private List<QuestionOptionMessage> questionOptionMessages;
 
-    public static QuestionMessage fromEntity(QuestionEntity entity, List<QuestionOptionMessage> questionOptionMessages) {
+    public static QuestionMessage fromEntity(QuestionEntity entity, List<QuestionOptionMessage> questionOptionMessages, boolean withAnswer) {
         QuestionMessage questionMessage = new QuestionMessage();
         questionMessage.setExamId(entity.getExam());
         questionMessage.setQuestionId(entity.getQuestionId());
         questionMessage.setQuestionDetail(entity.getDetail());
-        questionMessage.setAnswerId(entity.getAnswer());
+        if (withAnswer)
+            questionMessage.setAnswerId(entity.getAnswer());
+        else
+            questionMessage.setAnswerId(0);
         questionMessage.setQuestionOptionMessages(questionOptionMessages);
         return questionMessage;
     }
