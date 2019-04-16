@@ -43,7 +43,7 @@ public class ExamResource {
     }
 
     @POST
-    @Path("{id}/verification")
+    @Path("{id}/verifications")
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
