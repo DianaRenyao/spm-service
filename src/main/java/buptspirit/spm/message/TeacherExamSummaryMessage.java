@@ -5,10 +5,12 @@ import buptspirit.spm.persistence.entity.ExamEntity;
 public class TeacherExamSummaryMessage {
     private ChapterSummaryMessage chapter;
     private int questionNum;
+    private int examId;
 
     public static TeacherExamSummaryMessage fromEntity(ExamEntity entity, ChapterSummaryMessage chapter, int questionNum){
         TeacherExamSummaryMessage teacherExamSummaryMessage = new TeacherExamSummaryMessage();
         teacherExamSummaryMessage.setChapter(chapter);
+        teacherExamSummaryMessage.setExamId(entity.getExamId());
         teacherExamSummaryMessage.setQuestionNum(questionNum);
         return teacherExamSummaryMessage;
     }
@@ -27,5 +29,13 @@ public class TeacherExamSummaryMessage {
 
     public void setQuestionNum(int questionNum) {
         this.questionNum = questionNum;
+    }
+
+    public int getExamId() {
+        return examId;
+    }
+
+    public void setExamId(int examId) {
+        this.examId = examId;
     }
 }

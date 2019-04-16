@@ -4,12 +4,10 @@ import buptspirit.spm.exception.ServiceAssertionException;
 import buptspirit.spm.exception.ServiceError;
 import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ApplicationLogic;
+import buptspirit.spm.logic.ExamLogic;
 import buptspirit.spm.logic.SelectedCourseLogic;
 import buptspirit.spm.logic.UserLogic;
-import buptspirit.spm.message.SelectedCourseMessage;
-import buptspirit.spm.message.SessionMessage;
-import buptspirit.spm.message.StudentMessage;
-import buptspirit.spm.message.StudentRegisterMessage;
+import buptspirit.spm.message.*;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
@@ -22,6 +20,8 @@ import java.util.List;
 
 @Path("students")
 public class StudentResource {
+    @Inject
+    ExamLogic examLogic;
 
     @Inject
     private UserLogic userLogic;
@@ -90,4 +90,16 @@ public class StudentResource {
     ) throws ServiceException {
         return selectedCourseLogic.getStudentSelectedCourses(username, sessionMessage);
     }
+
+    @GET
+    @Path("{username}/courses/{courseId}/exams")
+    @Secured({Role.Student})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<StudentExamSummaryMessage> getStudentExamSummaries(
+            @PathParam("courseId") int courseId,
+            @PathParam("username") String username
+    ) throws ServiceException {
+        return examLogic.getStudentExamSummaries(courseId, username, sessionMessage);
+    }
+
 }

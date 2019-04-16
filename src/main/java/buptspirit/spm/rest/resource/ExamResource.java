@@ -5,8 +5,6 @@ import buptspirit.spm.exception.ServiceException;
 import buptspirit.spm.logic.ExamLogic;
 import buptspirit.spm.message.ExamMessage;
 import buptspirit.spm.message.SessionMessage;
-import buptspirit.spm.message.StudentExamSummaryMessage;
-import buptspirit.spm.message.TeacherExamSummaryMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
@@ -14,7 +12,6 @@ import buptspirit.spm.rest.filter.Secured;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path("exams")
 public class ExamResource {
@@ -37,27 +34,4 @@ public class ExamResource {
             throw ServiceError.FORBIDDEN.toException();
         return examLogic.getExam(examId, sessionMessage);
     }
-
-    @GET
-    @Path("teacher/{username}/courses/{courseId}/")
-    @Secured({Role.Teacher})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<TeacherExamSummaryMessage> getTeacherExamSummaries(
-            @PathParam("courseId") int courseId,
-            @PathParam("username") String username
-    ) throws ServiceException {
-        return examLogic.getTeacherExamSummaries(courseId, username, sessionMessage);
-    }
-
-    @GET
-    @Path("student/{username}/courses/{courseId}/")
-    @Secured({Role.Student})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<StudentExamSummaryMessage> getStudentExamSummaries(
-            @PathParam("courseId") int courseId,
-            @PathParam("username") String username
-    ) throws ServiceException {
-        return examLogic.getStudentExamSummaries(courseId, username, sessionMessage);
-    }
-
 }
