@@ -3,7 +3,6 @@ package buptspirit.spm.message;
 
 import buptspirit.spm.persistence.entity.*;
 import buptspirit.spm.persistence.facade.*;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.persistence.EntityManager;
