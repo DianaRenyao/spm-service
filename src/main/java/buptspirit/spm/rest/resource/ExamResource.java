@@ -6,11 +6,13 @@ import buptspirit.spm.logic.ExamLogic;
 import buptspirit.spm.message.ExamAnswerMessage;
 import buptspirit.spm.message.ExamScoreMessage;
 import buptspirit.spm.message.ExamMessage;
+import buptspirit.spm.message.StudentExamSummaryMessage;
+import buptspirit.spm.message.TeacherExamSummaryMessage;
 import buptspirit.spm.message.SessionMessage;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import buptspirit.spm.rest.filter.Role;
 import buptspirit.spm.rest.filter.Secured;
-
+import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
