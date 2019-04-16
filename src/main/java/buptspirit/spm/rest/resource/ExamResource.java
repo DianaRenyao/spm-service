@@ -43,7 +43,7 @@ public class ExamResource {
     }
 
     @POST
-    @Path("{id}/verifications")
+    @Path("{id}/studentAnswers")
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -53,25 +53,4 @@ public class ExamResource {
         return examLogic.verifyAnswers(id, examAnswerMessage, sessionMessage);
     }
 
-    @GET
-    @Path("teacher/{username}courses/{courseId}/")
-    @Secured({Role.Teacher})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<TeacherExamSummaryMessage> getTeacherExamSummaries(
-            @PathParam("courseId") int courseId,
-            @PathParam("username") String username
-    ) throws ServiceException {
-        return examLogic.getTeacherExamSummaries(courseId, username, sessionMessage);
-    }
-
-    @GET
-    @Path("student/{username}/courses/{courseId}/")
-    @Secured({Role.Student})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<StudentExamSummaryMessage> getStudentExamSummaries(
-            @PathParam("courseId") int courseId,
-            @PathParam("username") String username
-    ) throws ServiceException {
-        return examLogic.getStudentExamSummaries(courseId, username, sessionMessage);
-    }
 }
