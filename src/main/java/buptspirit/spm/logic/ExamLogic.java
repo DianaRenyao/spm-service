@@ -44,8 +44,6 @@ public class ExamLogic {
     @Inject
     private SelectedCourseFacade selectedCourseFacade;
 
-    @Inject
-    Logger logger;
 
     public ExamMessage createExam(int courseId, byte chapterSequence, SessionMessage sessionMessage, ExamCreationMessage examCreationMessage) throws ServiceAssertionException, ServiceException {
         examCreationMessage.enforce();
