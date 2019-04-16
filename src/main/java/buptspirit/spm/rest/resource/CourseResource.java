@@ -296,13 +296,14 @@ public class CourseResource {
 
     @PUT
     @Secured(Role.Teacher)
-    @Path("experiments/{experimentId}/files/{fileIdentifier}")
+    @Path("{courseId}/experiments/{experimentId}/files/{fileIdentifier}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addExperimentFileIdentifier(
+            @PathParam("courseId") int courseId,
             @PathParam("experimentId") int experimentId,
             @PathParam("fileIdentifier") String fileIdentifier) throws ServiceException {
         Response.Status status =
-                courseLogic.addExperimentFile(experimentId, fileIdentifier) ? Response.Status.OK : Response.Status.BAD_REQUEST;
+                courseLogic.addExperimentFile(courseId,experimentId, fileIdentifier) ? Response.Status.OK : Response.Status.BAD_REQUEST;
         return Response.noContent().status(status).build();
     }
 

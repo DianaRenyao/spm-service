@@ -182,7 +182,19 @@ public class CourseLogic {
         );
     }
 
-    public boolean addExperimentFile(int experimentId, String identifier) throws ServiceException {
+    private boolean isCourseExperiment(int experimentId, int courseId) {
+        ExperimentEntity experimentEntity = transactional(
+                em -> experimentFacade.find(em, experimentId),
+                "failed to find experiment"
+        );
+        return experimentEntity != null && experimentEntity.getCourseId() == courseId;
+    }
+
+    public boolean addExperimentFile(int courseId, int experimentId, String identifier) throws ServiceException {
+        if (!isCourseTeacher(courseId))
+            throw ServiceError.POST_EXPERIMENT_NO_SUCH_COURSE.toException();
+        if (!isCourseExperiment(experimentId, courseId))
+            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT.toException();
         FileSourceEntity fileSourceEntity = transactional(
                 em -> fileSourceFacade.findByIdentifier(em, identifier),
                 "failed to find file source information");
