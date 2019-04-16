@@ -262,7 +262,7 @@ public class CourseResource {
     }
 
     @POST
-    //@Secured({Role.Teacher})
+    @Secured({Role.Teacher})
     @Path("{id}/experiments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -292,6 +292,19 @@ public class CourseResource {
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
         return courseLogic.uploadExperimentFile(courseId, experimentId, fileDetail.getFileName(), inputStream);
+    }
+
+    @PUT
+    @Secured(Role.Teacher)
+    @Path("{courseId}/experiments/{experimentId}/files/{fileIdentifier}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addExperimentFileIdentifier(
+            @PathParam("courseId") int courseId,
+            @PathParam("experimentId") int experimentId,
+            @PathParam("fileIdentifier") String fileIdentifier) throws ServiceException {
+        Response.Status status =
+                courseLogic.addExperimentFile(courseId,experimentId, fileIdentifier) ? Response.Status.OK : Response.Status.BAD_REQUEST;
+        return Response.noContent().status(status).build();
     }
 
     @POST

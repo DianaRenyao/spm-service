@@ -15,10 +15,12 @@ import buptspirit.spm.message.UserInfoMessage;
 import buptspirit.spm.persistence.entity.CourseEntity;
 import buptspirit.spm.persistence.entity.ExperimentEntity;
 import buptspirit.spm.persistence.entity.ExperimentFileEntity;
+import buptspirit.spm.persistence.entity.FileSourceEntity;
 import buptspirit.spm.persistence.entity.UserInfoEntity;
 import buptspirit.spm.persistence.facade.CourseFacade;
 import buptspirit.spm.persistence.facade.ExperimentFacade;
 import buptspirit.spm.persistence.facade.ExperimentFileFacade;
+import buptspirit.spm.persistence.facade.FileSourceFacade;
 import buptspirit.spm.persistence.facade.UserInfoFacade;
 import buptspirit.spm.rest.filter.AuthenticatedSession;
 import org.apache.logging.log4j.Logger;
@@ -53,6 +55,10 @@ public class CourseLogic {
 
     @Inject
     private ExperimentFileFacade experimentFileFacade;
+
+    @Inject
+    private FileSourceFacade fileSourceFacade;
+
 
     @Inject
     private Logger logger;
@@ -174,6 +180,44 @@ public class CourseLogic {
                 },
                 "failed to find experiments"
         );
+    }
+
+    private boolean isCourseExperiment(int experimentId, int courseId) {
+        ExperimentEntity experimentEntity = transactional(
+                em -> experimentFacade.find(em, experimentId),
+                "failed to find experiment"
+        );
+        return experimentEntity != null && experimentEntity.getCourseId() == courseId;
+    }
+
+    public boolean addExperimentFile(int courseId, int experimentId, String identifier) throws ServiceException {
+        if (!isCourseTeacher(courseId))
+            throw ServiceError.POST_EXPERIMENT_NO_SUCH_COURSE.toException();
+        if (!isCourseExperiment(experimentId, courseId))
+            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_EXPERIMENT.toException();
+        FileSourceEntity fileSourceEntity = transactional(
+                em -> fileSourceFacade.findByIdentifier(em, identifier),
+                "failed to find file source information");
+        if (fileSourceEntity == null)
+            throw ServiceError.POST_EXPERIMENT_FILE_NO_SUCH_FILE.toException();
+        ExperimentFileEntity experimentFileEntity = new ExperimentFileEntity();
+        experimentFileEntity.setFileSourceId(fileSourceEntity.getFileSourceId());
+        experimentFileEntity.setExperimentId(experimentId);
+
+        try {
+            transactional(
+                    em -> {
+                        experimentFileFacade.create(em, experimentFileEntity);
+                        return null;
+                    },
+                    "failed to create experiment file record"
+            );
+            return true;
+        } catch (IllegalStateException e) {
+            logger.warn("Add record failed,experimentId:" + experimentId +
+                    ",fileIdentifier:" + identifier);
+            return false;
+        }
     }
 
     public FileSourceMessage uploadExperimentFile(
