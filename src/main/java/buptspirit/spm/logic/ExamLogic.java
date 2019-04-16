@@ -113,12 +113,16 @@ public class ExamLogic {
         );
     }
 
-    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) throws ServiceException {
+    public ExamScoreMessage verifyAnswers(int id, ExamAnswerMessage examAnswerMessage, SessionMessage sessionMessage) throws ServiceException {
         int examId = examAnswerMessage.getExamId();
+        if(examId != id)
+            throw ServiceError.POST_EXAM_ID_WRONG.toException();
         ChapterEntity chapterEntity = transactional(
                 em -> chapterFacade.findByExamId(em, examId),
                 "failed to find chapter"
         );
+        if(chapterEntity == null)
+            throw ServiceError.POST_EXAM_CHAPTER_DO_NOT_EXISTS.toException();
         boolean applied = transactional(
                 em -> {
                     SelectedCourseEntityPK pk = new SelectedCourseEntityPK();
@@ -146,8 +150,6 @@ public class ExamLogic {
                 correctAnswersAmount++;
             }
         }
-        logger.debug(correctAnswersAmount);
-        logger.debug(questionsAmount);
         double tempTotalScore=correctAnswersAmount / questionsAmount;
         logger.debug(tempTotalScore);
         int totalScore = (int)(tempTotalScore * 100);

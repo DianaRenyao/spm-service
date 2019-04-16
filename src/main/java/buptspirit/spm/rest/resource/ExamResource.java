@@ -44,13 +44,14 @@ public class ExamResource {
     }
 
     @POST
-    @Path("verify")
+    @Path("{id}/verification")
     @Secured({Role.Student})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage)
+    public ExamScoreMessage verifyAnswers(ExamAnswerMessage examAnswerMessage,
+                                          @PathParam("id") int id)
             throws ServiceException {
-        return examLogic.verifyAnswers(examAnswerMessage, sessionMessage);
+        return examLogic.verifyAnswers(id, examAnswerMessage, sessionMessage);
     }
 
     @GET
