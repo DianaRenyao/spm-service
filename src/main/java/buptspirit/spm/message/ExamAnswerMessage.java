@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ExamAnswerMessage {
     private int examId;
-    private List<QuestionAnswerMessage> questionAnswerMessageList;
+    private List<QuestionAnswerMessage> questionAnswers;
 
     public int getExamId() {
         return examId;
@@ -14,11 +14,11 @@ public class ExamAnswerMessage {
         this.examId = examId;
     }
 
-    public List<QuestionAnswerMessage> getQuestionAnswerMessageList() {
-        return questionAnswerMessageList;
+    public List<QuestionAnswerMessage> getQuestionAnswers() {
+        return questionAnswers;
     }
 
-    public void setQuestionAnswerMessageList(List<QuestionAnswerMessage> questionAnswerMessageList) {
-        this.questionAnswerMessageList = questionAnswerMessageList;
+    public void setQuestionAnswers(List<QuestionAnswerMessage> questionAnswers) {
+        this.questionAnswers = questionAnswers;
     }
 }
