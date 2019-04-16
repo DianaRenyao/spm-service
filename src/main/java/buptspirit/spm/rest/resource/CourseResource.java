@@ -19,6 +19,7 @@ import buptspirit.spm.message.CourseSummaryMessage;
 import buptspirit.spm.message.ExamCreationMessage;
 import buptspirit.spm.message.ExamMessage;
 import buptspirit.spm.message.ExperimentCreationMessage;
+import buptspirit.spm.message.ExperimentFileReceiveMessage;
 import buptspirit.spm.message.ExperimentMessage;
 import buptspirit.spm.message.FileSourceMessage;
 import buptspirit.spm.message.SectionCreationMessage;
@@ -262,7 +263,7 @@ public class CourseResource {
     }
 
     @POST
-    //@Secured({Role.Teacher})
+    @Secured({Role.Teacher})
     @Path("{id}/experiments")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -292,6 +293,16 @@ public class CourseResource {
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
         return courseLogic.uploadExperimentFile(courseId, experimentId, fileDetail.getFileName(), inputStream);
+    }
+
+    @POST
+    //@Secured(Role.Teacher)
+    @Path("experiments/fileIdentifiers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addExperimentFileIdentifier(ExperimentFileReceiveMessage experimentFileReceiveMessage) throws ServiceException {
+        Response.Status status =
+                courseLogic.addExperimentFile(experimentFileReceiveMessage) ? Response.Status.OK : Response.Status.BAD_REQUEST;
+        return Response.noContent().status(status).build();
     }
 
     @POST
