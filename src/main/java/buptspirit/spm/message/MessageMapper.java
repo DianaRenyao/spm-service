@@ -182,7 +182,7 @@ public class MessageMapper {
         ExamScoreMessage examScoreMessage = new ExamScoreMessage();
         if (examScoreEntity == null) {
             examScoreMessage.setExamScore(0);
-            examScoreEntity.setExamId(entity.getExamId());
+            examScoreMessage.setExamId(entity.getExamId());
             examScoreMessage.setStudentId(studentId);
         } else
             examScoreMessage = intoExamScoreMessage(em, examScoreEntity);
