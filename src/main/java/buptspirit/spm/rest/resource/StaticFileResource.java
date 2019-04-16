@@ -26,6 +26,9 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 @Path("static-files")
 public class StaticFileResource {
@@ -47,7 +50,14 @@ public class StaticFileResource {
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail
     ) throws ServiceException {
-        return fileLogic.upload(inputStream, fileDetail.getFileName());
+        try {
+            String filename = URLDecoder.decode(fileDetail.getFileName(), StandardCharsets.UTF_8.name());
+            return fileLogic.upload(inputStream, filename);
+        } catch (UnsupportedEncodingException e) {
+            // impossible in normal state
+            logger.error("unsupported encoding utf-8", e);
+            throw ServiceError.UNKNOWN.toException();
+        }
     }
 
     @GET
