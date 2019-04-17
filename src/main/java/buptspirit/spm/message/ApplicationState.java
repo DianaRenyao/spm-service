@@ -14,8 +14,4 @@ public enum ApplicationState {
     public byte getState() {
         return state;
     }
-
-    public void setState(byte state) {
-        this.state = state;
-    }
 }
