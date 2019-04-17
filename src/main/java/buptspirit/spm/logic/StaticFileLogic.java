@@ -21,13 +21,16 @@ import static buptspirit.spm.persistence.JpaUtility.transactional;
 @Singleton
 public class StaticFileLogic {
 
-    private static final HashMap<String, String> fileSuffixToMIMEType = new HashMap<String, String>() {
-        {
-            put("pdf", "application/pdf");
-            put("ppt", "application/vnd.ms-powerpoint");
-            put("mp4", "video/mp4");
-        }
-    };
+    private static final HashMap<String, String> fileSuffixToMIMEType = getFileSuffixToMIMEType();
+
+    private static HashMap<String, String> getFileSuffixToMIMEType() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("pdf", "application/pdf");
+        map.put("ppt", "application/vnd.ms-powerpoint");
+        map.put("mp4", "video/mp4");
+        return map;
+    }
+
     @Inject
     private FileManager fileManager;
     @Inject
