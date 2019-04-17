@@ -92,9 +92,9 @@ public class SelectedCourseLogic {
         selectedCourseEntity.setAvgOnlineScore(selectedCourseEditingMessage.getAvgOnlineScore());
         selectedCourseEntity.setMidScore(selectedCourseEditingMessage.getMidScore());
         selectedCourseEntity.setFinalScore(selectedCourseEditingMessage.getFinalScore());
-        BigDecimal tempAvgOnlineScore = selectedCourseEntity.getAvgOnlineScore().multiply(new BigDecimal(0.3));
-        BigDecimal tempMidScore = selectedCourseEntity.getMidScore().multiply(new BigDecimal(0.1));
-        BigDecimal tempFinalScore = selectedCourseEntity.getFinalScore().multiply(new BigDecimal(0.6));
+        BigDecimal tempAvgOnlineScore = selectedCourseEntity.getAvgOnlineScore().multiply(BigDecimal.valueOf(3, 1));
+        BigDecimal tempMidScore = selectedCourseEntity.getMidScore().multiply(BigDecimal.valueOf(1, 1));
+        BigDecimal tempFinalScore = selectedCourseEntity.getFinalScore().multiply(BigDecimal.valueOf(6, 1));
         BigDecimal totalScore = tempFinalScore.add(tempAvgOnlineScore.add(tempMidScore)).setScale(1, BigDecimal.ROUND_HALF_DOWN);
         selectedCourseEntity.setTotalScore(totalScore);
         return transactional(
