@@ -1,6 +1,8 @@
 package buptspirit.spm.utility;
 
 import javax.inject.Singleton;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -29,8 +31,8 @@ public class PasswordHash {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("sha-256 hash not provided");
         }
-        digest.update(salt.getBytes());
-        digest.update(new String(password).getBytes());
+        digest.update(salt.getBytes(StandardCharsets.UTF_8));
+        digest.update(new String(password).getBytes(StandardCharsets.UTF_8));
         byte[] digested = digest.digest();
         String base64 = Base64.getEncoder().encodeToString(digested);
         return salt + ":" + base64;
